@@ -8,7 +8,7 @@ import {processImage} from "../api/detectionApi";
 interface ProcessingDialogProps {
     open: boolean;
     images: FileList;
-    onViewResults: () => void;
+    onViewResults: (results: ImageResult[]) => void;
 }
 
 export default function ProcessingDialog({open, images, onViewResults}: ProcessingDialogProps) {
@@ -42,7 +42,12 @@ export default function ProcessingDialog({open, images, onViewResults}: Processi
 
                 setImageResults(prevResults => {
                     const newResults = [...prevResults];
-                    newResults[index] = { ...prevResults[index], status: imageToProcess.status };
+                    newResults[index] = {
+                        ...prevResults[index],
+                        status: imageToProcess.status,
+                        detections: imageToProcess.detections,
+                        errorMessage: imageToProcess.errorMessage,
+                    };
                     return newResults;
                 });
             }
@@ -100,6 +105,7 @@ export default function ProcessingDialog({open, images, onViewResults}: Processi
                     loading = {isLoading}
                     loadingPosition="end"
                     variant="contained"
+                    onClick={() => onViewResults(imageResults)}
                 >
                     View Results
                 </Button>

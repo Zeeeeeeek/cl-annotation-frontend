@@ -14,7 +14,7 @@ export default function InputImage({handleChange}: InputImageUploadProps) {
             component="label"
             startIcon={<CloudUploadIcon/>}
         >
-            Palle
+            Upload Images
             <input
                 type="file"
                 hidden
