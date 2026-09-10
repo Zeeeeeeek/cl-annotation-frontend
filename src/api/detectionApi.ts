@@ -20,16 +20,29 @@ export interface ImageResult {
     errorMessage?: string
 }
 
-const delay = ms => new Promise(res => setTimeout(res, ms))
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-export async function processImage(image: ImageResult, test: boolean) {
+export async function processImage(image: ImageResult) {
     image.status = "processing"
 
-    await delay(3000)
-    if (test) {
-        image.status = "error"
-    } else {
+    const formData = new FormData()
+    formData.append("image", image.file)
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/detect`, {
+            method: "POST",
+            body: formData,
+        })
+
+        if (!response.ok) {
+            throw new Error(`Detection failed with status ${response.status}`)
+        }
+        image.detections = await response.json()
         image.status = "completed"
+    } catch (error) {
+        image.status = "error"
+        image.errorMessage = error instanceof Error ? error.message : "Unknown error"
     }
+
 }
 

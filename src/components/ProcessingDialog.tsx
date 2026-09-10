@@ -38,9 +38,7 @@ export default function ProcessingDialog({open, images, onViewResults}: Processi
                 });
 
                 const imageToProcess = { ...imageResult };
-                const isTestError = Math.random() < 0.2; // chance of error
-
-                await processImage(imageToProcess, isTestError);
+                await processImage(imageToProcess);
 
                 setImageResults(prevResults => {
                     const newResults = [...prevResults];
@@ -48,21 +46,19 @@ export default function ProcessingDialog({open, images, onViewResults}: Processi
                     return newResults;
                 });
             }
-            console.log("Zio pera!");
         }
 
-        runProcessing().then(_ => {})
+        runProcessing().then()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const [isLoading, setIsLoading] = useState(true)
+    const isImagesProcessingDone = imageResults.every(image => image.status === "completed" || image.status === "error");
 
     useEffect(() => {
         if(isImagesProcessingDone) {
             setIsLoading(false)
         }
-    }, [imageResults]);
-
-    const isImagesProcessingDone = imageResults.every(image => image.status === "completed" || image.status === "error");
+    }, [imageResults, isImagesProcessingDone]);
 
     const getStatusColor = (status: string) => {
         switch (status) {

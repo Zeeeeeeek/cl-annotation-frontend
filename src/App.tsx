@@ -9,7 +9,6 @@ function App() {
 
     function handleImagesChange(event: ChangeEvent<HTMLInputElement>) {
         if (event.target.files) {
-            console.log("Changing images", event.target.files);
             setImages(event.target.files);
             setDialogOpen(true);
         }
