@@ -7,10 +7,11 @@ import { acquireObjectUrl, releaseObjectUrl } from "../utils/objectUrlCache.ts";
 
 interface AnnotatedImageProps {
     result: ImageResult;
+    confidenceThreshold: number;
     maxWidth?: number;
 }
 
-export function AnnotatedImage({ result, maxWidth = 800 }: AnnotatedImageProps) {
+export function AnnotatedImage({ result, maxWidth = 800 , confidenceThreshold}: AnnotatedImageProps) {
     const imageUrl = useMemo(() => acquireObjectUrl(result.file), [result]);
 
     useEffect(() => {
@@ -29,7 +30,9 @@ export function AnnotatedImage({ result, maxWidth = 800 }: AnnotatedImageProps) 
                 {image && (
                     <>
                         <Image image={image} width={stageWidth} height={stageHeight} />
-                        {result.detections.map((detection, index) => (
+                        {result.detections
+                            .filter(detection => detection.confidence >= confidenceThreshold)
+                            .map((detection, index) => (
                             <DetectionBox
                                 key={index}
                                 detection={detection}
