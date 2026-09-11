@@ -1,4 +1,4 @@
-import {Box, Card, CardContent, Grid, Stack, Typography, Slider, Pagination, Divider} from "@mui/material";
+import {Box, Card, CardContent, Grid, Stack, Typography, Slider, Pagination} from "@mui/material";
 import MuiInput from "@mui/material/Input";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
