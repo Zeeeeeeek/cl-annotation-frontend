@@ -12,11 +12,6 @@ export function ResultsVisualizer({results}: ResultsViewProps) {
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [confidenceThreshold, setConfidenceThreshold] = useState<number>(0.9);
 
-    function handleIndexChange(index: number) {
-        console.log("Navigating to result: ", index);
-        setSelectedIndex(index);
-    }
-
     return (
         <Grid className="results-grid">
             <AnnotatedImage result={results[selectedIndex]} maxWidth={Math.min(800, window.innerWidth)}
@@ -26,7 +21,7 @@ export function ResultsVisualizer({results}: ResultsViewProps) {
                 onConfidenceThresholdChange={setConfidenceThreshold}
                 currentIndex={selectedIndex}
                 totalResults={results.length}
-                onIndexChange={handleIndexChange}
+                onIndexChange={(index) => setSelectedIndex(index)}
             />
         </Grid>
     );

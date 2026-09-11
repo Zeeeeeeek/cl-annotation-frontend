@@ -47,62 +47,62 @@ export function VisualizerController({
     };
 
     return (
-        <Card>
-            <CardContent>
-                <Grid container spacing={2}>
-                    <Grid size={{ xs: 12, sm: 4 }} aria-label={"controls"}>
-                        <Stack spacing={1}>
-                            <Box sx={{ width: '100%' }}>
-                                <Typography id="confidence-slider" gutterBottom>
-                                    Confidence Threshold
-                                </Typography>
-                                <Grid container spacing={2} sx={{ alignItems: 'center' }}>
-                                    <Grid size="grow">
-                                        <Slider
-                                            value={confidenceThreshold}
-                                            onChange={handleSliderChange}
-                                            step={0.01}
-                                            min={0.5}
-                                            max={1}
-                                            aria-labelledby="confidence-slider"
-                                        />
+            <Card elevation={12}>
+                <CardContent>
+                    <Grid container spacing={2}>
+                        <Grid size={{ xs: 12, sm: 4 }} aria-label={"controls"}>
+                            <Stack spacing={1}>
+                                <Box sx={{ width: '100%' }}>
+                                    <Typography id="confidence-slider" gutterBottom>
+                                        Confidence Threshold
+                                    </Typography>
+                                    <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+                                        <Grid size="grow">
+                                            <Slider
+                                                value={confidenceThreshold}
+                                                onChange={handleSliderChange}
+                                                step={0.01}
+                                                min={0.5}
+                                                max={1}
+                                                aria-labelledby="confidence-slider"
+                                            />
+                                        </Grid>
+                                        <Grid>
+                                            <Input
+                                                value={Math.round(confidenceThreshold * 100)}
+                                                size="small"
+                                                onChange={handleInputChange}
+                                                onBlur={handleBlur}
+                                                inputProps={{
+                                                    step: 1,
+                                                    min: 50,
+                                                    max: 100,
+                                                    type: 'number',
+                                                    'aria-labelledby': 'confidence-slider',
+                                                }}
+                                            />
+                                        </Grid>
                                     </Grid>
-                                    <Grid>
-                                        <Input
-                                            value={Math.round(confidenceThreshold * 100)}
-                                            size="small"
-                                            onChange={handleInputChange}
-                                            onBlur={handleBlur}
-                                            inputProps={{
-                                                step: 1,
-                                                min: 50,
-                                                max: 100,
-                                                type: 'number',
-                                                'aria-labelledby': 'confidence-slider',
-                                            }}
-                                        />
-                                    </Grid>
-                                </Grid>
+                                </Box>
+                                <Pagination
+                                    count={totalResults}
+                                    page={currentIndex + 1}
+                                    onChange={handlePageChange}
+                                    sx={{ display: 'flex', justifyContent: 'center' }}
+                                />
+                                <Button variant={"contained"} fullWidth startIcon={<EditIcon />}
+                                        onClick={() => console.log("Edit button clicked")}>
+                                    Edit
+                                </Button>
+                            </Stack>
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 8 }}  aria-label={"boxes-list"} spacing={2}>
+                            <Box>
+                                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                             </Box>
-                            <Pagination
-                                count={totalResults}
-                                page={currentIndex + 1}
-                                onChange={handlePageChange}
-                                sx={{ display: 'flex', justifyContent: 'center' }}
-                            />
-                            <Button variant={"contained"} fullWidth startIcon={<EditIcon />} onClick={() => console.log("Edit button clicked")}>
-                                Edit
-                            </Button>
-                        </Stack>
+                        </Grid>
                     </Grid>
-
-                    <Grid size={{ xs: 12, sm: 8 }} sx={{backgroundColor: "lightgray"}} aria-label={"boxes-list"}>
-                        <Box>
-                            a
-                        </Box>
-                    </Grid>
-                </Grid>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
     );
 }

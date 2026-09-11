@@ -1,10 +1,5 @@
-#root {
-    height: 100%;
-}
-
 .results-grid {
-    height: 100%;
     display: grid;
-    grid-template-rows: auto 1fr;
-    background-color: blueviolet;
+    grid-template-rows: 1fr auto;
+    height: 100vh;
 }
