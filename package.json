@@ -14,8 +14,11 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.4.0",
     "@mui/material": "^9.4.0",
+    "konva": "^10.5.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-konva": "^19.2.7",
+    "use-image": "^1.1.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
