@@ -9,10 +9,18 @@ import Box from "@mui/material/Box";
 interface AnnotatedImageProps {
     result: ImageResult;
     confidenceThreshold: number;
+    labelColors?: Record<string, string>;
+    visibilityStates?: Record<number, boolean>;
     maxWidth?: number;
 }
 
-export function AnnotatedImage({result, maxWidth = 800, confidenceThreshold}: AnnotatedImageProps) {
+export function AnnotatedImage({
+                                   result,
+                                   maxWidth = 800,
+                                   confidenceThreshold,
+                                   visibilityStates,
+                                   labelColors
+                               }: AnnotatedImageProps) {
     const imageUrl = useMemo(() => acquireObjectUrl(result.file), [result]);
 
     useEffect(() => {
@@ -43,13 +51,15 @@ export function AnnotatedImage({result, maxWidth = 800, confidenceThreshold}: An
                         <>
                             <Image image={image} width={stageWidth} height={stageHeight}/>
                             {result.detections
-                                .filter(detection => detection.confidence >= confidenceThreshold)
-                                .map((detection, index) => (
+                                .map((detection, originalIndex) => ({detection, originalIndex}))
+                                .filter(({detection}) => detection.confidence >= confidenceThreshold)
+                                .filter(({originalIndex}) => visibilityStates?.[originalIndex] !== false)
+                                .map(({detection, originalIndex}) => (
                                     <DetectionBox
-                                        key={index}
+                                        key={originalIndex}
                                         detection={detection}
                                         scale={scale}
-                                        strokeColor="red"
+                                        strokeColor={labelColors ? labelColors[detection.label] : 'red'}
                                         textColor="white"
                                     />
                                 ))}
