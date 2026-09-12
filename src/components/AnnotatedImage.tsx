@@ -5,6 +5,7 @@ import useImage from "use-image";
 import {DetectionBox} from "./DetectionBox.tsx";
 import {acquireObjectUrl, releaseObjectUrl} from "../utils/objectUrlCache.ts";
 import Box from "@mui/material/Box";
+import {getContrastTextColor} from "../utils/labelColors.ts";
 
 interface AnnotatedImageProps {
     result: ImageResult;
@@ -54,15 +55,18 @@ export function AnnotatedImage({
                                 .map((detection, originalIndex) => ({detection, originalIndex}))
                                 .filter(({detection}) => detection.confidence >= confidenceThreshold)
                                 .filter(({originalIndex}) => visibilityStates?.[originalIndex] !== false)
-                                .map(({detection, originalIndex}) => (
-                                    <DetectionBox
-                                        key={originalIndex}
-                                        detection={detection}
-                                        scale={scale}
-                                        strokeColor={labelColors ? labelColors[detection.label] : 'red'}
-                                        textColor="white"
-                                    />
-                                ))}
+                                .map(({detection, originalIndex}) => {
+                                    const strokeColor = labelColors ? labelColors[detection.label] : 'red';
+                                    return (
+                                        <DetectionBox
+                                            key={originalIndex}
+                                            detection={detection}
+                                            scale={scale}
+                                            strokeColor={strokeColor}
+                                            textColor={getContrastTextColor(strokeColor)}
+                                        />
+                                    );
+                                })}
                         </>
                     )}
                 </Layer>

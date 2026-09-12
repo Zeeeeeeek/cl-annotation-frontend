@@ -1,14 +1,9 @@
-import {
-    Box,
-    Card,
-    CardContent,
-    Grid,
-} from "@mui/material";
+import {Card, CardContent, Grid} from "@mui/material";
 import type {ChangeEvent} from "react";
 import type {DetectedBox} from "../../api/detectionApi.ts";
 import ImageControls from "./ImageControls.tsx";
 import {DetectionsControls} from "./DetectionsControls.tsx";
-
+import {ColorPicker} from "./ColorPicker.tsx";
 
 interface VisualizerControllerProps {
     confidenceThreshold: number;
@@ -49,7 +44,6 @@ export function VisualizerController({
         onIndexChange(page - 1);
     };
 
-
     return (
         <Card elevation={12}>
             <CardContent>
@@ -75,7 +69,11 @@ export function VisualizerController({
                         />
                     </Grid>
                     <Grid size={{xs: 12, sm: 4}} aria-label={"color-picker"} spacing={2}>
-                        <Box>Color picker</Box>
+                        <ColorPicker
+                            labels={[...new Set(detections.map(d => d.label))]}
+                            colorForLabel={colorForLabel}
+                            setColorForLabel={setColorForLabel}
+                        />
                     </Grid>
                 </Grid>
             </CardContent>
