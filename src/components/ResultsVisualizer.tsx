@@ -1,7 +1,7 @@
 import type {ImageResult} from "../api/detectionApi.ts";
 import {AnnotatedImage} from "./AnnotatedImage.tsx";
 import {Grid} from "@mui/material";
-import {VisualizerController} from "./VisualizerController.tsx";
+import {VisualizerController} from "./controller/VisualizerController.tsx";
 import {useState} from "react";
 import {useLabelColors} from "../hooks/useLabelColors.ts";
 
