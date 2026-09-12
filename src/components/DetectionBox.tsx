@@ -19,7 +19,7 @@ function scaleBox(box: BoundingBox, scale: number): BoundingBox {
 
 export function DetectionBox({detection, scale, textColor, strokeColor}: DetectionBoxProps) {
     const box = scaleBox(detection.box, scale);
-    const labelText = `${detection.label} ${(detection.confidence * 100).toFixed(0)}%`;
+    const labelText = `${detection.label} ${Math.trunc(detection.confidence * 100)}%`;
 
     const labelFontSize = 14;
     const labelPaddingX = 4;
