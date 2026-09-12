@@ -7,9 +7,7 @@ import {
     Typography,
     Slider,
     Pagination,
-    List,
-    ListItem,
-    ListItemText, ListItemButton, IconButton
+    Chip
 } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -71,13 +69,18 @@ export function VisualizerController({
         onIndexChange(page - 1);
     };
 
+    function labelCapitalizeFirstLetter(label: string): string {
+        if (!label) return label;
+        return label.charAt(0).toUpperCase() + label.slice(1);
+    }
+
     return (
         <Card elevation={12}>
             <CardContent>
                 <Grid container spacing={2}>
-                    <Grid size={{xs: 12, sm: 4}} aria-label={"controls"}>
+                    <Grid size={{xs: 12, sm: 4}}>
                         <Stack spacing={1}>
-                            <Box sx={{width: '100%'}}>
+                            <Box>
                                 <Typography id="confidence-slider" gutterBottom>
                                     Confidence Threshold
                                 </Typography>
@@ -116,34 +119,30 @@ export function VisualizerController({
                                 sx={{display: 'flex', justifyContent: 'center'}}
                             />
                             <Button variant={"contained"} fullWidth startIcon={<EditIcon/>}
-                                    onClick={() => console.log("Edit button clicked")}>
+                                    onClick={() => alert("Not implemented yet")}>
                                 Edit
                             </Button>
                         </Stack>
                     </Grid>
-                    <Grid size={{xs: 12, sm: 4}} aria-label={"boxes-list"} spacing={2}>
-                        <List dense>
-                            {detections
-                                .map((detection, originalIndex) => ({detection, originalIndex}))
-                                .filter(({detection}) => detection.confidence >= confidenceThreshold)
-                                .map(({detection, originalIndex}) => (
-                                    <ListItem
-                                        key={originalIndex}
-                                        secondaryAction={
-                                            <IconButton edge="end" onClick={() => onToggleVisibility(originalIndex)}>
-                                                {visibilityStates[originalIndex] ? <VisibilityOffIcon/> : <VisibilityIcon/>}
-                                            </IconButton>
-                                        }
-                                        disablePadding
-                                    >
-                                        <ListItemButton>
-                                            <ListItemText primary={detection.label} secondary={detection.confidence}/>
-                                        </ListItemButton>
-                                    </ListItem>
-
-                                ))
-                            }
-                        </List>
+                    <Grid size={{xs: 12, sm: 4}}>
+                        <Box sx={{ maxHeight: 150, overflowY: 'auto' }}>
+                            <Typography gutterBottom>Detections</Typography>
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                {detections
+                                    .map((detection, originalIndex) => ({detection, originalIndex}))
+                                    .filter(({detection}) => detection.confidence >= confidenceThreshold)
+                                    .map(({detection, originalIndex}) => (
+                                        <Chip
+                                            key={originalIndex}
+                                            label={`${labelCapitalizeFirstLetter(detection.label)} ${Math.trunc(detection.confidence * 100)}%`}
+                                            onClick={() => onToggleVisibility(originalIndex)}
+                                            icon={visibilityStates[originalIndex] ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                                            variant={visibilityStates[originalIndex] ? "filled" : "outlined"}
+                                        />
+                                    ))
+                                }
+                            </Box>
+                        </Box>
                     </Grid>
                     <Grid size={{xs: 12, sm: 4}} aria-label={"color-picker"} spacing={2}>
                         <Box>Color picker</Box>
