@@ -2,6 +2,7 @@ import {Grid, Input, Pagination, Slider, Stack, Typography} from "@mui/material"
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
+import ReplayIcon from '@mui/icons-material/Replay';
 import type {ChangeEvent} from "react";
 
 interface ImageControlsProps {
@@ -74,9 +75,13 @@ export default function ImageControls({
                 onChange={onIndexChange}
                 sx={{display: 'flex', justifyContent: 'center'}}
             />
-            <Button variant={"contained"} fullWidth startIcon={<EditIcon/>} onClick={onEditClick}>
-                Edit
-            </Button>
+            <Stack direction="row" spacing={1}>
+                <Button variant={"contained"} fullWidth startIcon={<ReplayIcon/>} color="error"
+                        onClick={() => window.location.reload()}>Start over</Button>
+                <Button variant={"contained"} fullWidth startIcon={<EditIcon/>} onClick={onEditClick}>
+                    Edit
+                </Button>
+            </Stack>
         </Stack>
     );
 }
