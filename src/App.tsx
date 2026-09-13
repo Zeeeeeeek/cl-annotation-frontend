@@ -6,31 +6,42 @@ import {ResultsVisualizer} from "./components/ResultsVisualizer.tsx";
 import type { ImageResult } from "./api/detectionApi";
 import {HealthChecker} from "./components/HealthChecker.tsx";
 
+type AppPhase =
+    | { step: "input" }
+    | { step: "processing"; images: FileList }
+    | { step: "results"; results: ImageResult[] }
+
 function App() {
-    const [images, setImages] = useState<FileList | null>(null);
-    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [results, setResults] = useState<ImageResult[] | null>(null);
+    const [phase, setPhase] = useState<AppPhase>({ step: "input" });
 
     function handleImagesChange(event: ChangeEvent<HTMLInputElement>) {
         if (event.target.files) {
-            setImages(event.target.files);
-            setDialogOpen(true);
+            setPhase({ step: "processing", images: event.target.files });
         }
     }
 
     function handleViewResults(imageResults: ImageResult[]) {
-        setResults(imageResults);
-        setDialogOpen(false);
-    }
-
-    if (results) {
-        return <ResultsVisualizer results={results} />;
+        setPhase({ step: "results", results: imageResults });
     }
 
     return (
         <>
-            {images ? <ProcessingDialog open={dialogOpen} images={images} onViewResults={handleViewResults}/> :
-                <InputImage handleChange={handleImagesChange} />}
+            {phase.step === "input" && (
+                <InputImage handleChange={handleImagesChange} />
+            )}
+
+            {phase.step === "processing" && (
+                <ProcessingDialog
+                    open={true}
+                    images={phase.images}
+                    onViewResults={handleViewResults}
+                />
+            )}
+
+            {phase.step === "results" && (
+                <ResultsVisualizer results={phase.results} />
+            )}
+
             <HealthChecker />
         </>
     )
