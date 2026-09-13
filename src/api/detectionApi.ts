@@ -33,7 +33,6 @@ export async function processImage(image: ImageResult) {
             method: "POST",
             body: formData,
         })
-
         if (!response.ok) {
             throw new Error(`Detection failed with status ${response.status}`)
         }

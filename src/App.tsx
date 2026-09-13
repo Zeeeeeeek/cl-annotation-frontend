@@ -4,6 +4,7 @@ import {type ChangeEvent, useState} from "react";
 import ProcessingDialog from "./components/ProcessingDialog.tsx";
 import {ResultsVisualizer} from "./components/ResultsVisualizer.tsx";
 import type { ImageResult } from "./api/detectionApi";
+import {HealthChecker} from "./components/HealthChecker.tsx";
 
 function App() {
     const [images, setImages] = useState<FileList | null>(null);
@@ -30,6 +31,7 @@ function App() {
         <>
             {images ? <ProcessingDialog open={dialogOpen} images={images} onViewResults={handleViewResults}/> :
                 <InputImage handleChange={handleImagesChange} />}
+            <HealthChecker />
         </>
     )
 }
