@@ -1,9 +1,9 @@
-import {Card, CardContent, Grid} from "@mui/material";
-import type {ChangeEvent} from "react";
-import type {DetectedBox} from "../../api/detectionApi.ts";
+import { Divider, Grid, Paper } from "@mui/material";
+import type { ChangeEvent } from "react";
+import type { DetectedBox } from "../../api/detectionApi.ts";
 import ImageControls from "./ImageControls.tsx";
-import {DetectionsControls} from "./DetectionsControls.tsx";
-import {ColorPicker} from "./ColorPicker.tsx";
+import { DetectionsControls } from "./DetectionsControls.tsx";
+import { ColorPicker } from "./ColorPicker.tsx";
 
 interface VisualizerControllerProps {
     confidenceThreshold: number;
@@ -45,38 +45,50 @@ export function VisualizerController({
     };
 
     return (
-        <Card elevation={12}>
-            <CardContent>
-                <Grid container spacing={2}>
-                    <Grid size={{xs: 12, sm: 4}}>
-                        <ImageControls
-                            confidenceThreshold={confidenceThreshold}
-                            onConfidenceThresholdChange={handleSliderChange}
-                            onConfidenceInputChange={handleInputChange}
-                            onConfidenceThresholdCommit={onConfidenceThresholdChange}
-                            totalResults={totalResults}
-                            currentIndex={currentIndex}
-                            onIndexChange={handlePageChange}
-                            onEditClick={() => alert("Not implemented yet")}
-                        />
-                    </Grid>
-                    <Grid size={{xs: 12, sm: 4}}>
-                        <DetectionsControls
-                            detections={detections}
-                            confidenceThreshold={confidenceThreshold}
-                            onToggleVisibility={onToggleVisibility}
-                            visibilityStates={visibilityStates}
-                        />
-                    </Grid>
-                    <Grid size={{xs: 12, sm: 4}} aria-label={"color-picker"} spacing={2}>
-                        <ColorPicker
-                            labels={[...new Set(detections.map(d => d.label))]}
-                            colorForLabel={colorForLabel}
-                            setColorForLabel={setColorForLabel}
-                        />
-                    </Grid>
+        <Paper elevation={12} sx={{ p: 2, maxHeight: '30vh', overflowY: 'auto' }}>
+            <Grid container spacing={2}>
+
+                <Grid size={{ xs: 12, sm: 'grow' }} sx={{ order: { xs: 5, sm: 1 } }}>
+                    <ImageControls
+                        confidenceThreshold={confidenceThreshold}
+                        onConfidenceThresholdChange={handleSliderChange}
+                        onConfidenceInputChange={handleInputChange}
+                        onConfidenceThresholdCommit={onConfidenceThresholdChange}
+                        totalResults={totalResults}
+                        currentIndex={currentIndex}
+                        onIndexChange={handlePageChange}
+                        onEditClick={() => alert("Not implemented yet")}
+                    />
                 </Grid>
-            </CardContent>
-        </Card>
+
+                <Grid size={{ xs: 12, sm: 'auto' }} sx={{ display: 'flex', justifyContent: 'center', order: { xs: 2, sm: 2 } }}>
+                    <Divider orientation="vertical" flexItem sx={{ display: { xs: 'none', sm: 'block' } }} />
+                    <Divider orientation="horizontal" sx={{ display: { xs: 'block', sm: 'none' }, width: '100%' }} />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 'grow'}} sx={{ order: { xs: 1, sm: 3 } }}>
+                    <DetectionsControls
+                        detections={detections}
+                        confidenceThreshold={confidenceThreshold}
+                        onToggleVisibility={onToggleVisibility}
+                        visibilityStates={visibilityStates}
+                    />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 'auto' }} sx={{ display: 'flex', justifyContent: 'center', order: { xs: 4, sm: 4 } }}>
+                    <Divider orientation="vertical" flexItem sx={{ display: { xs: 'none', sm: 'block' } }} />
+                    <Divider orientation="horizontal" sx={{ display: { xs: 'block', sm: 'none' }, width: '100%' }} />
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 'grow' }} aria-label="color-picker" sx={{ order: { xs: 3, sm: 5 } }}>
+                    <ColorPicker
+                        labels={[...new Set(detections.map(d => d.label))]}
+                        colorForLabel={colorForLabel}
+                        setColorForLabel={setColorForLabel}
+                    />
+                </Grid>
+
+            </Grid>
+        </Paper>
     );
 }
