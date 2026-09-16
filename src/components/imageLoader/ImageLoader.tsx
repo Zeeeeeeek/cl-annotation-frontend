@@ -82,8 +82,6 @@ export function ImageLoader({ handleChange }: ImageLoaderProps) {
                                 borderColor: isDragEnter ? 'primary.main' : 'grey.400',
                                 transition: 'all 0.2s ease',
                                 py: 2,
-                                // Nessun figlio riceve eventi puntatore/drag:
-                                // dragenter/dragleave arrivano SOLO da questo Paper
                                 '& *': {
                                     pointerEvents: 'none',
                                 },
@@ -118,7 +116,6 @@ export function ImageLoader({ handleChange }: ImageLoaderProps) {
                                     sx={{
                                         color: 'primary.main',
                                         cursor: 'pointer',
-                                        // riattiva SOLO qui gli eventi puntatore
                                         pointerEvents: 'auto',
                                         '&:hover': { textDecoration: 'underline' }
                                     }}
