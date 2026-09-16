@@ -1,10 +1,10 @@
 import './App.css'
-import InputImage from "./components/InputImage.tsx";
 import {type ChangeEvent, useState} from "react";
 import ProcessingDialog from "./components/ProcessingDialog.tsx";
 import {ResultsVisualizer} from "./components/ResultsVisualizer.tsx";
 import type { ImageResult } from "./api/detectionApi";
 import {HealthChecker} from "./components/HealthChecker.tsx";
+import { ImageLoader } from "./components/imageLoader/ImageLoader.tsx";
 
 type AppPhase =
     | { step: "input" }
@@ -27,7 +27,7 @@ function App() {
     return (
         <>
             {phase.step === "input" && (
-                <InputImage handleChange={handleImagesChange} />
+                <ImageLoader handleChange={handleImagesChange} />
             )}
 
             {phase.step === "processing" && (
