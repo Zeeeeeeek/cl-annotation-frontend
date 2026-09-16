@@ -14,6 +14,7 @@ interface ImageControlsProps {
     currentIndex: number;
     onIndexChange: (event: ChangeEvent<unknown>, page: number) => void;
     onEditClick: () => void;
+    detectionScores?: number[];
 }
 
 export default function ImageControls({
@@ -25,7 +26,14 @@ export default function ImageControls({
                                           currentIndex,
                                           onIndexChange,
                                           onEditClick,
+                                          detectionScores
                                       }: ImageControlsProps) {
+
+    const marks = Array.from(
+        new Set(
+            detectionScores?.map((score) => Math.round(score * 100) / 100)
+        )
+    ).map((value) => ({ value }));
 
     function handleBlur() {
         if (confidenceThreshold < 0.5) {
@@ -51,7 +59,20 @@ export default function ImageControls({
                             step={0.01}
                             min={0.5}
                             max={1}
+                            marks={marks}
                             aria-labelledby="confidence-slider"
+                            sx={{
+                                '& .MuiSlider-mark': {
+                                    width: 5,
+                                    height: 15,
+
+                                    backgroundColor: 'rgba(0, 0, 0)',
+                                },
+                                '& .MuiSlider-markActive': {
+                                    backgroundColor: 'primary.main',
+                                    opacity: 1,
+                                }
+                            }}
                         />
                     </Grid>
                     <Grid>

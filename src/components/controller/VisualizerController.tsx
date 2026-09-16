@@ -45,7 +45,7 @@ export function VisualizerController({
     };
 
     return (
-        <Paper elevation={12} sx={{ p: 2, maxHeight: '30vh', overflowY: 'auto' }}>
+        <Paper elevation={12} sx={{ p: 2, height: '17vh', overflowY: 'auto' }}>
             <Grid container spacing={2}>
 
                 <Grid size={{ xs: 12, sm: 'grow' }} sx={{ order: { xs: 5, sm: 1 } }}>
@@ -58,6 +58,7 @@ export function VisualizerController({
                         currentIndex={currentIndex}
                         onIndexChange={handlePageChange}
                         onEditClick={() => alert("Not implemented yet")}
+                        detectionScores={detections.map(d => d.confidence)}
                     />
                 </Grid>
 
