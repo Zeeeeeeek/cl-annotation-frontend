@@ -1,4 +1,4 @@
-import { Box, Chip, Typography, Popover } from "@mui/material";
+import {Box, Chip, Typography, Popover, Tooltip} from "@mui/material";
 import { useState, type MouseEvent } from "react";
 import { HslColorPicker } from "react-colorful";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
@@ -32,7 +32,11 @@ export function ColorPicker({ labels, colorForLabel, setColorForLabel }: ColorPi
 
     return (
         <Box sx={{ maxHeight: 150, display: 'flex', flexDirection: 'column' }}>
-            <Typography gutterBottom>Color picker</Typography>
+            <Typography gutterBottom>
+                <Tooltip title="Customize the color used to highlight each class" arrow>
+                    <span>Color picker</span>
+                </Tooltip>
+            </Typography>
 
             <Box sx={{ overflowY: 'auto', flexGrow: 1, pb: 1 }}>
                 {uniqueLabels.length === 0 && (

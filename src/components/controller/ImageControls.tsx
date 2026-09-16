@@ -1,4 +1,4 @@
-import {Grid, Input, Pagination, Slider, Stack, Typography} from "@mui/material";
+import {Grid, Input, Pagination, Slider, Stack, Tooltip, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
@@ -38,8 +38,10 @@ export default function ImageControls({
     return (
         <Stack spacing={1}>
             <Box>
-                <Typography id="confidence-slider" gutterBottom>
-                    Confidence Threshold
+                <Typography gutterBottom>
+                    <Tooltip title="Hide detections below this confidence score" arrow>
+                        <span>Confidence Threshold</span>
+                    </Tooltip>
                 </Typography>
                 <Grid container spacing={2} sx={{alignItems: 'center'}}>
                     <Grid size="grow">

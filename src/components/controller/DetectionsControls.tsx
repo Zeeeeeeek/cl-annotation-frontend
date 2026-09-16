@@ -1,4 +1,4 @@
-import { Box, Chip, Typography } from "@mui/material";
+import {Box, Chip, Tooltip, Typography} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
@@ -29,7 +29,12 @@ export function DetectionsControls({
 
     return (
         <Box sx={{ maxHeight: 150, display: 'flex', flexDirection: 'column' }}>
-            <Typography gutterBottom>Detections</Typography>
+
+            <Typography gutterBottom>
+                <Tooltip title="Hide or highlight specific boxes that respect the conficence set" arrow>
+                    <span>Detection Boxes</span>
+                </Tooltip>
+            </Typography>
 
             <Box sx={{ overflowY: 'auto', flexGrow: 1, pb: 1 }}>
 
@@ -52,9 +57,10 @@ export function DetectionsControls({
                             <Chip
                                 key={originalIndex}
                                 label={`${labelCapitalizeFirstLetter(detection.label)} ${Math.trunc(detection.confidence * 100)}%`}
-                                onClick={() => onToggleVisibility(originalIndex)}
-                                icon={visibilityStates[originalIndex] ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                deleteIcon={visibilityStates[originalIndex] ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                onDelete={() => onToggleVisibility(originalIndex)}
                                 variant={visibilityStates[originalIndex] ? "filled" : "outlined"}
+                                onClick={() => console.log(`Clicked on detection box ${originalIndex}`)}
                             />
                         ))}
                     </Box>
