@@ -13,7 +13,7 @@ interface ThresholdControlProps {
 
 export function ThresholdControl({ value, onChange, scores }: ThresholdControlProps) {
     // One mark on the slider for each distinct detection score
-    const marks = [...new Set(scores.map(score => Math.round(score * 100) / 100))].map(score => ({ value: score }))
+    const marks = [...new Set(scores.map((score) => Math.round(score * 100) / 100))].map((score) => ({ value: score }))
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
         const percent = event.target.value === "" ? 0 : Number(event.target.value)

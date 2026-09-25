@@ -9,7 +9,7 @@ interface ProcessingDialogProps {
 }
 
 export function ProcessingDialog({ images, onViewResults }: ProcessingDialogProps) {
-    const isProcessingDone = images.every(image => image.status === "completed" || image.status === "error")
+    const isProcessingDone = images.every((image) => image.status === "completed" || image.status === "error")
 
     return (
         <Dialog open maxWidth="sm" fullWidth>

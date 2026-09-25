@@ -21,7 +21,7 @@ export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, maxW
     const stageHeight = htmlImage ? htmlImage.height * scale : 0
 
     const shownDetections = filterByThreshold(image.detections, confidenceThreshold).filter(
-        detection => detection.visible,
+        (detection) => detection.visible,
     )
 
     return (
@@ -41,7 +41,7 @@ export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, maxW
                     {htmlImage && (
                         <>
                             <KonvaImage image={htmlImage} width={stageWidth} height={stageHeight} />
-                            {shownDetections.map(detection => {
+                            {shownDetections.map((detection) => {
                                 const color = colorForLabel(detection.label)
                                 return (
                                     <DetectionBox

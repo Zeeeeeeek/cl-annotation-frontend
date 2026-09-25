@@ -33,7 +33,7 @@ export function UploadStep({ onFilesSelected }: UploadStepProps) {
         event.preventDefault()
         dragCounter.current = 0
         setIsDragging(false)
-        const imageFiles = Array.from(event.dataTransfer.files).filter(file => file.type.startsWith("image/"))
+        const imageFiles = Array.from(event.dataTransfer.files).filter((file) => file.type.startsWith("image/"))
         onFilesSelected(imageFiles)
     }
 

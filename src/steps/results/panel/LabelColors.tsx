@@ -28,13 +28,13 @@ export function LabelColors({ labels, colorForLabel, setColorForLabel }: LabelCo
 
             {labels.length > 0 && (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                    {labels.map(label => {
+                    {labels.map((label) => {
                         const color = colorForLabel(label)
                         return (
                             <Chip
                                 key={label}
                                 label={capitalizeFirstLetter(label)}
-                                onClick={event => handleChipClick(event, label)}
+                                onClick={(event) => handleChipClick(event, label)}
                                 sx={{ backgroundColor: color, color: getContrastTextColor(color) }}
                             />
                         )
@@ -54,7 +54,7 @@ export function LabelColors({ labels, colorForLabel, setColorForLabel }: LabelCo
                     <Box sx={{ p: 2 }}>
                         <HslColorPicker
                             color={parseHslString(colorForLabel(selectedLabel))}
-                            onChange={newColor => setColorForLabel(selectedLabel, toHslString(newColor))}
+                            onChange={(newColor) => setColorForLabel(selectedLabel, toHslString(newColor))}
                         />
                     </Box>
                 )}

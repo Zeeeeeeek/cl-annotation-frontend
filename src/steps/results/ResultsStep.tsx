@@ -20,7 +20,7 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
 
     function handleToggleVisibility(detectionId: string) {
         onImageUpdate(selectedImage.id, {
-            detections: selectedImage.detections.map(detection =>
+            detections: selectedImage.detections.map((detection) =>
                 detection.id === detectionId ? { ...detection, visible: !detection.visible } : detection,
             ),
         })

@@ -1,16 +1,16 @@
-import {Tooltip, Typography} from "@mui/material";
+import { Tooltip, Typography } from "@mui/material"
 
 interface SectionTitleProps {
-    title: string;
-    tooltip: string;
+    title: string
+    tooltip: string
 }
 
-export function SectionTitle({title, tooltip}: SectionTitleProps) {
+export function SectionTitle({ title, tooltip }: SectionTitleProps) {
     return (
         <Typography gutterBottom>
             <Tooltip title={tooltip} arrow>
                 <span>{title}</span>
             </Tooltip>
         </Typography>
-    );
+    )
 }

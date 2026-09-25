@@ -19,5 +19,5 @@ export function toDetection(detectedBox: DetectedBox): Detection {
 }
 
 export function filterByThreshold(detections: Detection[], threshold: number): Detection[] {
-    return detections.filter(detection => detection.confidence >= threshold)
+    return detections.filter((detection) => detection.confidence >= threshold)
 }

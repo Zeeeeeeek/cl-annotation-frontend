@@ -26,7 +26,7 @@ export function DetectionList({ detections, confidenceThreshold, onToggleVisibil
 
             {detectionsAboveThreshold.length > 0 && (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                    {detectionsAboveThreshold.map(detection => (
+                    {detectionsAboveThreshold.map((detection) => (
                         <Chip
                             key={detection.id}
                             label={`${capitalizeFirstLetter(detection.label)} ${formatConfidence(detection.confidence)}`}

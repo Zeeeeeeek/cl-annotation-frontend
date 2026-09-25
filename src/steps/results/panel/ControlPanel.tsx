@@ -29,18 +29,18 @@ function SectionDivider() {
 }
 
 export function ControlPanel({
-                                 confidenceThreshold,
-                                 onConfidenceThresholdChange,
-                                 currentIndex,
-                                 totalResults,
-                                 onIndexChange,
-                                 detections,
-                                 onToggleVisibility,
-                                 colorForLabel,
-                                 setColorForLabel,
-                                 onReset,
-                             }: ControlPanelProps) {
-    const uniqueLabels = [...new Set(detections.map(detection => detection.label))]
+    confidenceThreshold,
+    onConfidenceThresholdChange,
+    currentIndex,
+    totalResults,
+    onIndexChange,
+    detections,
+    onToggleVisibility,
+    colorForLabel,
+    setColorForLabel,
+    onReset,
+}: ControlPanelProps) {
+    const uniqueLabels = [...new Set(detections.map((detection) => detection.label))]
 
     return (
         <Paper elevation={12} sx={{ p: 2, height: "17vh", overflowY: "auto" }}>
@@ -50,7 +50,7 @@ export function ControlPanel({
                         <ThresholdControl
                             value={confidenceThreshold}
                             onChange={onConfidenceThresholdChange}
-                            scores={detections.map(detection => detection.confidence)}
+                            scores={detections.map((detection) => detection.confidence)}
                         />
                         <Pagination
                             count={totalResults}
@@ -59,7 +59,13 @@ export function ControlPanel({
                             sx={{ display: "flex", justifyContent: "center" }}
                         />
                         <Stack direction="row" spacing={1}>
-                            <Button variant="contained" fullWidth color="error" startIcon={<ReplayIcon />} onClick={onReset}>
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                color="error"
+                                startIcon={<ReplayIcon />}
+                                onClick={onReset}
+                            >
                                 Start over
                             </Button>
                             <Button
@@ -74,7 +80,10 @@ export function ControlPanel({
                     </Stack>
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: "auto" }} sx={{ display: "flex", justifyContent: "center", order: { xs: 2, sm: 2 } }}>
+                <Grid
+                    size={{ xs: 12, sm: "auto" }}
+                    sx={{ display: "flex", justifyContent: "center", order: { xs: 2, sm: 2 } }}
+                >
                     <SectionDivider />
                 </Grid>
 
@@ -86,12 +95,19 @@ export function ControlPanel({
                     />
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: "auto" }} sx={{ display: "flex", justifyContent: "center", order: { xs: 4, sm: 4 } }}>
+                <Grid
+                    size={{ xs: 12, sm: "auto" }}
+                    sx={{ display: "flex", justifyContent: "center", order: { xs: 4, sm: 4 } }}
+                >
                     <SectionDivider />
                 </Grid>
 
                 <Grid size={{ xs: 12, sm: "grow" }} sx={{ order: { xs: 3, sm: 5 } }}>
-                    <LabelColors labels={uniqueLabels} colorForLabel={colorForLabel} setColorForLabel={setColorForLabel} />
+                    <LabelColors
+                        labels={uniqueLabels}
+                        colorForLabel={colorForLabel}
+                        setColorForLabel={setColorForLabel}
+                    />
                 </Grid>
             </Grid>
         </Paper>
