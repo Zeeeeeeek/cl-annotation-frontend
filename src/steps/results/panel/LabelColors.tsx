@@ -1,11 +1,11 @@
 import { Box, Chip, Popover } from "@mui/material"
 import { useState, type MouseEvent } from "react"
 import { HslColorPicker } from "react-colorful"
-import { PanelSection } from "../PanelSection"
-import { EmptyState } from "../EmptyState"
-import { parseHslString, toHslString } from "../../utils/hslConversion"
-import { getContrastTextColor } from "../../utils/labelColors"
-import { capitalizeFirstLetter } from "../../utils/format"
+import { PanelSection } from "../../../components/PanelSection.tsx"
+import { EmptyState } from "../../../components/EmptyState.tsx"
+import { parseHslString, toHslString } from "../../../utils/hslConversion.ts"
+import { getContrastTextColor } from "../../../utils/labelColors.ts"
+import { capitalizeFirstLetter } from "../../../utils/format.ts"
 
 interface ColorPickerProps {
     labels: string[]
@@ -13,7 +13,7 @@ interface ColorPickerProps {
     setColorForLabel: (label: string, color: string) => void
 }
 
-export function ColorPicker({ labels, colorForLabel, setColorForLabel }: ColorPickerProps) {
+export function LabelColors({ labels, colorForLabel, setColorForLabel }: ColorPickerProps) {
     const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 

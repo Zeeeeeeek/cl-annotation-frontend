@@ -1,10 +1,10 @@
 import { Box } from "@mui/material"
 import { Image as KonvaImage, Layer, Stage } from "react-konva"
 import useImage from "use-image"
-import type { ImageItem } from "../types"
-import { DetectionBox } from "./DetectionBox"
-import { filterByThreshold } from "../utils/detections"
-import { getContrastTextColor } from "../utils/labelColors"
+import type { ImageItem } from "../../types.ts"
+import { DetectionBox } from "./DetectionBox.tsx"
+import { filterByThreshold } from "../../utils/detections.ts"
+import { getContrastTextColor } from "../../utils/labelColors.ts"
 
 interface AnnotatedImageProps {
     image: ImageItem

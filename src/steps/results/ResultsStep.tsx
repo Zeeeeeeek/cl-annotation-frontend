@@ -1,9 +1,9 @@
 import { Box } from "@mui/material"
 import { useState } from "react"
-import type { ImageItem } from "../types"
-import { AnnotatedImage } from "./AnnotatedImage"
-import { VisualizerController } from "./controller/VisualizerController"
-import { useLabelColors } from "../hooks/useLabelColors"
+import type { ImageItem } from "../../types.ts"
+import { AnnotatedImage } from "./AnnotatedImage.tsx"
+import { ControlPanel } from "./panel/ControlPanel.tsx"
+import { useLabelColors } from "../../hooks/useLabelColors.ts"
 
 interface ResultsVisualizerProps {
     images: ImageItem[]
@@ -11,7 +11,7 @@ interface ResultsVisualizerProps {
     onReset: () => void
 }
 
-export function ResultsVisualizer({ images, onImageUpdate, onReset }: ResultsVisualizerProps) {
+export function ResultsStep({ images, onImageUpdate, onReset }: ResultsVisualizerProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [confidenceThreshold, setConfidenceThreshold] = useState(0.9)
     const { colorForLabel, setColorForLabel } = useLabelColors()
@@ -34,7 +34,7 @@ export function ResultsVisualizer({ images, onImageUpdate, onReset }: ResultsVis
                 colorForLabel={colorForLabel}
                 maxWidth={Math.min(800, window.innerWidth)}
             />
-            <VisualizerController
+            <ControlPanel
                 confidenceThreshold={confidenceThreshold}
                 onConfidenceThresholdChange={setConfidenceThreshold}
                 currentIndex={selectedIndex}

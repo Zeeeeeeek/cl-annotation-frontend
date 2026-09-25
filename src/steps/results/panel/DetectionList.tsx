@@ -1,11 +1,11 @@
 import { Box, Chip } from "@mui/material"
 import VisibilityIcon from "@mui/icons-material/Visibility"
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
-import type { Detection } from "../../types"
-import { PanelSection } from "../PanelSection"
-import { EmptyState } from "../EmptyState"
-import { capitalizeFirstLetter, formatConfidence } from "../../utils/format"
-import { filterByThreshold } from "../../utils/detections"
+import type { Detection } from "../../../types.ts"
+import { PanelSection } from "../../../components/PanelSection.tsx"
+import { EmptyState } from "../../../components/EmptyState.tsx"
+import { capitalizeFirstLetter, formatConfidence } from "../../../utils/format.ts"
+import { filterByThreshold } from "../../../utils/detections.ts"
 
 interface DetectionsControlsProps {
     detections: Detection[]
@@ -13,7 +13,7 @@ interface DetectionsControlsProps {
     onToggleVisibility: (detectionId: string) => void
 }
 
-export function DetectionsControls({ detections, confidenceThreshold, onToggleVisibility }: DetectionsControlsProps) {
+export function DetectionList({ detections, confidenceThreshold, onToggleVisibility }: DetectionsControlsProps) {
     const detectionsAboveThreshold = filterByThreshold(detections, confidenceThreshold)
 
     return (

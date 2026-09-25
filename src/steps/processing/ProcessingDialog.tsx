@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText } from "@mui/material"
-import type { ImageItem } from "../types"
-import { StatusChip } from "./StatusChip"
-import { stripExtension } from "../utils/format"
+import type { ImageItem } from "../../types.ts"
+import { StatusChip } from "../../components/StatusChip.tsx"
+import { stripExtension } from "../../utils/format.ts"
 
 interface ProcessingDialogProps {
     images: ImageItem[]

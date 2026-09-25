@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { ImageLoader } from "./components/imageLoader/ImageLoader"
-import { ProcessingDialog } from "./components/ProcessingDialog"
-import { ResultsVisualizer } from "./components/ResultsVisualizer"
+import { UploadStep } from "./steps/upload/UploadStep.tsx"
+import { ProcessingDialog } from "./steps/processing/ProcessingDialog.tsx"
+import { ResultsStep } from "./steps/results/ResultsStep.tsx"
 import { HealthChecker } from "./components/HealthChecker"
 import { runDetection } from "./api/runDetection"
 import { createImageItem } from "./utils/detections"
@@ -34,14 +34,14 @@ export function App() {
 
     return (
         <>
-            {step === "upload" && <ImageLoader onFilesSelected={handleFilesSelected} />}
+            {step === "upload" && <UploadStep onFilesSelected={handleFilesSelected} />}
 
             {step === "processing" && (
                 <ProcessingDialog images={images} onViewResults={() => setStep("results")} />
             )}
 
             {step === "results" && (
-                <ResultsVisualizer images={images} onImageUpdate={updateImage} onReset={handleReset} />
+                <ResultsStep images={images} onImageUpdate={updateImage} onReset={handleReset} />
             )}
 
             <HealthChecker />

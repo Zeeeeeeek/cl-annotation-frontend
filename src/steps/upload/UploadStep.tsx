@@ -7,7 +7,7 @@ interface ImageLoaderProps {
     onFilesSelected: (files: File[]) => void
 }
 
-export function ImageLoader({ onFilesSelected }: ImageLoaderProps) {
+export function UploadStep({ onFilesSelected }: ImageLoaderProps) {
     const [isDragging, setIsDragging] = useState(false)
     const dragCounter = useRef(0)
 
