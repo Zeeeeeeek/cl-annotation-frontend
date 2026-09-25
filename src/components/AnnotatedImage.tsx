@@ -1,76 +1,62 @@
-import {useEffect, useMemo} from "react";
-import {Stage, Layer, Image} from 'react-konva';
-import type {ImageResult} from "../types.ts";
-import useImage from "use-image";
-import {DetectionBox} from "./DetectionBox.tsx";
-import {acquireObjectUrl, releaseObjectUrl} from "../utils/objectUrlCache.ts";
-import Box from "@mui/material/Box";
-import {getContrastTextColor} from "../utils/labelColors.ts";
+import { Box } from "@mui/material"
+import { Image as KonvaImage, Layer, Stage } from "react-konva"
+import useImage from "use-image"
+import type { ImageItem } from "../types"
+import { DetectionBox } from "./DetectionBox"
+import { filterByThreshold } from "../utils/detections"
+import { getContrastTextColor } from "../utils/labelColors"
 
 interface AnnotatedImageProps {
-    result: ImageResult;
-    confidenceThreshold: number;
-    labelColors?: Record<string, string>;
-    visibilityStates?: Record<number, boolean>;
-    maxWidth?: number;
+    image: ImageItem
+    confidenceThreshold: number
+    colorForLabel: (label: string) => string
+    maxWidth?: number
 }
 
-export function AnnotatedImage({
-                                   result,
-                                   maxWidth = 800,
-                                   confidenceThreshold,
-                                   visibilityStates,
-                                   labelColors
-                               }: AnnotatedImageProps) {
-    const imageUrl = useMemo(() => acquireObjectUrl(result.file), [result]);
+export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, maxWidth = 800 }: AnnotatedImageProps) {
+    const [htmlImage] = useImage(image.previewUrl)
 
-    useEffect(() => {
-        return () => releaseObjectUrl(result.file);
-    }, [result]);
+    const scale = htmlImage ? Math.min(1, maxWidth / htmlImage.width) : 1
+    const stageWidth = htmlImage ? htmlImage.width * scale : maxWidth
+    const stageHeight = htmlImage ? htmlImage.height * scale : 0
 
-    const [image] = useImage(imageUrl);
-
-    const scale = image ? Math.min(1, maxWidth / image.width) : 1;
-    const stageWidth = image ? image.width * scale : maxWidth;
-    const stageHeight = image ? image.height * scale : 0;
+    const shownDetections = filterByThreshold(image.detections, confidenceThreshold).filter(
+        detection => detection.visible,
+    )
 
     return (
         <Box
             sx={{
-                height: '100%',
-                width: '100%',
+                height: "100%",
+                width: "100%",
                 minHeight: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden",
             }}
         >
             <Stage width={stageWidth} height={stageHeight}>
                 <Layer>
-                    {image && (
+                    {htmlImage && (
                         <>
-                            <Image image={image} width={stageWidth} height={stageHeight}/>
-                            {result.detections
-                                .map((detection, originalIndex) => ({detection, originalIndex}))
-                                .filter(({detection}) => detection.confidence >= confidenceThreshold)
-                                .filter(({originalIndex}) => visibilityStates?.[originalIndex] !== false)
-                                .map(({detection, originalIndex}) => {
-                                    const strokeColor = labelColors ? labelColors[detection.label] : 'red';
-                                    return (
-                                        <DetectionBox
-                                            key={originalIndex}
-                                            detection={detection}
-                                            scale={scale}
-                                            strokeColor={strokeColor}
-                                            textColor={getContrastTextColor(strokeColor)}
-                                        />
-                                    );
-                                })}
+                            <KonvaImage image={htmlImage} width={stageWidth} height={stageHeight} />
+                            {shownDetections.map(detection => {
+                                const color = colorForLabel(detection.label)
+                                return (
+                                    <DetectionBox
+                                        key={detection.id}
+                                        detection={detection}
+                                        scale={scale}
+                                        strokeColor={color}
+                                        textColor={getContrastTextColor(color)}
+                                    />
+                                )
+                            })}
                         </>
                     )}
                 </Layer>
             </Stage>
         </Box>
-    );
+    )
 }

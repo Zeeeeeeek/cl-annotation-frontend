@@ -13,9 +13,16 @@ export interface DetectedBox {
 
 export type ImageStatus = "queued" | "processing" | "completed" | "error"
 
-export interface ImageResult {
+export interface Detection extends DetectedBox {
+    id: string
+    visible: boolean
+}
+
+export interface ImageItem {
+    id: string
     file: File
+    previewUrl: string
     status: ImageStatus
-    detections: DetectedBox[]
+    detections: Detection[]
     errorMessage?: string
 }

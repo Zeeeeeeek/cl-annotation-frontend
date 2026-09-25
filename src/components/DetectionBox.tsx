@@ -1,12 +1,17 @@
-import type {BoundingBox, DetectedBox} from "../types.ts";
-import {Group, Rect, Text} from "react-konva";
-import {formatConfidence} from "../utils/format.ts";
+import { Group, Rect, Text } from "react-konva"
+import type { BoundingBox, Detection } from "../types"
+import { formatConfidence } from "../utils/format"
+
+const LABEL_FONT_SIZE = 14
+const LABEL_PADDING_X = 4
+const LABEL_PADDING_Y = 2
+const LABEL_OFFSET = 4
 
 interface DetectionBoxProps {
-    detection: DetectedBox;
-    scale: number;
-    textColor?: string;
-    strokeColor?: string;
+    detection: Detection
+    scale: number
+    strokeColor: string
+    textColor: string
 }
 
 function scaleBox(box: BoundingBox, scale: number): BoundingBox {
@@ -15,18 +20,16 @@ function scaleBox(box: BoundingBox, scale: number): BoundingBox {
         y: box.y * scale,
         width: box.width * scale,
         height: box.height * scale,
-    };
+    }
 }
 
-export function DetectionBox({detection, scale, textColor, strokeColor}: DetectionBoxProps) {
-    const box = scaleBox(detection.box, scale);
-    const labelText = formatConfidence(detection.confidence);
+export function DetectionBox({ detection, scale, strokeColor, textColor }: DetectionBoxProps) {
+    const box = scaleBox(detection.box, scale)
+    const labelText = `${detection.label} ${formatConfidence(detection.confidence)}`
 
-    const labelFontSize = 14;
-    const labelPaddingX = 4;
-    const labelPaddingY = 2;
-    const labelWidth = labelText.length * (labelFontSize * 0.6) + labelPaddingX * 2;
-    const labelHeight = labelFontSize + labelPaddingY * 2;
+    // Approximate text width: Konva can't measure it before rendering
+    const labelWidth = labelText.length * (LABEL_FONT_SIZE * 0.6) + LABEL_PADDING_X * 2
+    const labelHeight = LABEL_FONT_SIZE + LABEL_PADDING_Y * 2
 
     return (
         <Group>
@@ -35,26 +38,25 @@ export function DetectionBox({detection, scale, textColor, strokeColor}: Detecti
                 y={box.y}
                 width={box.width}
                 height={box.height}
-                fillEnabled={false}
-                stroke={strokeColor || "red"}
+                stroke={strokeColor}
                 strokeWidth={3}
                 shadowBlur={10}
             />
             <Rect
-                x={box.x + 4}
-                y={box.y + 4}
+                x={box.x + LABEL_OFFSET}
+                y={box.y + LABEL_OFFSET}
                 width={labelWidth}
                 height={labelHeight}
-                fill={strokeColor || "red"}
+                fill={strokeColor}
             />
             <Text
-                x={box.x + 4 + labelPaddingX}
-                y={box.y + 4 + labelPaddingY}
+                x={box.x + LABEL_OFFSET + LABEL_PADDING_X}
+                y={box.y + LABEL_OFFSET + LABEL_PADDING_Y}
                 text={labelText}
-                fontSize={labelFontSize}
-                fill={textColor || "white"}
+                fontSize={LABEL_FONT_SIZE}
+                fill={textColor}
                 fontStyle="bold"
             />
         </Group>
-    );
+    )
 }
