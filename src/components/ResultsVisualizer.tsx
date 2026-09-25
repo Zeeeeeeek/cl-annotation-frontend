@@ -1,9 +1,9 @@
 import type {ImageResult} from "../api/detectionApi.ts";
 import {AnnotatedImage} from "./AnnotatedImage.tsx";
-import {Grid} from "@mui/material";
 import {VisualizerController} from "./controller/VisualizerController.tsx";
 import {useState} from "react";
 import {useLabelColors} from "../hooks/useLabelColors.ts";
+import Box from "@mui/material/Box";
 
 interface ResultsViewProps {
     results: ImageResult[];
@@ -49,7 +49,7 @@ export function ResultsVisualizer({results}: ResultsViewProps) {
     );
 
     return (
-        <Grid className="results-grid">
+        <Box sx={{ display: "grid", gridTemplateRows: "1fr auto", height: "100vh" }}>
             <AnnotatedImage result={results[selectedIndex]} maxWidth={Math.min(800, window.innerWidth)}
                             confidenceThreshold={confidenceThreshold}
                             labelColors={labelColors}
@@ -67,6 +67,6 @@ export function ResultsVisualizer({results}: ResultsViewProps) {
                 setColorForLabel={setColorForLabel}
                 visibilityStates={visibilityStates[selectedIndex]}
             />
-        </Grid>
+        </Box>
     );
 }

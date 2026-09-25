@@ -6,7 +6,7 @@ import { parseHslString, toHslString } from "../../utils/hslConversion.ts";
 import {getContrastTextColor} from "../../utils/labelColors.ts";
 
 interface ColorPickerProps {
-    labels: (string | undefined | null)[];
+    labels: string [];
     colorForLabel: (label: string) => string;
     setColorForLabel: (label: string, color: string) => void;
 }

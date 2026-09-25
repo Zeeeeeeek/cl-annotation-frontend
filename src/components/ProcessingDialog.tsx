@@ -6,12 +6,11 @@ import type {ImageResult} from "../api/detectionApi";
 import {processImage} from "../api/detectionApi";
 
 interface ProcessingDialogProps {
-    open: boolean;
     images: FileList;
     onViewResults: (results: ImageResult[]) => void;
 }
 
-export default function ProcessingDialog({open, images, onViewResults}: ProcessingDialogProps) {
+export default function ProcessingDialog({images, onViewResults}: ProcessingDialogProps) {
 
     const isMounted = useRef(false);
 
@@ -56,14 +55,7 @@ export default function ProcessingDialog({open, images, onViewResults}: Processi
         runProcessing().then()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const [isLoading, setIsLoading] = useState(true)
     const isImagesProcessingDone = imageResults.every(image => image.status === "completed" || image.status === "error");
-
-    useEffect(() => {
-        if(isImagesProcessingDone) {
-            setIsLoading(false)
-        }
-    }, [imageResults, isImagesProcessingDone]);
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -89,7 +81,7 @@ export default function ProcessingDialog({open, images, onViewResults}: Processi
     }
 
     return (
-        <Dialog open={open} maxWidth="sm" fullWidth>
+        <Dialog open maxWidth="sm" fullWidth>
             <DialogTitle> Processing images </DialogTitle>
             <DialogContent>
                 <List>
@@ -102,7 +94,7 @@ export default function ProcessingDialog({open, images, onViewResults}: Processi
                 </List>
                 <Button
                     fullWidth
-                    loading = {isLoading}
+                    loading = {!isImagesProcessingDone}
                     loadingPosition="end"
                     variant="contained"
                     onClick={() => onViewResults(imageResults)}

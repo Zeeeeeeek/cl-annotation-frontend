@@ -1,4 +1,3 @@
-import './App.css'
 import {type ChangeEvent, useState} from "react";
 import ProcessingDialog from "./components/ProcessingDialog.tsx";
 import {ResultsVisualizer} from "./components/ResultsVisualizer.tsx";
@@ -32,7 +31,6 @@ function App() {
 
             {phase.step === "processing" && (
                 <ProcessingDialog
-                    open={true}
                     images={phase.images}
                     onViewResults={handleViewResults}
                 />

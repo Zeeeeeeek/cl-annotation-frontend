@@ -31,7 +31,7 @@ export function DetectionsControls({
         <Box sx={{ maxHeight: 150, display: 'flex', flexDirection: 'column' }}>
 
             <Typography gutterBottom>
-                <Tooltip title="Hide or highlight specific boxes that respect the conficence set" arrow>
+                <Tooltip title="Hide or highlight specific boxes that respect the confidence set" arrow>
                     <span>Detection Boxes</span>
                 </Tooltip>
             </Typography>
@@ -60,7 +60,6 @@ export function DetectionsControls({
                                 deleteIcon={visibilityStates[originalIndex] ? <VisibilityIcon /> : <VisibilityOffIcon />}
                                 onDelete={() => onToggleVisibility(originalIndex)}
                                 variant={visibilityStates[originalIndex] ? "filled" : "outlined"}
-                                onClick={() => console.log(`Clicked on detection box ${originalIndex}`)}
                             />
                         ))}
                     </Box>
