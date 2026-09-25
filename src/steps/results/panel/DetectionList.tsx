@@ -1,11 +1,11 @@
 import { Box, Chip } from "@mui/material"
 import VisibilityIcon from "@mui/icons-material/Visibility"
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
-import type { Detection } from "../../../types.ts"
-import { PanelSection } from "../../../components/PanelSection.tsx"
-import { EmptyState } from "../../../components/EmptyState.tsx"
-import { capitalizeFirstLetter, formatConfidence } from "../../../utils/format.ts"
-import { filterByThreshold } from "../../../utils/detections.ts"
+import type { Detection } from "../../../types"
+import { PanelSection } from "../../../components/PanelSection"
+import { EmptyState } from "../../../components/EmptyState"
+import { capitalizeFirstLetter, formatConfidence } from "../../../utils/format"
+import { filterByThreshold } from "../../../utils/detections"
 
 interface DetectionListProps {
     detections: Detection[]

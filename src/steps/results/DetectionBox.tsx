@@ -1,6 +1,6 @@
 import { Group, Rect, Text } from "react-konva"
-import type { BoundingBox, Detection } from "../../types.ts"
-import { formatConfidence } from "../../utils/format.ts"
+import type { BoundingBox, Detection } from "../../types"
+import { formatConfidence } from "../../utils/format"
 
 const LABEL_FONT_SIZE = 14
 const LABEL_PADDING_X = 4

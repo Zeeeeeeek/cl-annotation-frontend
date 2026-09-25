@@ -1,11 +1,11 @@
 import { Box, Chip, Popover } from "@mui/material"
 import { useState, type MouseEvent } from "react"
 import { HslColorPicker } from "react-colorful"
-import { PanelSection } from "../../../components/PanelSection.tsx"
-import { EmptyState } from "../../../components/EmptyState.tsx"
-import { parseHslString, toHslString } from "../../../utils/hslConversion.ts"
-import { getContrastTextColor } from "../../../utils/labelColors.ts"
-import { capitalizeFirstLetter } from "../../../utils/format.ts"
+import { PanelSection } from "../../../components/PanelSection"
+import { EmptyState } from "../../../components/EmptyState"
+import { parseHslString, toHslString } from "../../../utils/hslConversion"
+import { getContrastTextColor } from "../../../utils/labelColors"
+import { capitalizeFirstLetter } from "../../../utils/format"
 
 interface LabelColorsProps {
     labels: string[]

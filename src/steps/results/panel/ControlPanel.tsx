@@ -2,7 +2,7 @@ import { Button, Divider, Grid, Pagination, Paper, Stack } from "@mui/material"
 import EditIcon from "@mui/icons-material/Edit"
 import ReplayIcon from "@mui/icons-material/Replay"
 import type { Detection } from "../../../types"
-import { ThresholdControl } from "./ThresholdControl.tsx"
+import { ThresholdControl } from "./ThresholdControl"
 import { DetectionList } from "./DetectionList"
 import { LabelColors } from "./LabelColors"
 

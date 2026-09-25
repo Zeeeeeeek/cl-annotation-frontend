@@ -1,9 +1,9 @@
 import { Box } from "@mui/material"
 import { useState } from "react"
-import type { ImageItem } from "../../types.ts"
-import { AnnotatedImage } from "./AnnotatedImage.tsx"
-import { ControlPanel } from "./panel/ControlPanel.tsx"
-import { useLabelColors } from "../../hooks/useLabelColors.ts"
+import type { ImageItem } from "../../types"
+import { AnnotatedImage } from "./AnnotatedImage"
+import { ControlPanel } from "./panel/ControlPanel"
+import { useLabelColors } from "../../hooks/useLabelColors"
 
 interface ResultsStepProps {
     images: ImageItem[]

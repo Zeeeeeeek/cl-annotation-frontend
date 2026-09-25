@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {deterministicColorForLabel} from "../utils/labelColors.ts";
+import {deterministicColorForLabel} from "../utils/labelColors";
 
 
 const STORAGE_KEY = "label-color-overrides";

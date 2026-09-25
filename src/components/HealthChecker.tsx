@@ -1,6 +1,6 @@
 import {Alert, Snackbar} from "@mui/material";
 import {useEffect, useState} from "react";
-import {checkHealth} from "../api/client.ts";
+import {checkHealth} from "../api/client";
 
 export function HealthChecker() {
     const [showSnackbar, setShowSnackbar] = useState<boolean>(false);

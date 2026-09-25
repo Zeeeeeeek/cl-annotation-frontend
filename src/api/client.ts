@@ -1,5 +1,5 @@
-import type {DetectedBox} from "../types.ts";
-import {API_BASE_URL} from "../config.ts";
+import type {DetectedBox} from "../types";
+import {API_BASE_URL} from "../config";
 
 export async function detect(file: File, signal?: AbortSignal): Promise<DetectedBox[]> {
     const formData = new FormData();
