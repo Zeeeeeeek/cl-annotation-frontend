@@ -7,13 +7,13 @@ import { EmptyState } from "../../../components/EmptyState.tsx"
 import { capitalizeFirstLetter, formatConfidence } from "../../../utils/format.ts"
 import { filterByThreshold } from "../../../utils/detections.ts"
 
-interface DetectionsControlsProps {
+interface DetectionListProps {
     detections: Detection[]
     confidenceThreshold: number
     onToggleVisibility: (detectionId: string) => void
 }
 
-export function DetectionList({ detections, confidenceThreshold, onToggleVisibility }: DetectionsControlsProps) {
+export function DetectionList({ detections, confidenceThreshold, onToggleVisibility }: DetectionListProps) {
     const detectionsAboveThreshold = filterByThreshold(detections, confidenceThreshold)
 
     return (

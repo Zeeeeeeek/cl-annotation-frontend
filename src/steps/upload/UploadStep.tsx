@@ -3,11 +3,11 @@ import { blue } from "@mui/material/colors"
 import FileUploadIcon from "@mui/icons-material/FileUpload"
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react"
 
-interface ImageLoaderProps {
+interface UploadStepProps {
     onFilesSelected: (files: File[]) => void
 }
 
-export function UploadStep({ onFilesSelected }: ImageLoaderProps) {
+export function UploadStep({ onFilesSelected }: UploadStepProps) {
     const [isDragging, setIsDragging] = useState(false)
     const dragCounter = useRef(0)
 

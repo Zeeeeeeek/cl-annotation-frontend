@@ -7,13 +7,13 @@ import { parseHslString, toHslString } from "../../../utils/hslConversion.ts"
 import { getContrastTextColor } from "../../../utils/labelColors.ts"
 import { capitalizeFirstLetter } from "../../../utils/format.ts"
 
-interface ColorPickerProps {
+interface LabelColorsProps {
     labels: string[]
     colorForLabel: (label: string) => string
     setColorForLabel: (label: string, color: string) => void
 }
 
-export function LabelColors({ labels, colorForLabel, setColorForLabel }: ColorPickerProps) {
+export function LabelColors({ labels, colorForLabel, setColorForLabel }: LabelColorsProps) {
     const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 

@@ -5,13 +5,13 @@ import { AnnotatedImage } from "./AnnotatedImage.tsx"
 import { ControlPanel } from "./panel/ControlPanel.tsx"
 import { useLabelColors } from "../../hooks/useLabelColors.ts"
 
-interface ResultsVisualizerProps {
+interface ResultsStepProps {
     images: ImageItem[]
     onImageUpdate: (id: string, changes: Partial<ImageItem>) => void
     onReset: () => void
 }
 
-export function ResultsStep({ images, onImageUpdate, onReset }: ResultsVisualizerProps) {
+export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [confidenceThreshold, setConfidenceThreshold] = useState(0.9)
     const { colorForLabel, setColorForLabel } = useLabelColors()
