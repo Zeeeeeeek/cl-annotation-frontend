@@ -1,7 +1,7 @@
 import {type ChangeEvent, useState} from "react";
 import ProcessingDialog from "./components/ProcessingDialog.tsx";
 import {ResultsVisualizer} from "./components/ResultsVisualizer.tsx";
-import type { ImageResult } from "./api/detectionApi";
+import type { ImageResult } from "./types.ts";
 import {HealthChecker} from "./components/HealthChecker.tsx";
 import { ImageLoader } from "./components/imageLoader/ImageLoader.tsx";
 

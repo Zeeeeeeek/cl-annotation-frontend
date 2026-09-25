@@ -2,7 +2,7 @@ import {Box, Chip, Tooltip, Typography} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import type { DetectedBox } from "../../api/detectionApi.ts";
+import type { DetectedBox } from "../../types.ts";
 
 interface DetectionsControlsProps {
     detections: DetectedBox[];

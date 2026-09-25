@@ -1,6 +1,6 @@
 import {useEffect, useMemo} from "react";
 import {Stage, Layer, Image} from 'react-konva';
-import type {ImageResult} from "../api/detectionApi.ts";
+import type {ImageResult} from "../types.ts";
 import useImage from "use-image";
 import {DetectionBox} from "./DetectionBox.tsx";
 import {acquireObjectUrl, releaseObjectUrl} from "../utils/objectUrlCache.ts";

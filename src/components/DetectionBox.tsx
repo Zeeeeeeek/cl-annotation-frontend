@@ -1,4 +1,4 @@
-import type {BoundingBox, DetectedBox} from "../api/detectionApi.ts";
+import type {BoundingBox, DetectedBox} from "../types.ts";
 import {Group, Rect, Text} from "react-konva";
 
 interface DetectionBoxProps {

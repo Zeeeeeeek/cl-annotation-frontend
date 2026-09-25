@@ -1,6 +1,6 @@
 import { Divider, Grid, Paper } from "@mui/material";
 import type { ChangeEvent } from "react";
-import type { DetectedBox } from "../../api/detectionApi.ts";
+import type { DetectedBox } from "../../types.ts";
 import ImageControls from "./ImageControls.tsx";
 import { DetectionsControls } from "./DetectionsControls.tsx";
 import { ColorPicker } from "./ColorPicker.tsx";

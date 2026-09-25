@@ -1,6 +1,6 @@
 import {Alert, Snackbar} from "@mui/material";
 import {useEffect, useState} from "react";
-import {isBackendHealthy} from "../api/healthApi.ts";
+import {checkHealth} from "../api/client.ts";
 
 export function HealthChecker() {
     const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
@@ -13,12 +13,12 @@ export function HealthChecker() {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            const healthy = await isBackendHealthy();
+            const healthy = await checkHealth();
             setIsHealthy(healthy);
         }, 60000);
 
         (async () => {
-            const healthy = await isBackendHealthy();
+            const healthy = await checkHealth();
             setIsHealthy(healthy);
         })();
 

@@ -1,4 +1,4 @@
-import type {ImageResult} from "../api/detectionApi.ts";
+import type {ImageResult} from "../types.ts";
 import {AnnotatedImage} from "./AnnotatedImage.tsx";
 import {VisualizerController} from "./controller/VisualizerController.tsx";
 import {useState} from "react";
