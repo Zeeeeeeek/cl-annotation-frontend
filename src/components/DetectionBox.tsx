@@ -1,5 +1,6 @@
 import type {BoundingBox, DetectedBox} from "../types.ts";
 import {Group, Rect, Text} from "react-konva";
+import {formatConfidence} from "../utils/format.ts";
 
 interface DetectionBoxProps {
     detection: DetectedBox;
@@ -19,7 +20,7 @@ function scaleBox(box: BoundingBox, scale: number): BoundingBox {
 
 export function DetectionBox({detection, scale, textColor, strokeColor}: DetectionBoxProps) {
     const box = scaleBox(detection.box, scale);
-    const labelText = `${detection.label} ${Math.trunc(detection.confidence * 100)}%`;
+    const labelText = formatConfidence(detection.confidence);
 
     const labelFontSize = 14;
     const labelPaddingX = 4;

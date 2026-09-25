@@ -1,9 +1,10 @@
-import {Grid, Input, Pagination, Slider, Stack, Tooltip, Typography} from "@mui/material";
+import {Grid, Input, Pagination, Slider, Stack} from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import ReplayIcon from '@mui/icons-material/Replay';
 import type {ChangeEvent} from "react";
+import {SectionTitle} from "../SectionTitle.tsx";
 
 interface ImageControlsProps {
     confidenceThreshold: number;
@@ -46,11 +47,7 @@ export default function ImageControls({
     return (
         <Stack spacing={1}>
             <Box>
-                <Typography gutterBottom>
-                    <Tooltip title="Hide detections below this confidence score" arrow>
-                        <span>Confidence Threshold</span>
-                    </Tooltip>
-                </Typography>
+                <SectionTitle title={"Confidence Threshold"} tooltip={"Hide detections below this confidence score"} />
                 <Grid container spacing={2} sx={{alignItems: 'center'}}>
                     <Grid size="grow">
                         <Slider

@@ -1,87 +1,64 @@
-import {Box, Chip, Typography, Popover, Tooltip} from "@mui/material";
-import { useState, type MouseEvent } from "react";
-import { HslColorPicker } from "react-colorful";
-import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import { parseHslString, toHslString } from "../../utils/hslConversion.ts";
-import {getContrastTextColor} from "../../utils/labelColors.ts";
+import { Box, Chip, Popover } from "@mui/material"
+import { useState, type MouseEvent } from "react"
+import { HslColorPicker } from "react-colorful"
+import { PanelSection } from "../PanelSection"
+import { EmptyState } from "../EmptyState"
+import { parseHslString, toHslString } from "../../utils/hslConversion"
+import { getContrastTextColor } from "../../utils/labelColors"
+import { capitalizeFirstLetter } from "../../utils/format"
 
 interface ColorPickerProps {
-    labels: string [];
-    colorForLabel: (label: string) => string;
-    setColorForLabel: (label: string, color: string) => void;
-}
-
-function labelCapitalizeFirstLetter(label: string): string {
-    if (!label) return label;
-    return label.charAt(0).toUpperCase() + label.slice(1);
+    labels: string[]
+    colorForLabel: (label: string) => string
+    setColorForLabel: (label: string, color: string) => void
 }
 
 export function ColorPicker({ labels, colorForLabel, setColorForLabel }: ColorPickerProps) {
-    const uniqueLabels = [...new Set(labels.filter((label): label is string => Boolean(label)))];
-    const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     function handleChipClick(event: MouseEvent<HTMLElement>, label: string) {
-        setSelectedLabel(label);
-        setAnchorEl(event.currentTarget);
-    }
-
-    function handleClose() {
-        setAnchorEl(null);
+        setSelectedLabel(label)
+        setAnchorEl(event.currentTarget)
     }
 
     return (
-        <Box sx={{ maxHeight: 150, display: 'flex', flexDirection: 'column' }}>
-            <Typography gutterBottom>
-                <Tooltip title="Customize the color used to highlight each class" arrow>
-                    <span>Color picker</span>
-                </Tooltip>
-            </Typography>
+        <PanelSection title="Color picker" tooltip="Customize the color used to highlight each class">
+            {labels.length === 0 && <EmptyState message="No labels" />}
 
-            <Box sx={{ overflowY: 'auto', flexGrow: 1, pb: 1 }}>
-                {uniqueLabels.length === 0 && (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 100, color: 'text.secondary' }}>
-                        <SentimentVeryDissatisfiedIcon sx={{ fontSize: 32, mb: 0.5 }} />
-                        <Typography variant="body2">No labels</Typography>
-                    </Box>
-                )}
-
-                {uniqueLabels.length > 0 && (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                        {uniqueLabels.map(label => (
+            {labels.length > 0 && (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    {labels.map(label => {
+                        const color = colorForLabel(label)
+                        return (
                             <Chip
                                 key={label}
-                                label={labelCapitalizeFirstLetter(label)}
-                                onClick={(event) => handleChipClick(event, label)}
-                                variant="filled"
-                                sx={{ bgcolor: colorForLabel(label), color: getContrastTextColor(colorForLabel(label)) }}
+                                label={capitalizeFirstLetter(label)}
+                                onClick={event => handleChipClick(event, label)}
+                                sx={{ backgroundColor: color, color: getContrastTextColor(color) }}
                             />
-                        ))}
-                    </Box>
-                )}
-            </Box>
+                        )
+                    })}
+                </Box>
+            )}
 
             <Popover
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-                slotProps={{
-                    transition: {
-                        onExited: () => setSelectedLabel(null),
-                    },
-                }}
+                onClose={() => setAnchorEl(null)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                transformOrigin={{ vertical: "top", horizontal: "center" }}
+                slotProps={{ transition: { onExited: () => setSelectedLabel(null) } }}
             >
                 {selectedLabel && (
                     <Box sx={{ p: 2 }}>
                         <HslColorPicker
                             color={parseHslString(colorForLabel(selectedLabel))}
-                            onChange={(newColor) => setColorForLabel(selectedLabel, toHslString(newColor))}
+                            onChange={newColor => setColorForLabel(selectedLabel, toHslString(newColor))}
                         />
                     </Box>
                 )}
             </Popover>
-        </Box>
-    );
+        </PanelSection>
+    )
 }

@@ -1,9 +1,9 @@
 import {type ChangeEvent, useState} from "react";
-import ProcessingDialog from "./components/ProcessingDialog.tsx";
-import {ResultsVisualizer} from "./components/ResultsVisualizer.tsx";
+import {ProcessingDialog} from "./components/ProcessingDialog";
+import {ResultsVisualizer} from "./components/ResultsVisualizer";
 import type { ImageResult } from "./types.ts";
-import {HealthChecker} from "./components/HealthChecker.tsx";
-import { ImageLoader } from "./components/imageLoader/ImageLoader.tsx";
+import {HealthChecker} from "./components/HealthChecker";
+import { ImageLoader } from "./components/imageLoader/ImageLoader";
 
 type AppPhase =
     | { step: "input" }

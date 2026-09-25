@@ -1,44 +1,39 @@
-import Dialog from '@mui/material/Dialog';
-import Button from "@mui/material/Button";
-import {Chip, DialogContent, DialogTitle, List, ListItem, ListItemText} from "@mui/material";
-import {useEffect, useRef, useState} from "react";
-import {detect} from "../api/client"
-import type {ImageResult} from "../types"
+import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText } from "@mui/material"
+import { useEffect, useRef, useState } from "react"
+import { detect } from "../api/client"
+import type { ImageResult } from "../types"
+import { StatusChip } from "./StatusChip"
+import { stripExtension } from "../utils/format"
 
 interface ProcessingDialogProps {
-    images: FileList;
-    onViewResults: (results: ImageResult[]) => void;
+    images: FileList
+    onViewResults: (results: ImageResult[]) => void
 }
 
-export default function ProcessingDialog({images, onViewResults}: ProcessingDialogProps) {
+export function ProcessingDialog({ images, onViewResults }: ProcessingDialogProps) {
+    const isMounted = useRef(false)
 
-    const isMounted = useRef(false);
-
-    const [imageResults, setImageResults] = useState<ImageResult[]>(() => {
-        return Array.from(images).map(img => ({
-            file: img,
-            status: "queued",
-            detections: []
-        }));
-    });
+    const [imageResults, setImageResults] = useState<ImageResult[]>(() =>
+        Array.from(images).map(file => ({ file, status: "queued", detections: [] })),
+    )
 
     useEffect(() => {
         if (isMounted.current) return
         isMounted.current = true
 
         function updateImage(index: number, changes: Partial<ImageResult>) {
-            setImageResults(prev => prev.map((image, i) => (i === index ? {...image, ...changes} : image)))
+            setImageResults(prev => prev.map((image, i) => (i === index ? { ...image, ...changes } : image)))
         }
 
         async function runProcessing() {
             for (let index = 0; index < imageResults.length; index++) {
-                updateImage(index, {status: "processing"})
+                updateImage(index, { status: "processing" })
                 try {
                     const detections = await detect(imageResults[index].file)
-                    updateImage(index, {status: "completed", detections})
+                    updateImage(index, { status: "completed", detections })
                 } catch (error) {
                     const errorMessage = error instanceof Error ? error.message : "Unknown error"
-                    updateImage(index, {status: "error", errorMessage})
+                    updateImage(index, { status: "error", errorMessage })
                 }
             }
         }
@@ -46,47 +41,23 @@ export default function ProcessingDialog({images, onViewResults}: ProcessingDial
         void runProcessing()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const isImagesProcessingDone = imageResults.every(image => image.status === "completed" || image.status === "error");
-
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case "processing":
-                return "primary";
-            case "completed":
-                return "success";
-            case "error":
-                return "error";
-            default:
-                return "default";
-        }
-    }
-
-    const getStatusText = (status: string) => {
-        return status[0].toUpperCase() + status.slice(1);
-    }
-
-    function removeFileExtension(fileName: string) {
-        const lastDotIndex = fileName.lastIndexOf(".")
-        if (lastDotIndex <= 0) return fileName
-        return fileName.substring(0, lastDotIndex)
-    }
+    const isProcessingDone = imageResults.every(image => image.status === "completed" || image.status === "error")
 
     return (
         <Dialog open maxWidth="sm" fullWidth>
-            <DialogTitle> Processing images </DialogTitle>
+            <DialogTitle>Processing images</DialogTitle>
             <DialogContent>
                 <List>
                     {imageResults.map((imageResult, index) => (
-                        <ListItem divider={index < imageResults.length - 1} key={index}>
-                            <ListItemText primary={removeFileExtension(imageResult.file.name)}/>
-                            <Chip color={getStatusColor(imageResult.status)} size="medium"
-                                  label={getStatusText(imageResult.status)}/>
+                        <ListItem key={index} divider={index < imageResults.length - 1}>
+                            <ListItemText primary={stripExtension(imageResult.file.name)} />
+                            <StatusChip status={imageResult.status} />
                         </ListItem>
                     ))}
                 </List>
                 <Button
                     fullWidth
-                    loading={!isImagesProcessingDone}
+                    loading={!isProcessingDone}
                     loadingPosition="end"
                     variant="contained"
                     onClick={() => onViewResults(imageResults)}
@@ -95,6 +66,5 @@ export default function ProcessingDialog({images, onViewResults}: ProcessingDial
                 </Button>
             </DialogContent>
         </Dialog>
-    );
-
+    )
 }
