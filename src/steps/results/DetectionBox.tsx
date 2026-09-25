@@ -1,6 +1,6 @@
 import { Group, Rect, Text } from "react-konva"
 import type { BoundingBox, Detection } from "../../types"
-import { formatConfidence } from "../../utils/format"
+import {formatDetectionLabel} from "../../utils/format"
 
 const LABEL_FONT_SIZE = 14
 const LABEL_PADDING_X = 4
@@ -25,7 +25,7 @@ function scaleBox(box: BoundingBox, scale: number): BoundingBox {
 
 export function DetectionBox({ detection, scale, strokeColor, textColor }: DetectionBoxProps) {
     const box = scaleBox(detection.box, scale)
-    const labelText = `${detection.label} ${formatConfidence(detection.confidence)}`
+    const labelText = formatDetectionLabel(detection)
 
     // Approximate text width: Konva can't measure it before rendering
     const labelWidth = labelText.length * (LABEL_FONT_SIZE * 0.6) + LABEL_PADDING_X * 2

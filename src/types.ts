@@ -15,6 +15,7 @@ export type ImageStatus = "queued" | "processing" | "completed" | "error"
 
 export interface Detection extends DetectedBox {
     id: string
+    index: number
     visible: boolean
 }
 

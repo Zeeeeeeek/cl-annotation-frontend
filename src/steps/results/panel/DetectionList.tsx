@@ -4,7 +4,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 import type { Detection } from "../../../types"
 import { PanelSection } from "../../../components/PanelSection"
 import { EmptyState } from "../../../components/EmptyState"
-import { capitalizeFirstLetter, formatConfidence } from "../../../utils/format"
+import {formatDetectionLabel} from "../../../utils/format"
 import { filterByThreshold } from "../../../utils/detections"
 
 interface DetectionListProps {
@@ -29,7 +29,7 @@ export function DetectionList({ detections, confidenceThreshold, onToggleVisibil
                     {detectionsAboveThreshold.map((detection) => (
                         <Chip
                             key={detection.id}
-                            label={`${capitalizeFirstLetter(detection.label)} ${formatConfidence(detection.confidence)}`}
+                            label={formatDetectionLabel(detection)}
                             deleteIcon={detection.visible ? <VisibilityIcon /> : <VisibilityOffIcon />}
                             onDelete={() => onToggleVisibility(detection.id)}
                             variant={detection.visible ? "filled" : "outlined"}
