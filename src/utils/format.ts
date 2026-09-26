@@ -1,4 +1,4 @@
-import type {Detection} from "../types";
+import type { Detection } from "../types"
 
 export function capitalizeFirstLetter(text: string): string {
     return text.charAt(0).toUpperCase() + text.slice(1)

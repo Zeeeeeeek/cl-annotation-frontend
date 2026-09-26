@@ -4,7 +4,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 import type { Detection } from "../../../types"
 import { PanelSection } from "../../../components/PanelSection"
 import { EmptyState } from "../../../components/EmptyState"
-import {formatDetectionLabel} from "../../../utils/format"
+import { formatDetectionLabel } from "../../../utils/format"
 import { filterByThreshold } from "../../../utils/detections"
 
 interface DetectionListProps {

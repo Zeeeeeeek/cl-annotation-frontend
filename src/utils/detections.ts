@@ -15,7 +15,7 @@ export function toDetections(detectedBoxes: DetectedBox[]): Detection[] {
 
     return [...detectedBoxes]
         .sort((a, b) => b.confidence - a.confidence)
-        .map(detectedBox => {
+        .map((detectedBox) => {
             const index = (countByLabel.get(detectedBox.label) ?? 0) + 1
             countByLabel.set(detectedBox.label, index)
             return { ...detectedBox, id: crypto.randomUUID(), index, visible: true }
