@@ -2,6 +2,7 @@ import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemTex
 import type { ImageItem } from "../../types"
 import { StatusChip } from "../../components/StatusChip"
 import { stripExtension } from "../../utils/format"
+import { scrollShadow } from "../../styles/scrollShadow.ts"
 
 interface ProcessingDialogProps {
     images: ImageItem[]
@@ -14,8 +15,15 @@ export function ProcessingDialog({ images, onViewResults }: ProcessingDialogProp
     return (
         <Dialog open maxWidth="sm" fullWidth>
             <DialogTitle>Processing images</DialogTitle>
-            <DialogContent>
-                <List>
+            <DialogContent sx={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
+                <List
+                    sx={(theme) => ({
+                        flex: 1,
+                        overflowY: "auto",
+                        pr: 1,
+                        ...scrollShadow(theme),
+                    })}
+                >
                     {images.map((image, index) => (
                         <ListItem key={image.id} divider={index < images.length - 1}>
                             <ListItemText primary={stripExtension(image.file.name)} />
@@ -29,6 +37,7 @@ export function ProcessingDialog({ images, onViewResults }: ProcessingDialogProp
                     loadingPosition="end"
                     variant="contained"
                     onClick={onViewResults}
+                    sx={{ mt: 2, flexShrink: 0 }}
                 >
                     View Results
                 </Button>
