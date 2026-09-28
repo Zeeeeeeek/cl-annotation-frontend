@@ -1,50 +1,46 @@
-import './App.css'
-import InputImage from "./components/InputImage.tsx";
-import {type ChangeEvent, useState} from "react";
-import ProcessingDialog from "./components/ProcessingDialog.tsx";
-import {ResultsVisualizer} from "./components/ResultsVisualizer.tsx";
-import type { ImageResult } from "./api/detectionApi";
-import {HealthChecker} from "./components/HealthChecker.tsx";
+import { useState } from "react"
+import { UploadStep } from "./steps/upload/UploadStep"
+import { ProcessingDialog } from "./steps/processing/ProcessingDialog"
+import { ResultsStep } from "./steps/results/ResultsStep"
+import { HealthChecker } from "./components/HealthChecker"
+import { runDetection } from "./api/runDetection"
+import { createImageItem } from "./utils/detections"
+import type { ImageItem } from "./types"
 
-type AppPhase =
-    | { step: "input" }
-    | { step: "processing"; images: FileList }
-    | { step: "results"; results: ImageResult[] }
+type Step = "upload" | "processing" | "results"
 
-function App() {
-    const [phase, setPhase] = useState<AppPhase>({ step: "input" });
+export function App() {
+    const [step, setStep] = useState<Step>("upload")
+    const [images, setImages] = useState<ImageItem[]>([])
 
-    function handleImagesChange(event: ChangeEvent<HTMLInputElement>) {
-        if (event.target.files) {
-            setPhase({ step: "processing", images: event.target.files });
-        }
+    function updateImage(id: string, changes: Partial<ImageItem>) {
+        setImages((prev) => prev.map((image) => (image.id === id ? { ...image, ...changes } : image)))
     }
 
-    function handleViewResults(imageResults: ImageResult[]) {
-        setPhase({ step: "results", results: imageResults });
+    function handleFilesSelected(files: File[]) {
+        if (files.length === 0) return
+
+        const newImages = files.map(createImageItem)
+        setImages(newImages)
+        setStep("processing")
+        void runDetection(newImages, updateImage)
+    }
+
+    function handleReset() {
+        images.forEach((image) => URL.revokeObjectURL(image.previewUrl))
+        setImages([])
+        setStep("upload")
     }
 
     return (
         <>
-            {phase.step === "input" && (
-                <InputImage handleChange={handleImagesChange} />
-            )}
+            {step === "upload" && <UploadStep onFilesSelected={handleFilesSelected} />}
 
-            {phase.step === "processing" && (
-                <ProcessingDialog
-                    open={true}
-                    images={phase.images}
-                    onViewResults={handleViewResults}
-                />
-            )}
+            {step === "processing" && <ProcessingDialog images={images} onViewResults={() => setStep("results")} />}
 
-            {phase.step === "results" && (
-                <ResultsVisualizer results={phase.results} />
-            )}
+            {step === "results" && <ResultsStep images={images} onImageUpdate={updateImage} onReset={handleReset} />}
 
             <HealthChecker />
         </>
     )
 }
-
-export default App
