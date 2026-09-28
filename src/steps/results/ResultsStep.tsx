@@ -37,12 +37,11 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
     }
 
     return (
-        <Box sx={{ display: "grid", gridTemplateRows: "1fr auto", height: "100vh" }}>
+        <Box sx={{ display: "grid", gridTemplateRows: "minmax(0, 1fr) auto", height: "100vh" }}>
             <AnnotatedImage
                 image={selectedImage}
                 confidenceThreshold={confidenceThreshold}
                 colorForLabel={colorForLabel}
-                maxWidth={Math.min(800, window.innerWidth)}
                 hoveredDetectionId={hoveredDetectionId}
             />
             <ControlPanel

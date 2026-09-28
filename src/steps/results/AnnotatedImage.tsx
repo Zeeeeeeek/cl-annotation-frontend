@@ -4,26 +4,21 @@ import useImage from "use-image"
 import type { Detection, Emphasis, ImageItem } from "../../types"
 import { DetectionBox } from "./DetectionBox"
 import { filterByThreshold } from "../../utils/detections"
+import { useElementSize } from "../../hooks/useElementSize.ts"
 
 interface AnnotatedImageProps {
     image: ImageItem
     confidenceThreshold: number
     colorForLabel: (label: string) => string
-    maxWidth: number
     hoveredDetectionId: string | null
 }
 
-export function AnnotatedImage({
-    image,
-    confidenceThreshold,
-    colorForLabel,
-    maxWidth = 800,
-    hoveredDetectionId,
-}: AnnotatedImageProps) {
+export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, hoveredDetectionId }: AnnotatedImageProps) {
+    const { ref, width: areaWidth, height: areaHeight } = useElementSize<HTMLDivElement>()
     const [htmlImage] = useImage(image.previewUrl)
 
-    const scale = htmlImage ? Math.min(1, maxWidth / htmlImage.width) : 1
-    const stageWidth = htmlImage ? htmlImage.width * scale : maxWidth
+    const scale = htmlImage ? Math.min(1, areaWidth / htmlImage.width, areaHeight / htmlImage.height) : 0
+    const stageWidth = htmlImage ? htmlImage.width * scale : 0
     const stageHeight = htmlImage ? htmlImage.height * scale : 0
 
     const shownDetections = filterByThreshold(image.detections, confidenceThreshold).filter(
@@ -43,6 +38,7 @@ export function AnnotatedImage({
 
     return (
         <Box
+            ref={ref}
             sx={{
                 height: "100%",
                 width: "100%",
