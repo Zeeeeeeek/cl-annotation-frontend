@@ -39,6 +39,7 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
     return (
         <Box sx={{ display: "grid", gridTemplateRows: "minmax(0, 1fr) auto", height: "100vh" }}>
             <AnnotatedImage
+                key={selectedImage.id}
                 image={selectedImage}
                 confidenceThreshold={confidenceThreshold}
                 colorForLabel={colorForLabel}
