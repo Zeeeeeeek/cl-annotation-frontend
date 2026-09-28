@@ -1,4 +1,4 @@
-import { parseHslString } from "./hslConversion"
+import { parseHslString, toHslString } from "./hslConversion"
 
 function hashString(str: string): number {
     let hash = 0
@@ -17,4 +17,9 @@ export function deterministicColorForLabel(label: string): string {
 export function getContrastTextColor(backgroundColor: string): "white" | "black" {
     const { l } = parseHslString(backgroundColor)
     return l > 55 ? "black" : "white"
+}
+
+export function brighten(color: string, amount = 15): string {
+    const { h, s, l } = parseHslString(color)
+    return toHslString({ h, s, l: Math.min(100, l + amount) })
 }

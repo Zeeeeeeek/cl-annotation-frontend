@@ -13,10 +13,12 @@ interface ControlPanelProps {
     totalResults: number
     onIndexChange: (index: number) => void
     detections: Detection[]
-    onToggleVisibility: (detectionId: string) => void
+    onToggleVisibility: (detection: Detection) => void
     colorForLabel: (label: string) => string
     setColorForLabel: (label: string, color: string) => void
     onReset: () => void
+    onToggleHighlight: (detection: Detection) => void
+    onDetectionHover: (detectionId: string | null) => void
 }
 
 function SectionDivider() {
@@ -39,6 +41,8 @@ export function ControlPanel({
     colorForLabel,
     setColorForLabel,
     onReset,
+    onToggleHighlight,
+    onDetectionHover,
 }: ControlPanelProps) {
     const uniqueLabels = [...new Set(detections.map((detection) => detection.label))]
 
@@ -92,6 +96,8 @@ export function ControlPanel({
                         detections={detections}
                         confidenceThreshold={confidenceThreshold}
                         onToggleVisibility={onToggleVisibility}
+                        onToggleHighlight={onToggleHighlight}
+                        onDetectionHover={onDetectionHover}
                     />
                 </Grid>
 

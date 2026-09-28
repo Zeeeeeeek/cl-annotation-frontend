@@ -1,6 +1,6 @@
 import { Box } from "@mui/material"
 import { useState } from "react"
-import type { ImageItem } from "../../types"
+import type { Detection, ImageItem } from "../../types"
 import { AnnotatedImage } from "./AnnotatedImage"
 import { ControlPanel } from "./panel/ControlPanel"
 import { useLabelColors } from "../../hooks/useLabelColors"
@@ -18,12 +18,22 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
 
     const selectedImage = images[selectedIndex]
 
-    function handleToggleVisibility(detectionId: string) {
+    const [hoveredDetectionId, setHoveredDetectionId] = useState<string | null>(null)
+
+    function updateDetection(detectionId: string, changes: Partial<Detection>) {
         onImageUpdate(selectedImage.id, {
             detections: selectedImage.detections.map((detection) =>
-                detection.id === detectionId ? { ...detection, visible: !detection.visible } : detection,
+                detection.id === detectionId ? { ...detection, ...changes } : detection,
             ),
         })
+    }
+
+    function handleToggleVisibility(detection: Detection) {
+        updateDetection(detection.id, { visible: !detection.visible })
+    }
+
+    function handleToggleHighlight(detection: Detection) {
+        updateDetection(detection.id, { highlighted: !detection.highlighted })
     }
 
     return (
@@ -33,6 +43,7 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
                 confidenceThreshold={confidenceThreshold}
                 colorForLabel={colorForLabel}
                 maxWidth={Math.min(800, window.innerWidth)}
+                hoveredDetectionId={hoveredDetectionId}
             />
             <ControlPanel
                 confidenceThreshold={confidenceThreshold}
@@ -45,6 +56,8 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
                 colorForLabel={colorForLabel}
                 setColorForLabel={setColorForLabel}
                 onReset={onReset}
+                onToggleHighlight={handleToggleHighlight}
+                onDetectionHover={setHoveredDetectionId}
             />
         </Box>
     )

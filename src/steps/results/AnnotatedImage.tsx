@@ -1,19 +1,25 @@
 import { Box } from "@mui/material"
 import { Image as KonvaImage, Layer, Stage } from "react-konva"
 import useImage from "use-image"
-import type { ImageItem } from "../../types"
+import type { Detection, Emphasis, ImageItem } from "../../types"
 import { DetectionBox } from "./DetectionBox"
 import { filterByThreshold } from "../../utils/detections"
-import { getContrastTextColor } from "../../utils/labelColors"
 
 interface AnnotatedImageProps {
     image: ImageItem
     confidenceThreshold: number
     colorForLabel: (label: string) => string
-    maxWidth?: number
+    maxWidth: number
+    hoveredDetectionId: string | null
 }
 
-export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, maxWidth = 800 }: AnnotatedImageProps) {
+export function AnnotatedImage({
+    image,
+    confidenceThreshold,
+    colorForLabel,
+    maxWidth = 800,
+    hoveredDetectionId,
+}: AnnotatedImageProps) {
     const [htmlImage] = useImage(image.previewUrl)
 
     const scale = htmlImage ? Math.min(1, maxWidth / htmlImage.width) : 1
@@ -23,6 +29,17 @@ export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, maxW
     const shownDetections = filterByThreshold(image.detections, confidenceThreshold).filter(
         (detection) => detection.visible,
     )
+
+    const isEmphasized = (detection: Detection) => detection.highlighted || detection.id === hoveredDetectionId
+
+    const hasEmphasizedDetections = shownDetections.some(isEmphasized)
+
+    function getEmphasis(detection: Detection): Emphasis {
+        if (isEmphasized(detection)) {
+            return "highlighted"
+        }
+        return hasEmphasizedDetections ? "dimmed" : "normal"
+    }
 
     return (
         <Box
@@ -42,14 +59,13 @@ export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, maxW
                         <>
                             <KonvaImage image={htmlImage} width={stageWidth} height={stageHeight} />
                             {shownDetections.map((detection) => {
-                                const color = colorForLabel(detection.label)
                                 return (
                                     <DetectionBox
                                         key={detection.id}
                                         detection={detection}
                                         scale={scale}
-                                        strokeColor={color}
-                                        textColor={getContrastTextColor(color)}
+                                        color={colorForLabel(detection.label)}
+                                        emphasis={getEmphasis(detection)}
                                     />
                                 )
                             })}

@@ -13,10 +13,13 @@ export interface DetectedBox {
 
 export type ImageStatus = "queued" | "processing" | "completed" | "error"
 
+export type Emphasis = "highlighted" | "dimmed" | "normal"
+
 export interface Detection extends DetectedBox {
     id: string
     index: number
     visible: boolean
+    highlighted: boolean
 }
 
 export interface ImageItem {
