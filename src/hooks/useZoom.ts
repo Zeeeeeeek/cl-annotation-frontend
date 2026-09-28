@@ -35,9 +35,7 @@ export function useZoom(imageSize: Size | null, areaSize: Size) {
     const [position, setPosition] = useState<Point>({ x: 0, y: 0 })
 
     // Scale that fits the whole image in the area (small images are never enlarged)
-    const fitScale = imageSize
-        ? Math.min(1, areaSize.width / imageSize.width, areaSize.height / imageSize.height)
-        : 1
+    const fitScale = imageSize ? Math.min(1, areaSize.width / imageSize.width, areaSize.height / imageSize.height) : 1
     const scale = fitScale * zoom
 
     function clampPosition(point: Point, atScale: number = scale): Point {

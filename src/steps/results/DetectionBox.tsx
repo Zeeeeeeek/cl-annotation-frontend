@@ -46,13 +46,7 @@ export function DetectionBox({ detection, color, emphasis, viewScale }: Detectio
 
             {/* Label in screen pixels: the inverse scale cancels the stage scale */}
             <Group x={box.x} y={box.y} scaleX={1 / viewScale} scaleY={1 / viewScale}>
-                <Rect
-                    x={LABEL_OFFSET}
-                    y={LABEL_OFFSET}
-                    width={labelWidth}
-                    height={labelHeight}
-                    fill={displayColor}
-                />
+                <Rect x={LABEL_OFFSET} y={LABEL_OFFSET} width={labelWidth} height={labelHeight} fill={displayColor} />
                 <Text
                     x={LABEL_OFFSET + LABEL_PADDING_X}
                     y={LABEL_OFFSET + LABEL_PADDING_Y}
