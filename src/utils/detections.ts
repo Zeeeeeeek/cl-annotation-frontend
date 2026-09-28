@@ -15,10 +15,10 @@ export function toDetections(detectedBoxes: DetectedBox[]): Detection[] {
 
     return [...detectedBoxes]
         .sort((a, b) => b.confidence - a.confidence)
-        .map((detectedBox) => {
+        .map((detectedBox): Detection => {
             const index = (countByLabel.get(detectedBox.label) ?? 0) + 1
             countByLabel.set(detectedBox.label, index)
-            return { ...detectedBox, id: crypto.randomUUID(), index, visible: true }
+            return { ...detectedBox, id: crypto.randomUUID(), index, visible: true, highlighted: false }
         })
 }
 
