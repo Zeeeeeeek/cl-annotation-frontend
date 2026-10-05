@@ -19,6 +19,7 @@ interface ControlPanelProps {
     onReset: () => void
     onToggleHighlight: (detection: Detection) => void
     onDetectionHover: (detectionId: string | null) => void
+    onImageEdit: () => void
 }
 
 function SectionDivider() {
@@ -43,6 +44,7 @@ export function ControlPanel({
     onReset,
     onToggleHighlight,
     onDetectionHover,
+    onImageEdit,
 }: ControlPanelProps) {
     const uniqueLabels = [...new Set(detections.map((detection) => detection.label))]
 
@@ -72,12 +74,7 @@ export function ControlPanel({
                             >
                                 Start over
                             </Button>
-                            <Button
-                                variant="contained"
-                                fullWidth
-                                startIcon={<EditIcon />}
-                                onClick={() => alert("Not implemented yet")}
-                            >
+                            <Button variant="contained" fullWidth startIcon={<EditIcon />} onClick={onImageEdit}>
                                 Edit
                             </Button>
                         </Stack>

@@ -4,6 +4,7 @@ import type { Detection, ImageItem } from "../../types"
 import { AnnotatedImage } from "./AnnotatedImage"
 import { ControlPanel } from "./panel/ControlPanel"
 import { useLabelColors } from "../../hooks/useLabelColors"
+import { EditDialog } from "./editor/EditDialog.tsx"
 
 interface ResultsStepProps {
     images: ImageItem[]
@@ -36,6 +37,12 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
         updateDetection(detection.id, { highlighted: !detection.highlighted })
     }
 
+    const [openEditDialog, setOpenEditDialog] = useState(false)
+
+    function onImageEdit() {
+        setOpenEditDialog((prevState) => !prevState)
+    }
+
     return (
         <Box sx={{ display: "grid", gridTemplateRows: "minmax(0, 1fr) auto", height: "100vh" }}>
             <AnnotatedImage
@@ -58,7 +65,9 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
                 onReset={onReset}
                 onToggleHighlight={handleToggleHighlight}
                 onDetectionHover={setHoveredDetectionId}
+                onImageEdit={onImageEdit}
             />
+            {openEditDialog && <EditDialog />}
         </Box>
     )
 }

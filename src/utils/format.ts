@@ -9,6 +9,14 @@ export function stripExtension(fileName: string): string {
     return lastDot > 0 ? fileName.slice(0, lastDot) : fileName
 }
 
+export function formatConfidence(confidence: number): string {
+    return `${Math.trunc(confidence * 100)}%`
+}
+
+export function formatDetectionName(detection: Detection): string {
+    return `${capitalizeFirstLetter(detection.label)} ${detection.index}`
+}
+
 export function formatDetectionLabel(detection: Detection): string {
-    return `${capitalizeFirstLetter(detection.label)} ${detection.index} · ${Math.trunc(detection.confidence * 100)}%`
+    return `${formatDetectionName(detection)} · ${formatConfidence(detection.confidence)}`
 }

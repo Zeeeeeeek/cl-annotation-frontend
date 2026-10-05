@@ -15,6 +15,8 @@ export type ImageStatus = "queued" | "processing" | "completed" | "error"
 
 export type Emphasis = "highlighted" | "dimmed" | "normal"
 
+export type EditMode = "Select" | "Draw"
+
 export interface Detection extends DetectedBox {
     id: string
     index: number
