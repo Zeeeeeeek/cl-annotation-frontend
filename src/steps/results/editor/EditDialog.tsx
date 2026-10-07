@@ -49,7 +49,30 @@ const tempDetections: Detection[] = [
 export function EditDialog() {
     const [mode, setMode] = useState<EditMode>("Select")
     const [selectedDetectionId, setSelectedDetectionId] = useState<string | null>(null)
-    const selectedDetection = tempDetections.find(d => d.id === selectedDetectionId) || null
+
+    const [detections, setDetections] = useState<Detection[]>(tempDetections)
+    const selectedDetection = detections.find(d => d.id === selectedDetectionId) || null
+
+    function handleToggleVisibility(id: string) {
+        setDetections(prevDetections =>
+            prevDetections.map(detection => detection.id === id ? {
+                ...detection,
+                visible: !detection.visible
+            } : detection)
+        )
+    }
+
+    function handleLabelChange(id: string, newLabel: string) {
+        setDetections(prevDetections =>
+            prevDetections.map(detection => detection.id === id ? {...detection, label: newLabel} : detection))
+    }
+
+    function handleDelete(id: string) {
+        setDetections(prevDetections => prevDetections.filter(detection => detection.id !== id))
+        if (selectedDetectionId === id) {
+            setSelectedDetectionId(null)
+        }
+    }
 
     return (
         <Dialog open={true} fullScreen>
@@ -86,28 +109,27 @@ export function EditDialog() {
                         flexDirection: "column"
                     }}
                 >
-                    <Box sx={{p:2}}>
+                    <Box sx={{p: 2, display: "flex", flexDirection: "column", minHeight: 0, flex: 1}}>
                         <BoxList
-                            detections={tempDetections}
+                            detections={detections}
                             selectedId={selectedDetectionId}
                             onSelect={setSelectedDetectionId}
-                            onToggleVisibility={() => {
-                            }}
-                            onDelete={() => {
-                            }}
+                            onToggleVisibility={handleToggleVisibility}
+                            onDelete={handleDelete}
                         />
-                        <Divider/>
+
                         {selectedDetection && (
-                            <SelectedBoxPanel
-                                selectedBox={selectedDetection}
-                                onLabelChange={() => {
-                                }}
-                                onDelete={() => {
-                                }}
-                            />
+                            <>
+                                <Divider/>
+                                <SelectedBoxPanel
+                                    selectedBox={selectedDetection}
+                                    onLabelChange={(newLabel) => handleLabelChange(selectedDetection.id, newLabel)}
+                                    onDelete={() => handleDelete(selectedDetection.id)}
+                                />
+                            </>
                         )}
                     </Box>
-                    <Box sx={{mt: "auto", borderTop: 1, borderColor: "divider", px: 2, py: 1.5}}>
+                    <Box sx={{borderTop: 1, borderColor: "divider", px: 2, py: 1.5}}>
                         <ShortcutLegend/>
                     </Box>
                 </Box>
