@@ -5,6 +5,7 @@ import { EditHeader } from "./EditHeader.tsx"
 import { BoxList } from "./BoxList.tsx"
 import { SelectedBoxPanel } from "./SelectedBoxPanel.tsx"
 import { ShortcutLegend } from "./ShortcutLegend.tsx"
+import { EditCanvas } from "./EditCanvas.tsx"
 
 interface EditDialogProps {
     image: ImageItem
@@ -70,8 +71,16 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                         flexGrow: 1,
                         minWidth: 0,
                         backgroundColor: "grey.900",
+                        p: 1,
                     }}
-                ></Box>
+                >
+                    <EditCanvas
+                        imageUrl={image.previewUrl}
+                        detections={image.detections}
+                        selectedId={selectedDetectionId}
+                        colorForLabel={colorForLabel}
+                    />
+                </Box>
                 <Box
                     sx={{
                         width: "clamp(18rem, 25vw, 25rem)",
