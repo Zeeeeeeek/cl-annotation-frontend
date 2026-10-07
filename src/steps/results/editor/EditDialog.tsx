@@ -12,9 +12,10 @@ interface EditDialogProps {
     totalImages: number,
     onClose: () => void,
     onSave: (updatedDetections: Detection[]) => void
+    colorForLabel: (label: string) => string
 }
 
-export function EditDialog({image, imageIndex, totalImages, onClose, onSave}: EditDialogProps) {
+export function EditDialog({image, imageIndex, totalImages, onClose, onSave, colorForLabel}: EditDialogProps) {
     const [mode, setMode] = useState<EditMode>("Select")
     const [selectedDetectionId, setSelectedDetectionId] = useState<string | null>(null)
 
@@ -83,6 +84,7 @@ export function EditDialog({image, imageIndex, totalImages, onClose, onSave}: Ed
                             onSelect={setSelectedDetectionId}
                             onToggleVisibility={handleToggleVisibility}
                             onDelete={handleDelete}
+                            colorForLabel={colorForLabel}
                         />
 
                         {selectedDetection && (

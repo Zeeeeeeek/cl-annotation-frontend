@@ -79,6 +79,7 @@ export function ResultsStep({images, onImageUpdate, onReset}: ResultsStepProps) 
                     })
                     setOpenEditDialog(false)
                 }}
+                colorForLabel={colorForLabel}
             />}
         </Box>
     )

@@ -22,9 +22,10 @@ interface BoxListProps {
     onSelect: (id: string) => void
     onToggleVisibility: (id: string) => void
     onDelete: (id: string) => void
+    colorForLabel: (label: string) => string
 }
 
-export function BoxList({detections, selectedId, onSelect, onToggleVisibility, onDelete}: BoxListProps) {
+export function BoxList({detections, selectedId, onSelect, onToggleVisibility, onDelete, colorForLabel}: BoxListProps) {
     const detectionsIndexes = getDetectionIndexes(detections)
 
     return (
@@ -75,10 +76,9 @@ export function BoxList({detections, selectedId, onSelect, onToggleVisibility, o
                                     sx={{pr: 10, borderRadius: 1}}
                                 >
                                     <ListItemIcon sx={{minWidth: "2rem"}}>
-                                        {/* TODO: replace the placeholder with the label color */}
                                         <Box
                                             sx={{
-                                                backgroundColor: "red",
+                                                backgroundColor: colorForLabel(detection.label) ?? "red",
                                                 width: "1rem",
                                                 height: "1rem",
                                                 borderRadius: "30%",
