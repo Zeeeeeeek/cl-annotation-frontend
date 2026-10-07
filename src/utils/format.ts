@@ -17,6 +17,6 @@ export function formatDetectionName(detection: Detection, index: number): string
     return `${capitalizeFirstLetter(detection.label)} ${index}`
 }
 
-export function formatDetectionLabel(detection: Detection, index:number): string {
+export function formatDetectionLabel(detection: Detection, index: number): string {
     return `${formatDetectionName(detection, index)} · ${formatConfidence(detection.confidence)}`
 }

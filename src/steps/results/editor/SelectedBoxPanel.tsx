@@ -53,13 +53,7 @@ export function SelectedBoxPanel({ selectedBox, onLabelChange, onDelete }: Selec
                 ))}
             </Box>
 
-            <Button
-                variant="outlined"
-                color="error"
-                fullWidth
-                startIcon={<DeleteOutlinedIcon />}
-                onClick={onDelete}
-            >
+            <Button variant="outlined" color="error" fullWidth startIcon={<DeleteOutlinedIcon />} onClick={onDelete}>
                 Delete box
             </Button>
         </Box>

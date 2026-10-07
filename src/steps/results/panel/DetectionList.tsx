@@ -5,7 +5,7 @@ import type { Detection } from "../../../types"
 import { PanelSection } from "../../../components/PanelSection"
 import { EmptyState } from "../../../components/EmptyState"
 import { formatDetectionLabel } from "../../../utils/format"
-import {filterByThreshold, getDetectionIndexes} from "../../../utils/detections"
+import { filterByThreshold, getDetectionIndexes } from "../../../utils/detections"
 import PushPinIcon from "@mui/icons-material/PushPin"
 
 interface DetectionListProps {

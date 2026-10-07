@@ -7,7 +7,7 @@ export function createImageItem(file: File): ImageItem {
         previewUrl: URL.createObjectURL(file),
         status: "queued",
         detections: [],
-        edited: false
+        edited: false,
     }
 }
 

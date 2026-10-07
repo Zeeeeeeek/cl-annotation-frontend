@@ -1,6 +1,6 @@
 import type { Detection, Emphasis, ImageItem } from "../../types"
 import { DetectionBox } from "./DetectionBox"
-import {filterByThreshold, getDetectionIndexes} from "../../utils/detections"
+import { filterByThreshold, getDetectionIndexes } from "../../utils/detections"
 import { ImageViewer } from "../../components/ImageViewer.tsx"
 
 interface AnnotatedImageProps {

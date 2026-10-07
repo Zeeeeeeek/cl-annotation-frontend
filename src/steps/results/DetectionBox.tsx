@@ -1,7 +1,7 @@
-import {Group, Rect, Text} from "react-konva"
-import type {Detection, Emphasis} from "../../types"
-import {formatDetectionLabel} from "../../utils/format"
-import {brighten, getContrastTextColor} from "../../utils/labelColors"
+import { Group, Rect, Text } from "react-konva"
+import type { Detection, Emphasis } from "../../types"
+import { formatDetectionLabel } from "../../utils/format"
+import { brighten, getContrastTextColor } from "../../utils/labelColors"
 
 const LABEL_FONT_SIZE = 14
 const LABEL_PADDING_X = 4
@@ -13,12 +13,12 @@ interface DetectionBoxProps {
     color: string
     emphasis: Emphasis
     // Current scale of the stage: used to keep the label the same size on screen
-    viewScale: number,
+    viewScale: number
     detectionIndex: number
 }
 
-export function DetectionBox({detection, color, emphasis, viewScale, detectionIndex}: DetectionBoxProps) {
-    const {box} = detection
+export function DetectionBox({ detection, color, emphasis, viewScale, detectionIndex }: DetectionBoxProps) {
+    const { box } = detection
     const isHighlighted = emphasis === "highlighted"
 
     const displayColor = isHighlighted ? brighten(color) : color
@@ -47,7 +47,7 @@ export function DetectionBox({detection, color, emphasis, viewScale, detectionIn
 
             {/* Label in screen pixels: the inverse scale cancels the stage scale */}
             <Group x={box.x} y={box.y} scaleX={1 / viewScale} scaleY={1 / viewScale}>
-                <Rect x={LABEL_OFFSET} y={LABEL_OFFSET} width={labelWidth} height={labelHeight} fill={displayColor}/>
+                <Rect x={LABEL_OFFSET} y={LABEL_OFFSET} width={labelWidth} height={labelHeight} fill={displayColor} />
                 <Text
                     x={LABEL_OFFSET + LABEL_PADDING_X}
                     y={LABEL_OFFSET + LABEL_PADDING_Y}
