@@ -74,7 +74,7 @@ export function ResultsStep({images, onImageUpdate, onReset}: ResultsStepProps) 
                 onClose={() => setOpenEditDialog(false)}
                 onSave={(updatedDetections) => {
                     onImageUpdate(selectedImage.id, {
-                        detections: updatedDetections.map((detection) => ({...detection, visible: true})),
+                        detections: updatedDetections.map((detection) => ({...detection, visible: true, confidence: 1})),
                         edited: true,
                     })
                     setOpenEditDialog(false)
