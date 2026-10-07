@@ -19,7 +19,6 @@ export type EditMode = "Select" | "Draw"
 
 export interface Detection extends DetectedBox {
     id: string
-    index: number
     visible: boolean
     highlighted: boolean
 }
@@ -30,5 +29,6 @@ export interface ImageItem {
     previewUrl: string
     status: ImageStatus
     detections: Detection[]
+    edited: boolean
     errorMessage?: string
 }

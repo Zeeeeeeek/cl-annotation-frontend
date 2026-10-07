@@ -1,6 +1,6 @@
 import type { Detection, Emphasis, ImageItem } from "../../types"
 import { DetectionBox } from "./DetectionBox"
-import { filterByThreshold } from "../../utils/detections"
+import {filterByThreshold, getDetectionIndexes} from "../../utils/detections"
 import { ImageViewer } from "../../components/ImageViewer.tsx"
 
 interface AnnotatedImageProps {
@@ -25,7 +25,7 @@ export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, hove
 
     // Konva draws in render order: emphasized boxes go last so they stay on top
     const orderedDetections = [...shownDetections].sort((a, b) => Number(isEmphasized(a)) - Number(isEmphasized(b)))
-
+    const detectionIndexes = getDetectionIndexes(image.detections)
     return (
         <ImageViewer
             imageUrl={image.previewUrl}
@@ -37,6 +37,7 @@ export function AnnotatedImage({ image, confidenceThreshold, colorForLabel, hove
                         color={colorForLabel(detection.label)}
                         emphasis={getEmphasis(detection)}
                         viewScale={scale}
+                        detectionIndex={detectionIndexes.get(detection.id) ?? 0}
                     />
                 ))
             }

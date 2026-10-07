@@ -5,7 +5,7 @@ import type { Detection } from "../../../types"
 import { PanelSection } from "../../../components/PanelSection"
 import { EmptyState } from "../../../components/EmptyState"
 import { formatDetectionLabel } from "../../../utils/format"
-import { filterByThreshold } from "../../../utils/detections"
+import {filterByThreshold, getDetectionIndexes} from "../../../utils/detections"
 import PushPinIcon from "@mui/icons-material/PushPin"
 
 interface DetectionListProps {
@@ -24,6 +24,7 @@ export function DetectionList({
     onDetectionHover,
 }: DetectionListProps) {
     const detectionsAboveThreshold = filterByThreshold(detections, confidenceThreshold)
+    const detectionIndexes = getDetectionIndexes(detections)
 
     return (
         <PanelSection title="Detection Boxes" tooltip="Hide or show the boxes above the confidence threshold">
@@ -38,7 +39,7 @@ export function DetectionList({
                     {detectionsAboveThreshold.map((detection) => (
                         <Chip
                             key={detection.id}
-                            label={formatDetectionLabel(detection)}
+                            label={formatDetectionLabel(detection, detectionIndexes.get(detection.id) ?? 0)}
                             icon={detection.highlighted ? <PushPinIcon /> : undefined}
                             variant={detection.visible ? "filled" : "outlined"}
                             onClick={() => onToggleHighlight(detection)}

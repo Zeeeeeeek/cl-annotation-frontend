@@ -7,21 +7,30 @@ export function createImageItem(file: File): ImageItem {
         previewUrl: URL.createObjectURL(file),
         status: "queued",
         detections: [],
+        edited: false
     }
 }
 
 export function toDetections(detectedBoxes: DetectedBox[]): Detection[] {
-    const countByLabel = new Map<string, number>()
-
     return [...detectedBoxes]
         .sort((a, b) => b.confidence - a.confidence)
         .map((detectedBox): Detection => {
-            const index = (countByLabel.get(detectedBox.label) ?? 0) + 1
-            countByLabel.set(detectedBox.label, index)
-            return { ...detectedBox, id: crypto.randomUUID(), index, visible: true, highlighted: false }
+            return { ...detectedBox, id: crypto.randomUUID(), visible: true, highlighted: false }
         })
 }
 
 export function filterByThreshold(detections: Detection[], threshold: number): Detection[] {
     return detections.filter((detection) => detection.confidence >= threshold)
+}
+
+export function getDetectionIndexes(detections: Detection[]): Map<string, number> {
+    const labelCountMap = new Map<string, number>()
+    const detectionIndexMap = new Map<string, number>()
+
+    detections.forEach((detection) => {
+        const index = (labelCountMap.get(detection.label) ?? 0) + 1
+        labelCountMap.set(detection.label, index)
+        detectionIndexMap.set(detection.id, index)
+    })
+    return detectionIndexMap
 }

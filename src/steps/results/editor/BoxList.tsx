@@ -14,6 +14,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined"
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined"
 import type {Detection} from "../../../types"
 import {formatConfidence, formatDetectionName} from "../../../utils/format.ts"
+import {getDetectionIndexes} from "../../../utils/detections.ts";
 
 interface BoxListProps {
     detections: Detection[]
@@ -24,6 +25,8 @@ interface BoxListProps {
 }
 
 export function BoxList({detections, selectedId, onSelect, onToggleVisibility, onDelete}: BoxListProps) {
+    const detectionsIndexes = getDetectionIndexes(detections)
+
     return (
         <Box sx={{display: "flex", flexDirection: "column", minHeight: 0}}>
             <Stack direction="row" spacing={1} sx={{alignItems: "baseline"}}>
@@ -35,7 +38,7 @@ export function BoxList({detections, selectedId, onSelect, onToggleVisibility, o
             <Box sx={{flex: "0 1 auto", minHeight: 0, overflowY: "auto"}}>
                 <List>
                     {detections.map((detection) => {
-                        const name = formatDetectionName(detection)
+                        const name = formatDetectionName(detection, detectionsIndexes.get(detection.id) ?? 0)
 
                         return (
                             <ListItem
