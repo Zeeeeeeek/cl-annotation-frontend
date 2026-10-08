@@ -49,6 +49,19 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
         }
     }
 
+    function handleBoxUpdate(detectionId: string, updatedBox: Detection["box"]) {
+        setDetections((prevDetections) =>
+            prevDetections.map((detection) =>
+                detection.id === detectionId
+                    ? {
+                          ...detection,
+                          box: updatedBox,
+                      }
+                    : detection,
+            ),
+        )
+    }
+
     return (
         <Dialog open={true} fullScreen>
             <EditHeader
@@ -76,10 +89,11 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                 >
                     <EditCanvas
                         imageUrl={image.previewUrl}
-                        detections={image.detections}
+                        detections={detections}
                         selectedId={selectedDetectionId}
                         setSelectedId={setSelectedDetectionId}
                         colorForLabel={colorForLabel}
+                        onBoxUpdate={handleBoxUpdate}
                     />
                 </Box>
                 <Box

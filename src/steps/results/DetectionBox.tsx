@@ -36,6 +36,8 @@ export function DetectionBox({ detection, color, emphasis, viewScale, detectionI
                 detectionIndex={detectionIndex}
                 displayColor={displayColor}
                 viewScale={viewScale}
+                x={box.x}
+                y={box.y}
             />
         </Group>
     )

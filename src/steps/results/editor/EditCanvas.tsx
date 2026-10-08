@@ -9,9 +9,17 @@ interface EditCanvasProps {
     selectedId: string | null
     setSelectedId: (id: string | null) => void
     colorForLabel: (label: string) => string
+    onBoxUpdate: (detectionId: string, updatedBox: Detection["box"]) => void
 }
 
-export function EditCanvas({ imageUrl, detections, selectedId, colorForLabel, setSelectedId }: EditCanvasProps) {
+export function EditCanvas({
+    imageUrl,
+    detections,
+    selectedId,
+    colorForLabel,
+    setSelectedId,
+    onBoxUpdate,
+}: EditCanvasProps) {
     const shownDetections = detections.filter((detection) => detection.visible)
 
     const orderedDetections = [...shownDetections].sort(
@@ -33,6 +41,9 @@ export function EditCanvas({ imageUrl, detections, selectedId, colorForLabel, se
                         isSelected={detection.id === selectedId}
                         viewScale={scale}
                         onSelect={() => setSelectedId(detection.id)}
+                        onBoxUpdate={(updatedBox) => {
+                            onBoxUpdate(detection.id, updatedBox)
+                        }}
                     />
                 ))
             }
