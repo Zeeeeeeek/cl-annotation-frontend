@@ -12,9 +12,10 @@ const WHEEL_ZOOM_SENSITIVITY = 0.002
 interface ImageViewerProps {
     imageUrl: string
     renderOverlay: (scale: number) => ReactNode
+    onBackGroundClick?: () => void
 }
 
-export function ImageViewer({ imageUrl, renderOverlay }: ImageViewerProps) {
+export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: ImageViewerProps) {
     const { ref, width: areaWidth, height: areaHeight } = useElementSize<HTMLDivElement>()
     const [htmlImage] = useImage(imageUrl)
 
@@ -64,11 +65,20 @@ export function ImageViewer({ imageUrl, renderOverlay }: ImageViewerProps) {
                 dragBoundFunc={(point) => clampPosition(point)}
                 onDragMove={handleDragMove}
                 onWheel={handleWheel}
+                onClick={(e) => {
+                    const clickedOnBackground = e.target === e.target.getStage() || e.target.name() === "background"
+                    if (clickedOnBackground) {
+                        e.cancelBubble = true
+                        if (onBackGroundClick) {
+                            onBackGroundClick()
+                        }
+                    }
+                }}
             >
                 <Layer>
                     {htmlImage && (
                         <>
-                            <KonvaImage image={htmlImage} />
+                            <KonvaImage image={htmlImage} name={"background"}/>
                             {renderOverlay?.(scale)}
                         </>
                     )}

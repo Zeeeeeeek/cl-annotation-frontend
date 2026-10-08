@@ -78,6 +78,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                         imageUrl={image.previewUrl}
                         detections={image.detections}
                         selectedId={selectedDetectionId}
+                        setSelectedId={setSelectedDetectionId}
                         colorForLabel={colorForLabel}
                     />
                 </Box>
