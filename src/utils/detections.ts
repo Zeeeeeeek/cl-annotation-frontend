@@ -34,3 +34,7 @@ export function getDetectionIndexes(detections: Detection[]): Map<string, number
     })
     return detectionIndexMap
 }
+
+export function getBoxArea(box: Detection["box"]): number {
+    return box.width * box.height
+}

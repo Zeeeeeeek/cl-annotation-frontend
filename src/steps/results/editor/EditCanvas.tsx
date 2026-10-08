@@ -1,5 +1,5 @@
 import type { Detection } from "../../../types.ts"
-import { getDetectionIndexes } from "../../../utils/detections.ts"
+import { getBoxArea, getDetectionIndexes } from "../../../utils/detections.ts"
 import { ImageViewer } from "../../../components/ImageViewer.tsx"
 import { EditableBox } from "./EditableBox.tsx"
 
@@ -22,11 +22,13 @@ export function EditCanvas({
 }: EditCanvasProps) {
     const shownDetections = detections.filter((detection) => detection.visible)
 
-    const orderedDetections = [...shownDetections].sort(
-        (a, b) => Number(a.id === selectedId) - Number(b.id === selectedId),
-    )
-    const detectionIndexes = getDetectionIndexes(detections)
+    const selectionDiff = (a: Detection, b: Detection): number =>
+        Number(a.id === selectedId) - Number(b.id === selectedId)
 
+    const areaDiff = (a: Detection, b: Detection): number => getBoxArea(b.box) - getBoxArea(a.box)
+
+    const orderedDetections = [...shownDetections].sort((a, b) => areaDiff(a, b) || selectionDiff(a, b))
+    const detectionIndexes = getDetectionIndexes(detections)
     return (
         <ImageViewer
             imageUrl={imageUrl}
