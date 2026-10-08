@@ -1,8 +1,7 @@
-import {Group, Rect} from "react-konva"
-import type {Detection, Emphasis} from "../../types"
-import {brighten} from "../../utils/labelColors"
-import {DetectionLabel} from "../../components/DetectionLabel.tsx";
-
+import { Group, Rect } from "react-konva"
+import type { Detection, Emphasis } from "../../types"
+import { brighten } from "../../utils/labelColors"
+import { DetectionLabel } from "../../components/DetectionLabel.tsx"
 
 interface DetectionBoxProps {
     detection: Detection
@@ -12,8 +11,8 @@ interface DetectionBoxProps {
     detectionIndex: number
 }
 
-export function DetectionBox({detection, color, emphasis, viewScale, detectionIndex}: DetectionBoxProps) {
-    const {box} = detection
+export function DetectionBox({ detection, color, emphasis, viewScale, detectionIndex }: DetectionBoxProps) {
+    const { box } = detection
     const isHighlighted = emphasis === "highlighted"
 
     const displayColor = isHighlighted ? brighten(color) : color
@@ -32,8 +31,12 @@ export function DetectionBox({detection, color, emphasis, viewScale, detectionIn
                 strokeScaleEnabled={false}
                 shadowBlur={10}
             />
-            <DetectionLabel detection={detection} detectionIndex={detectionIndex} displayColor={displayColor}
-                            viewScale={viewScale}/>
+            <DetectionLabel
+                detection={detection}
+                detectionIndex={detectionIndex}
+                displayColor={displayColor}
+                viewScale={viewScale}
+            />
         </Group>
     )
 }

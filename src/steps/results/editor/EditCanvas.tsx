@@ -26,7 +26,7 @@ export function EditCanvas({ imageUrl, detections, selectedId, colorForLabel, se
             renderOverlay={(scale) =>
                 orderedDetections.map((detection) => (
                     <EditableBox
-                        key ={detection.id}
+                        key={detection.id}
                         detection={detection}
                         detectionIndex={detectionIndexes.get(detection.id) ?? 0}
                         color={colorForLabel(detection.label)}

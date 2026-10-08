@@ -78,7 +78,7 @@ export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: Imag
                 <Layer>
                     {htmlImage && (
                         <>
-                            <KonvaImage image={htmlImage} name={"background"}/>
+                            <KonvaImage image={htmlImage} name={"background"} />
                             {renderOverlay?.(scale)}
                         </>
                     )}

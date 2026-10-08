@@ -1,7 +1,7 @@
-import type {Detection} from "../../../types.ts"
-import {Group, Rect} from "react-konva"
-import {brighten} from "../../../utils/labelColors.ts"
-import {DetectionLabel} from "../../../components/DetectionLabel.tsx";
+import type { Detection } from "../../../types.ts"
+import { Group, Rect } from "react-konva"
+import { brighten } from "../../../utils/labelColors.ts"
+import { DetectionLabel } from "../../../components/DetectionLabel.tsx"
 
 interface EditableBoxProps {
     detection: Detection
@@ -12,7 +12,7 @@ interface EditableBoxProps {
     onSelect: () => void
 }
 
-export function EditableBox({detection, detectionIndex, color, isSelected, viewScale, onSelect}: EditableBoxProps) {
+export function EditableBox({ detection, detectionIndex, color, isSelected, viewScale, onSelect }: EditableBoxProps) {
     const displayColor = isSelected ? brighten(color) : color
     const strokeWidth = isSelected ? 5 : 3
 
@@ -29,8 +29,12 @@ export function EditableBox({detection, detectionIndex, color, isSelected, viewS
                 shadowBlur={10}
                 fill={"transparent"}
             />
-            <DetectionLabel detection={detection} detectionIndex={detectionIndex} displayColor={displayColor}
-                            viewScale={viewScale}/>
+            <DetectionLabel
+                detection={detection}
+                detectionIndex={detectionIndex}
+                displayColor={displayColor}
+                viewScale={viewScale}
+            />
         </Group>
     )
 }
