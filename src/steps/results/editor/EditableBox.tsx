@@ -1,7 +1,9 @@
 import type { Detection } from "../../../types.ts"
-import { Group, Rect } from "react-konva"
+import { Group, Rect, Transformer } from "react-konva"
 import { brighten } from "../../../utils/labelColors.ts"
 import { DetectionLabel } from "../../../components/DetectionLabel.tsx"
+import { useEffect, useRef } from "react"
+import Konva from "konva"
 
 interface EditableBoxProps {
     detection: Detection
@@ -16,6 +18,14 @@ export function EditableBox({ detection, detectionIndex, color, isSelected, view
     const displayColor = isSelected ? brighten(color) : color
     const strokeWidth = isSelected ? 5 : 3
 
+    const rectRef = useRef<Konva.Rect>(null)
+    const transformerRef = useRef<Konva.Transformer>(null)
+    useEffect(() => {
+        if (isSelected && rectRef.current && transformerRef.current) {
+            transformerRef.current.nodes([rectRef.current])
+        }
+    }, [isSelected])
+
     return (
         <Group onClick={onSelect} onTap={onSelect}>
             <Rect
@@ -28,6 +38,10 @@ export function EditableBox({ detection, detectionIndex, color, isSelected, view
                 strokeScaleEnabled={false}
                 shadowBlur={10}
                 fill={"transparent"}
+                draggable
+                onDragEnd={(e) => {
+                    console.log(`Drag end: ${e.target.x()}, ${e.target.y()}`)
+                }}
             />
             <DetectionLabel
                 detection={detection}
@@ -35,6 +49,7 @@ export function EditableBox({ detection, detectionIndex, color, isSelected, view
                 displayColor={displayColor}
                 viewScale={viewScale}
             />
+            {isSelected && <Transformer ref={transformerRef} rotateEnabled={false} keepRatio={false} />}
         </Group>
     )
 }
