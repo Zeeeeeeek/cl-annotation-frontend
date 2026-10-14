@@ -79,6 +79,7 @@ export function EditableBox({
                 onDragEnd={handleMoveEnd}
                 onTransformEnd={handleMoveEnd}
                 ref={rectRef}
+                dragDistance={3}
             />
             <DetectionLabel
                 detection={detection}
@@ -88,7 +89,7 @@ export function EditableBox({
                 x={labelBox.x}
                 y={labelBox.y}
             />
-            {isSelected && <Transformer ref={transformerRef} rotateEnabled={false} keepRatio={false} ignoreStroke />}
+            {isSelected && <Transformer ref={transformerRef} rotateEnabled={false} keepRatio={false} ignoreStroke flipEnabled={false}/>}
         </Group>
     )
 }

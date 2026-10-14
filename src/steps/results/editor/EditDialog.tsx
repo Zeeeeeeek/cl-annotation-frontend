@@ -1,5 +1,5 @@
-import { Box, Button, Dialog, DialogActions, Divider } from "@mui/material"
-import { useState } from "react"
+import {Box, Button, Dialog, DialogActions, Divider, Typography} from "@mui/material"
+import {useMemo, useState} from "react"
 import type { Detection, EditMode, ImageItem } from "../../../types"
 import { EditHeader } from "./EditHeader.tsx"
 import { BoxList } from "./BoxList.tsx"
@@ -22,6 +22,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
 
     const [detections, setDetections] = useState<Detection[]>(image.detections)
     const selectedDetection = detections.find((d) => d.id === selectedDetectionId) || null
+    const [confirmSaveOpen, setConfirmSaveOpen] = useState(false);
 
     function handleToggleVisibility(id: string) {
         setDetections((prevDetections) =>
@@ -60,6 +61,50 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                     : detection,
             ),
         )
+        const tempOldBox = image.detections.find((detection) => detection.id === detectionId)?.box
+        console.log("Old Box:", tempOldBox)
+        console.log("Updated Box:", updatedBox)
+    }
+
+    function isSameBox(
+        box1: Detection["box"],
+        box2: Detection["box"],
+    ): boolean {
+        const epsilon = 0.01;
+
+        return (
+            Math.abs(box1.x - box2.x) < epsilon &&
+            Math.abs(box1.y - box2.y) < epsilon &&
+            Math.abs(box1.width - box2.width) < epsilon &&
+            Math.abs(box1.height - box2.height) < epsilon
+        );
+    }
+
+    const isModified = useMemo(() => {
+        const original = image.detections;
+
+        if (original.length !== detections.length) {
+            return true;
+        }
+
+        return original.some((oldDetection) => {
+            const current = detections.find(
+                (detection) => detection.id === oldDetection.id,
+            );
+
+            if (!current) return true;
+
+            if (current.label !== oldDetection.label) {
+                return true;
+            }
+
+            return !isSameBox(oldDetection.box, current.box);
+        });
+    }, [image.detections, detections]);
+
+    function handleConfirmSave() {
+        onSave(detections);
+        setConfirmSaveOpen(false);
     }
 
     return (
@@ -132,14 +177,71 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                     </Box>
                 </Box>
             </Box>
-            <DialogActions sx={{ borderTop: 1, borderColor: "divider", px: 3, py: 2 }}>
-                <Button color="error" variant="text" onClick={onClose}>
-                    Cancel
-                </Button>
-                <Button color="primary" variant="contained" onClick={() => onSave(detections)}>
-                    Save changes
-                </Button>
+            <DialogActions
+                sx={{
+                    borderTop: 1,
+                    borderColor: "divider",
+                    px: 3,
+                    py: 2,
+                    justifyContent: "space-between",
+                }}
+            >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Box
+                        sx={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: "50%",
+                            bgcolor: isModified ? "warning.main" : "transparent",
+                        }}
+                    />
+
+                    <Typography variant="body2">
+                        {isModified ? "Unsaved changes" : ""}
+                    </Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", gap: 1 }}>
+                    <Button color="inherit" onClick={onClose}>
+                        Cancel
+                    </Button>
+
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        disabled={!isModified}
+                        onClick={() => setConfirmSaveOpen(true)}
+                    >
+                        Save changes
+                    </Button>
+                </Box>
             </DialogActions>
+            <Dialog
+                open={confirmSaveOpen}
+                onClose={() => setConfirmSaveOpen(false)}
+            >
+                <Box sx={{ p: 3 }}>
+                    <Typography variant="h6">
+                        Save changes?
+                    </Typography>
+
+                    <Typography sx={{ mt: 1 }}>
+                        Saving will set the confidence score of all remaining boxes to 100% and permanently delete any boxes you removed. This action cannot be undone.
+                    </Typography>
+
+                    <DialogActions sx={{ mt: 2 }}>
+                        <Button onClick={() => setConfirmSaveOpen(false)}>
+                            Go back
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={handleConfirmSave}
+                        >
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </Box>
+            </Dialog>
         </Dialog>
     )
 }
