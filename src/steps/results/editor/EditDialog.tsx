@@ -68,9 +68,6 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                     : detection,
             ),
         )
-        const tempOldBox = image.detections.find((detection) => detection.id === detectionId)?.box
-        console.log("Old Box:", tempOldBox)
-        console.log("Updated Box:", updatedBox)
     }
 
     function isSameBox(box1: Detection["box"], box2: Detection["box"]): boolean {
