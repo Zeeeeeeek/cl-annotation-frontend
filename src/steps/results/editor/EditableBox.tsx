@@ -2,7 +2,7 @@ import type { Detection } from "../../../types.ts"
 import { Group, Rect, Transformer } from "react-konva"
 import { brighten } from "../../../utils/labelColors.ts"
 import { DetectionLabel } from "../../../components/DetectionLabel.tsx"
-import { useEffect, useRef, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import Konva from "konva"
 import type { KonvaEventObject } from "konva/lib/Node"
 
@@ -12,11 +12,12 @@ interface EditableBoxProps {
     color: string
     isSelected: boolean
     viewScale: number
-    onSelect: () => void
-    onBoxUpdate: (updatedBox: Detection["box"]) => void
+    onSelect: (id: string) => void
+    onBoxUpdate: (id: string, updatedBox: Detection["box"]) => void
+    interactive: boolean
 }
 
-export function EditableBox({
+export const EditableBox = memo(function EditableBox({
     detection,
     detectionIndex,
     color,
@@ -24,6 +25,7 @@ export function EditableBox({
     viewScale,
     onSelect,
     onBoxUpdate,
+    interactive,
 }: EditableBoxProps) {
     const displayColor = isSelected ? brighten(color) : color
     const strokeWidth = isSelected ? 5 : 3
@@ -57,13 +59,13 @@ export function EditableBox({
         event.target.scaleX(1)
         event.target.scaleY(1)
         setLiveBox(null)
-        onBoxUpdate(updatedBox)
+        onBoxUpdate(detection.id, updatedBox)
     }
 
     const labelBox = liveBox ?? detection.box
 
     return (
-        <Group onClick={onSelect} onTap={onSelect}>
+        <Group onClick={() => onSelect(detection.id)} onTap={() => onSelect(detection.id)} listening={interactive}>
             <Rect
                 x={detection.box.x}
                 y={detection.box.y}
@@ -89,7 +91,15 @@ export function EditableBox({
                 x={labelBox.x}
                 y={labelBox.y}
             />
-            {isSelected && <Transformer ref={transformerRef} rotateEnabled={false} keepRatio={false} ignoreStroke flipEnabled={false}/>}
+            {isSelected && (
+                <Transformer
+                    ref={transformerRef}
+                    rotateEnabled={false}
+                    keepRatio={false}
+                    ignoreStroke
+                    flipEnabled={false}
+                />
+            )}
         </Group>
     )
-}
+})

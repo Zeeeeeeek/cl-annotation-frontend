@@ -1,6 +1,6 @@
 import useImage from "use-image"
 import { useElementSize } from "../hooks/useElementSize.ts"
-import { MIN_ZOOM, useZoom } from "../hooks/useZoom.ts"
+import { clamp, MIN_ZOOM, type Point, useZoom } from "../hooks/useZoom.ts"
 import type { KonvaEventObject } from "konva/lib/Node"
 import { Box } from "@mui/material"
 import { Layer, Stage, Image as KonvaImage } from "react-konva"
@@ -13,9 +13,25 @@ interface ImageViewerProps {
     imageUrl: string
     renderOverlay: (scale: number) => ReactNode
     onBackGroundClick?: () => void
+    panEnabled?: boolean
+    cursor?: string
+    onImageMouseDown?: (point: Point) => void
+    onImageMouseMove?: (point: Point) => void
+    onImageMouseUp?: (point: Point) => void
+    renderTopOverlay?: (scale: number) => ReactNode
 }
 
-export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: ImageViewerProps) {
+export function ImageViewer({
+    imageUrl,
+    renderOverlay,
+    onBackGroundClick,
+    panEnabled = true,
+    cursor,
+    onImageMouseUp,
+    onImageMouseMove,
+    onImageMouseDown,
+    renderTopOverlay,
+}: ImageViewerProps) {
     const { ref, width: areaWidth, height: areaHeight } = useElementSize<HTMLDivElement>()
     const [htmlImage] = useImage(imageUrl)
 
@@ -24,7 +40,7 @@ export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: Imag
         width: areaWidth,
         height: areaHeight,
     })
-    const canPan = zoom > MIN_ZOOM
+    const canPan = zoom > MIN_ZOOM && panEnabled
 
     function handleWheel(event: KonvaEventObject<WheelEvent>) {
         event.evt.preventDefault() // stop the page (or the browser) from scrolling/zooming
@@ -41,6 +57,15 @@ export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: Imag
         panTo(event.target.position())
     }
 
+    function getImagePointFromEvent(event: KonvaEventObject<MouseEvent>): Point | null {
+        const point = event.target.getStage()?.getRelativePointerPosition()
+        if (!point || !imageSize) return null
+        return {
+            x: clamp(point.x, 0, imageSize.width),
+            y: clamp(point.y, 0, imageSize.height),
+        }
+    }
+
     return (
         <Box
             ref={ref}
@@ -50,8 +75,8 @@ export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: Imag
                 width: "100%",
                 minHeight: 0,
                 overflow: "hidden",
-                cursor: canPan ? "grab" : "default",
-                "&:active": { cursor: canPan ? "grabbing" : "default" },
+                cursor: cursor ?? (canPan ? "grab" : "default"),
+                "&:active": { cursor: cursor ?? (canPan ? "grabbing" : "default") },
             }}
         >
             <Stage
@@ -62,7 +87,7 @@ export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: Imag
                 x={position.x}
                 y={position.y}
                 draggable={canPan}
-                dragBoundFunc={(point) => clampPosition(point)}
+                dragBoundFunc={canPan ? (point) => clampPosition(point) : undefined}
                 onDragMove={handleDragMove}
                 onWheel={handleWheel}
                 onClick={(e) => {
@@ -74,6 +99,24 @@ export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: Imag
                         }
                     }
                 }}
+                onMouseDown={(event) => {
+                    const imagePoint = getImagePointFromEvent(event)
+                    if (imagePoint) {
+                        onImageMouseDown?.(imagePoint)
+                    }
+                }}
+                onMouseUp={(event) => {
+                    const imagePoint = getImagePointFromEvent(event)
+                    if (imagePoint) {
+                        onImageMouseUp?.(imagePoint)
+                    }
+                }}
+                onMouseMove={(event) => {
+                    const imagePoint = getImagePointFromEvent(event)
+                    if (imagePoint) {
+                        onImageMouseMove?.(imagePoint)
+                    }
+                }}
             >
                 <Layer>
                     {htmlImage && (
@@ -83,6 +126,7 @@ export function ImageViewer({ imageUrl, renderOverlay, onBackGroundClick }: Imag
                         </>
                     )}
                 </Layer>
+                <Layer listening={false}>{htmlImage && renderTopOverlay?.(scale)}</Layer>
             </Stage>
             {htmlImage && <ZoomToolbar zoom={zoom} onZoomChange={zoomToCenter} onReset={reset} />}
         </Box>

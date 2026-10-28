@@ -1,7 +1,11 @@
-import type { Detection } from "../../../types.ts"
+import type { Detection, EditMode } from "../../../types.ts"
 import { getBoxArea, getDetectionIndexes } from "../../../utils/detections.ts"
 import { ImageViewer } from "../../../components/ImageViewer.tsx"
 import { EditableBox } from "./EditableBox.tsx"
+import { type Point } from "../../../hooks/useZoom.ts"
+import { useState } from "react"
+import { Rect } from "react-konva"
+import { DraftSizeLabel } from "./DraftSizeLabel.tsx"
 
 interface EditCanvasProps {
     imageUrl: string
@@ -10,6 +14,7 @@ interface EditCanvasProps {
     setSelectedId: (id: string | null) => void
     colorForLabel: (label: string) => string
     onBoxUpdate: (detectionId: string, updatedBox: Detection["box"]) => void
+    mode: EditMode
 }
 
 export function EditCanvas({
@@ -19,6 +24,7 @@ export function EditCanvas({
     colorForLabel,
     setSelectedId,
     onBoxUpdate,
+    mode,
 }: EditCanvasProps) {
     const shownDetections = detections.filter((detection) => detection.visible)
 
@@ -29,10 +35,37 @@ export function EditCanvas({
 
     const orderedDetections = [...shownDetections].sort((a, b) => areaDiff(a, b) || selectionDiff(a, b))
     const detectionIndexes = getDetectionIndexes(detections)
+
+    const [draft, setDraft] = useState<{ start: Point; end: Point } | null>(null)
+
+    const draftBox = draft && {
+        x: Math.min(draft.start.x, draft.end.x),
+        y: Math.min(draft.start.y, draft.end.y),
+        width: Math.abs(draft.end.x - draft.start.x),
+        height: Math.abs(draft.end.y - draft.start.y),
+    }
+
     return (
         <ImageViewer
             imageUrl={imageUrl}
             onBackGroundClick={() => setSelectedId(null)}
+            panEnabled={mode === "Select"}
+            cursor={mode === "Draw" ? "crosshair" : undefined}
+            onImageMouseDown={(point) => {
+                if (mode === "Draw") {
+                    setDraft({ start: point, end: point })
+                }
+            }}
+            onImageMouseMove={(point) => {
+                if (draft && mode === "Draw") {
+                    setDraft({ start: draft.start, end: point })
+                }
+            }}
+            onImageMouseUp={() => {
+                if (draft && mode === "Draw") {
+                    setDraft(null)
+                }
+            }}
             renderOverlay={(scale) =>
                 orderedDetections.map((detection) => (
                     <EditableBox
@@ -42,12 +75,27 @@ export function EditCanvas({
                         color={colorForLabel(detection.label)}
                         isSelected={detection.id === selectedId}
                         viewScale={scale}
-                        onSelect={() => setSelectedId(detection.id)}
-                        onBoxUpdate={(updatedBox) => {
-                            onBoxUpdate(detection.id, updatedBox)
-                        }}
+                        onSelect={setSelectedId}
+                        onBoxUpdate={onBoxUpdate}
+                        interactive={mode === "Select"}
                     />
                 ))
+            }
+            renderTopOverlay={(scale) =>
+                draftBox && (
+                    <>
+                        <Rect
+                            {...draftBox}
+                            stroke="white"
+                            strokeWidth={2}
+                            strokeScaleEnabled={false}
+                            dash={[6, 4]}
+                            fill="rgba(255, 255, 255, 0.2)"
+                            listening={false}
+                        />
+                        <DraftSizeLabel draftBox={draftBox} scale={scale} />
+                    </>
+                )
             }
         />
     )

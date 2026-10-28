@@ -1,5 +1,5 @@
-import {Box, Button, Dialog, DialogActions, Divider, Typography} from "@mui/material"
-import {useMemo, useState} from "react"
+import { Box, Button, Dialog, DialogActions, Divider, Typography } from "@mui/material"
+import { useMemo, useState } from "react"
 import type { Detection, EditMode, ImageItem } from "../../../types"
 import { EditHeader } from "./EditHeader.tsx"
 import { BoxList } from "./BoxList.tsx"
@@ -22,7 +22,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
 
     const [detections, setDetections] = useState<Detection[]>(image.detections)
     const selectedDetection = detections.find((d) => d.id === selectedDetectionId) || null
-    const [confirmSaveOpen, setConfirmSaveOpen] = useState(false);
+    const [confirmSaveOpen, setConfirmSaveOpen] = useState(false)
 
     function handleToggleVisibility(id: string) {
         setDetections((prevDetections) =>
@@ -35,6 +35,13 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                     : detection,
             ),
         )
+    }
+
+    function handleModeChange(newMode: EditMode) {
+        setMode(newMode)
+        if (newMode === "Draw") {
+            setSelectedDetectionId(null)
+        }
     }
 
     function handleLabelChange(id: string, newLabel: string) {
@@ -66,45 +73,40 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
         console.log("Updated Box:", updatedBox)
     }
 
-    function isSameBox(
-        box1: Detection["box"],
-        box2: Detection["box"],
-    ): boolean {
-        const epsilon = 0.01;
+    function isSameBox(box1: Detection["box"], box2: Detection["box"]): boolean {
+        const epsilon = 0.01
 
         return (
             Math.abs(box1.x - box2.x) < epsilon &&
             Math.abs(box1.y - box2.y) < epsilon &&
             Math.abs(box1.width - box2.width) < epsilon &&
             Math.abs(box1.height - box2.height) < epsilon
-        );
+        )
     }
 
     const isModified = useMemo(() => {
-        const original = image.detections;
+        const original = image.detections
 
         if (original.length !== detections.length) {
-            return true;
+            return true
         }
 
         return original.some((oldDetection) => {
-            const current = detections.find(
-                (detection) => detection.id === oldDetection.id,
-            );
+            const current = detections.find((detection) => detection.id === oldDetection.id)
 
-            if (!current) return true;
+            if (!current) return true
 
             if (current.label !== oldDetection.label) {
-                return true;
+                return true
             }
 
-            return !isSameBox(oldDetection.box, current.box);
-        });
-    }, [image.detections, detections]);
+            return !isSameBox(oldDetection.box, current.box)
+        })
+    }, [image.detections, detections])
 
     function handleConfirmSave() {
-        onSave(detections);
-        setConfirmSaveOpen(false);
+        onSave(detections)
+        setConfirmSaveOpen(false)
     }
 
     return (
@@ -114,7 +116,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                 imageIndex={imageIndex}
                 totalImages={totalImages}
                 mode={mode}
-                onModeChange={setMode}
+                onModeChange={handleModeChange}
                 onClose={onClose}
             />
             <Box
@@ -139,6 +141,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                         setSelectedId={setSelectedDetectionId}
                         colorForLabel={colorForLabel}
                         onBoxUpdate={handleBoxUpdate}
+                        mode={mode}
                     />
                 </Box>
                 <Box
@@ -196,9 +199,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                         }}
                     />
 
-                    <Typography variant="body2">
-                        {isModified ? "Unsaved changes" : ""}
-                    </Typography>
+                    <Typography variant="body2">{isModified ? "Unsaved changes" : ""}</Typography>
                 </Box>
 
                 <Box sx={{ display: "flex", gap: 1 }}>
@@ -216,27 +217,18 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                     </Button>
                 </Box>
             </DialogActions>
-            <Dialog
-                open={confirmSaveOpen}
-                onClose={() => setConfirmSaveOpen(false)}
-            >
+            <Dialog open={confirmSaveOpen} onClose={() => setConfirmSaveOpen(false)}>
                 <Box sx={{ p: 3 }}>
-                    <Typography variant="h6">
-                        Save changes?
-                    </Typography>
+                    <Typography variant="h6">Save changes?</Typography>
 
                     <Typography sx={{ mt: 1 }}>
-                        Saving will set the confidence score of all remaining boxes to 100% and permanently delete any boxes you removed. This action cannot be undone.
+                        Saving will set the confidence score of all remaining boxes to 100% and permanently delete any
+                        boxes you removed. This action cannot be undone.
                     </Typography>
 
                     <DialogActions sx={{ mt: 2 }}>
-                        <Button onClick={() => setConfirmSaveOpen(false)}>
-                            Go back
-                        </Button>
-                        <Button
-                            variant="contained"
-                            onClick={handleConfirmSave}
-                        >
+                        <Button onClick={() => setConfirmSaveOpen(false)}>Go back</Button>
+                        <Button variant="contained" onClick={handleConfirmSave}>
                             Confirm
                         </Button>
                     </DialogActions>
