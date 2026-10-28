@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogActions, Divider, Typography } from "@mui/material"
 import { useMemo, useState } from "react"
-import type { Detection, EditMode, ImageItem } from "../../../types"
+import type { BoundingBox, Detection, EditMode, ImageItem } from "../../../types"
 import { EditHeader } from "./EditHeader.tsx"
 import { BoxList } from "./BoxList.tsx"
 import { SelectedBoxPanel } from "./SelectedBoxPanel.tsx"
@@ -68,6 +68,18 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                     : detection,
             ),
         )
+    }
+
+    function handleBoxCreate(box: BoundingBox, label: string) {
+        const newDetection: Detection = {
+            id: crypto.randomUUID(),
+            box,
+            label,
+            confidence: 1.0,
+            visible: true,
+            highlighted: false,
+        }
+        setDetections((prevDetections) => [...prevDetections, newDetection])
     }
 
     function isSameBox(box1: Detection["box"], box2: Detection["box"]): boolean {
@@ -139,6 +151,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                         colorForLabel={colorForLabel}
                         onBoxUpdate={handleBoxUpdate}
                         mode={mode}
+                        onBoxCreate={handleBoxCreate}
                     />
                 </Box>
                 <Box
