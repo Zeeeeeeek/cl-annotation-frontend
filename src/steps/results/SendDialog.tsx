@@ -1,9 +1,7 @@
-import type { ImageItem, SendState, SendStatus } from "../../types.ts"
+import type { ImageItem, SendState } from "../../types.ts"
 import {
     Box,
     Button,
-    Chip,
-    type ChipProps,
     Dialog,
     DialogActions,
     DialogContent,
@@ -12,18 +10,9 @@ import {
     ListItem,
     ListItemText,
 } from "@mui/material"
-import type { ReactElement } from "react"
-import CheckIcon from "@mui/icons-material/Check"
-import ErrorOutlinedIcon from "@mui/icons-material/ErrorOutlined"
 import { stripExtension } from "../../utils/format.ts"
 import RefreshIcon from "@mui/icons-material/Refresh"
-
-const SEND_CHIPS: Record<SendStatus, { label: string; color: ChipProps["color"]; icon?: ReactElement }> = {
-    queued: { label: "Queued", color: "default" },
-    sending: { label: "Sending", color: "primary" },
-    sent: { label: "Sent", color: "success", icon: <CheckIcon /> },
-    error: { label: "Error", color: "error", icon: <ErrorOutlinedIcon /> },
-}
+import { StatusChip } from "../../components/StatusChip.tsx"
 
 interface SendDialogProps {
     images: ImageItem[]
@@ -44,7 +33,6 @@ export function SendDialog({ images, sendStates, onClose, onRetry }: SendDialogP
                 <List>
                     {images.map((image, index) => {
                         const { status, errorMessage } = sendStates[image.id]
-                        const chip = SEND_CHIPS[status]
                         return (
                             <ListItem key={image.id} divider={index < images.length - 1}>
                                 <ListItemText
@@ -52,7 +40,7 @@ export function SendDialog({ images, sendStates, onClose, onRetry }: SendDialogP
                                     secondary={errorMessage}
                                     slotProps={{ secondary: { color: "error" } }}
                                 />
-                                <Chip label={chip.label} color={chip.color} icon={chip.icon} />
+                                <StatusChip status={status} />
                             </ListItem>
                         )
                     })}

@@ -8,6 +8,7 @@ import { LabelColors } from "./LabelColors"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { PaginationLegend } from "./PaginationLegend.tsx"
 import { filterByThreshold } from "../../../utils/detections.ts"
+import CircleIcon from "@mui/icons-material/Circle"
 
 interface ControlPanelProps {
     confidenceThreshold: number
@@ -91,10 +92,9 @@ export function ControlPanel({
                                     }
                                     return (
                                         <Badge
-                                            variant="dot"
-                                            color="warning"
                                             overlap="circular"
                                             invisible={!editedImages[index]}
+                                            badgeContent={<CircleIcon color="warning" sx={{ fontSize: "0.875rem" }} />}
                                         >
                                             <PaginationItem {...item} />
                                         </Badge>
