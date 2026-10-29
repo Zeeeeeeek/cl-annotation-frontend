@@ -59,7 +59,7 @@ export function EditCanvas({
             <ImageViewer
                 imageUrl={imageUrl}
                 onBackGroundClick={() => setSelectedId(null)}
-                panEnabled={mode === "Select"}
+                panEnabled={mode === "Pan"}
                 cursor={mode === "Draw" ? "crosshair" : undefined}
                 onImageMouseDown={(point) => {
                     if (mode === "Draw") {

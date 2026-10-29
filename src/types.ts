@@ -17,7 +17,7 @@ export type SendStatus = "queued" | "sending" | "sent" | "error"
 
 export type Emphasis = "highlighted" | "dimmed" | "normal"
 
-export type EditMode = "Select" | "Draw"
+export type EditMode = "Select" | "Draw" | "Pan"
 
 export interface SendState {
     status: SendStatus

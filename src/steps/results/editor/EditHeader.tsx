@@ -1,6 +1,7 @@
 import { AppBar, Box, IconButton, Stack, ToggleButtonGroup, Toolbar, Typography } from "@mui/material"
 import NearMeOutlinedIcon from "@mui/icons-material/NearMeOutlined"
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined"
+import PanToolOutlinedIcon from "@mui/icons-material/PanToolOutlined"
 import CloseIcon from "@mui/icons-material/Close"
 import type { EditMode } from "../../../types"
 import type { MouseEvent } from "react"
@@ -42,6 +43,12 @@ export function EditHeader({ imageName, imageIndex, totalImages, mode, onModeCha
                         keyboardShortcut={"B"}
                         icon={<AddBoxOutlinedIcon fontSize={"small"} />}
                         value={"Draw"}
+                    />
+                    <ModeToggleButton
+                        text={"Pan"}
+                        keyboardShortcut={"H"}
+                        icon={<PanToolOutlinedIcon fontSize={"small"} />}
+                        value={"Pan"}
                     />
                 </ToggleButtonGroup>
                 <Box sx={{ flexGrow: 1 }} />
