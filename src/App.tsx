@@ -1,4 +1,4 @@
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { UploadStep } from "./steps/upload/UploadStep"
 import { ProcessingDialog } from "./steps/processing/ProcessingDialog"
 import { ResultsStep } from "./steps/results/ResultsStep"
@@ -48,6 +48,18 @@ export function App() {
         setImages([])
         setStep("upload")
     }
+
+    useEffect(() => {
+        const hasUnsentChanges = images.some((image) => image.edited && !image.sent)
+        if (!hasUnsentChanges) return
+
+        function handleBeforeUnload(event: BeforeUnloadEvent) {
+            event.preventDefault()
+        }
+
+        window.addEventListener("beforeunload", handleBeforeUnload)
+        return () => window.removeEventListener("beforeunload", handleBeforeUnload)
+    }, [images])
 
     return (
         <>

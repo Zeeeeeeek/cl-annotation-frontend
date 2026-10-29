@@ -35,6 +35,7 @@ export function EditDialog({
     const selectedDetection = detections.find((d) => d.id === selectedDetectionId) || null
     const editorLabels = [...new Set([...labels, ...detections.map((detection) => detection.label)])]
     const [confirmSaveOpen, setConfirmSaveOpen] = useState(false)
+    const [confirmDiscardOpen, setConfirmDiscardOpen] = useState(false)
 
     function handleToggleVisibility(id: string) {
         setDetections((prevDetections) =>
@@ -131,6 +132,14 @@ export function EditDialog({
         setConfirmSaveOpen(false)
     }
 
+    function handleClose() {
+        if (isModified) {
+            setConfirmDiscardOpen(true)
+        } else {
+            onClose()
+        }
+    }
+
     return (
         <Dialog open={true} fullScreen>
             <EditHeader
@@ -139,7 +148,7 @@ export function EditDialog({
                 totalImages={totalImages}
                 mode={mode}
                 onModeChange={handleModeChange}
-                onClose={onClose}
+                onClose={handleClose}
             />
             <Box
                 sx={{
@@ -228,7 +237,7 @@ export function EditDialog({
                 </Box>
 
                 <Box sx={{ display: "flex", gap: 1 }}>
-                    <Button color="inherit" onClick={onClose}>
+                    <Button color="inherit" onClick={handleClose}>
                         Cancel
                     </Button>
 
@@ -255,6 +264,18 @@ export function EditDialog({
                         <Button onClick={() => setConfirmSaveOpen(false)}>Go back</Button>
                         <Button variant="contained" onClick={handleConfirmSave}>
                             Confirm
+                        </Button>
+                    </DialogActions>
+                </Box>
+            </Dialog>
+            <Dialog open={confirmDiscardOpen} onClose={() => setConfirmDiscardOpen(false)}>
+                <Box sx={{ p: 3 }}>
+                    <Typography variant="h6">Discard changes?</Typography>
+                    <Typography sx={{ mt: 1 }}>Your changes to this image will be lost.</Typography>
+                    <DialogActions sx={{ mt: 2 }}>
+                        <Button onClick={() => setConfirmDiscardOpen(false)}>Keep editing</Button>
+                        <Button variant="contained" color="error" onClick={onClose}>
+                            Discard
                         </Button>
                     </DialogActions>
                 </Box>
