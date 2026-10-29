@@ -6,7 +6,7 @@ import { HealthChecker } from "./components/HealthChecker"
 import { runDetection } from "./api/runDetection"
 import { createImageItem } from "./utils/detections"
 import type { ImageItem } from "./types"
-import {COCO_LABELS} from "./constants/cocoLabels.ts";
+import { COCO_LABELS } from "./constants/cocoLabels.ts"
 
 type Step = "upload" | "processing" | "results"
 
@@ -45,7 +45,15 @@ export function App() {
 
             {step === "processing" && <ProcessingDialog images={images} onViewResults={() => setStep("results")} />}
 
-            {step === "results" && <ResultsStep images={images} onImageUpdate={updateImage} onReset={handleReset} labels={labels} onAddLabel={addLabel}/>}
+            {step === "results" && (
+                <ResultsStep
+                    images={images}
+                    onImageUpdate={updateImage}
+                    onReset={handleReset}
+                    labels={labels}
+                    onAddLabel={addLabel}
+                />
+            )}
 
             <HealthChecker />
         </>

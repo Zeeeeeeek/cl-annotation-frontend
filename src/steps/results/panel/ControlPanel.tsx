@@ -1,10 +1,12 @@
-import { Button, Divider, Grid, Pagination, Paper, Stack } from "@mui/material"
+import { Badge, Button, Divider, Grid, Pagination, PaginationItem, Paper, Stack } from "@mui/material"
 import EditIcon from "@mui/icons-material/Edit"
 import ReplayIcon from "@mui/icons-material/Replay"
 import type { Detection } from "../../../types"
 import { ThresholdControl } from "./ThresholdControl"
 import { DetectionList } from "./DetectionList"
 import { LabelColors } from "./LabelColors"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import { PaginationLegend } from "./PaginationLegend.tsx"
 
 interface ControlPanelProps {
     confidenceThreshold: number
@@ -20,6 +22,8 @@ interface ControlPanelProps {
     onToggleHighlight: (detection: Detection) => void
     onDetectionHover: (detectionId: string | null) => void
     onImageEdit: () => void
+    editedImages: boolean[]
+    sentImages: boolean[]
 }
 
 function SectionDivider() {
@@ -45,6 +49,8 @@ export function ControlPanel({
     onToggleHighlight,
     onDetectionHover,
     onImageEdit,
+    editedImages,
+    sentImages,
 }: ControlPanelProps) {
     const uniqueLabels = [...new Set(detections.map((detection) => detection.label))]
 
@@ -58,12 +64,42 @@ export function ControlPanel({
                             onChange={onConfidenceThresholdChange}
                             scores={detections.map((detection) => detection.confidence)}
                         />
-                        <Pagination
-                            count={totalResults}
-                            page={currentIndex + 1}
-                            onChange={(_, page) => onIndexChange(page - 1)}
-                            sx={{ display: "flex", justifyContent: "center" }}
-                        />
+                        <Stack direction="row" sx={{ alignItems: "center" }} spacing={2}>
+                            <Pagination
+                                count={totalResults}
+                                page={currentIndex + 1}
+                                onChange={(_, page) => onIndexChange(page - 1)}
+                                sx={{ display: "flex", justifyContent: "center", flex: 1 }}
+                                renderItem={(item) => {
+                                    if (item.type !== "page" || item.page === null) return <PaginationItem {...item} />
+
+                                    const index = item.page - 1
+                                    if (sentImages[index]) {
+                                        return (
+                                            <Badge
+                                                overlap="circular"
+                                                badgeContent={
+                                                    <CheckCircleIcon color="success" sx={{ fontSize: "0.875rem" }} />
+                                                }
+                                            >
+                                                <PaginationItem {...item} />
+                                            </Badge>
+                                        )
+                                    }
+                                    return (
+                                        <Badge
+                                            variant="dot"
+                                            color="warning"
+                                            overlap="circular"
+                                            invisible={!editedImages[index]}
+                                        >
+                                            <PaginationItem {...item} />
+                                        </Badge>
+                                    )
+                                }}
+                            />
+                            <PaginationLegend />
+                        </Stack>
                         <Stack direction="row" spacing={1}>
                             <Button
                                 variant="contained"

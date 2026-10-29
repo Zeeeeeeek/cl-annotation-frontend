@@ -8,6 +8,7 @@ export function createImageItem(file: File): ImageItem {
         status: "queued",
         detections: [],
         edited: false,
+        sent: false,
     }
 }
 

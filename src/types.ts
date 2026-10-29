@@ -30,5 +30,6 @@ export interface ImageItem {
     status: ImageStatus
     detections: Detection[]
     edited: boolean
+    sent: boolean
     errorMessage?: string
 }
