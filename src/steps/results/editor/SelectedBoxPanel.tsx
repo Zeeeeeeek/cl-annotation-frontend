@@ -1,7 +1,7 @@
 import type { Detection } from "../../../types.ts"
-import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
-import { COCO_LABELS } from "../../../constants/cocoLabels.ts"
+import {LabelAutocomplete} from "./LabelAutocomplete.tsx";
 
 interface SelectedBoxPanelProps {
     selectedBox: Detection
@@ -24,13 +24,7 @@ export function SelectedBoxPanel({ selectedBox, onLabelChange, onDelete }: Selec
                 Selected box
             </Typography>
 
-            <Autocomplete
-                disableClearable
-                options={COCO_LABELS}
-                value={selectedBox.label}
-                onChange={(_, newValue) => onLabelChange(newValue)}
-                renderInput={(params) => <TextField {...params} label="Label" />}
-            />
+            <LabelAutocomplete value={selectedBox.label} onSelect={onLabelChange} />
 
             <Typography variant="body2" sx={{ mt: 2, mb: 1 }}>
                 Position in original image (px)

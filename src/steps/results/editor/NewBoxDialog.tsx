@@ -1,26 +1,29 @@
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material"
-import { COCO_LABELS } from "../../../constants/cocoLabels.ts"
-import { useState } from "react"
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from "@mui/material"
+import {useState} from "react"
+import {LabelAutocomplete} from "./LabelAutocomplete.tsx"
 
 interface NewBoxDialogProps {
     onCancel: () => void
     onAdd: (label: string) => void
 }
 
-export function NewBoxDialog({ onCancel, onAdd }: NewBoxDialogProps) {
+export function NewBoxDialog({onCancel, onAdd}: NewBoxDialogProps) {
     const [label, setLabel] = useState<string | null>(null)
 
     return (
         <Dialog open onClose={onCancel} fullWidth maxWidth="xs">
             <DialogTitle>New Box</DialogTitle>
             <DialogContent>
-                <Autocomplete
-                    renderInput={(params) => <TextField {...params} label="Label" autoFocus />}
-                    options={COCO_LABELS}
-                    value={label}
-                    onChange={(_, newValue) => setLabel(newValue)}
-                    sx={{ mt: 1 }}
-                />
+                <Box sx={{mt: 1}}>
+                    <LabelAutocomplete autoFocus onTextChange={(text) => setLabel(text || null)}/>
+                </Box>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onCancel}>Cancel</Button>
