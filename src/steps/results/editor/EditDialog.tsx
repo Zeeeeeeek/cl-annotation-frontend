@@ -37,8 +37,17 @@ export function EditDialog({
     const [confirmSaveOpen, setConfirmSaveOpen] = useState(false)
     const [confirmDiscardOpen, setConfirmDiscardOpen] = useState(false)
 
+    const [past, setPast] = useState<Detection[][]>([])
+    const [future, setFuture] = useState<Detection[][]>([])
+
+    function changeDetections(update: (prev: Detection[]) => Detection[]) {
+        setPast((prev) => [...prev, detections])
+        setFuture([])
+        setDetections(update)
+    }
+
     function handleToggleVisibility(id: string) {
-        setDetections((prevDetections) =>
+        changeDetections((prevDetections) =>
             prevDetections.map((detection) =>
                 detection.id === id
                     ? {
@@ -58,20 +67,20 @@ export function EditDialog({
     }
 
     function handleLabelChange(id: string, newLabel: string) {
-        setDetections((prevDetections) =>
+        changeDetections((prevDetections) =>
             prevDetections.map((detection) => (detection.id === id ? { ...detection, label: newLabel } : detection)),
         )
     }
 
     function handleDelete(id: string) {
-        setDetections((prevDetections) => prevDetections.filter((detection) => detection.id !== id))
+        changeDetections((prevDetections) => prevDetections.filter((detection) => detection.id !== id))
         if (selectedDetectionId === id) {
             setSelectedDetectionId(null)
         }
     }
 
     function handleBoxUpdate(detectionId: string, updatedBox: Detection["box"]) {
-        setDetections((prevDetections) =>
+        changeDetections((prevDetections) =>
             prevDetections.map((detection) =>
                 detection.id === detectionId
                     ? {
@@ -92,7 +101,30 @@ export function EditDialog({
             visible: true,
             highlighted: false,
         }
-        setDetections((prevDetections) => [...prevDetections, newDetection])
+        changeDetections((prevDetections) => [...prevDetections, newDetection])
+    }
+
+    function undo() {
+        const previous = past.at(-1)
+        if (!previous) return
+        setPast(past.slice(0, -1))
+        setFuture([detections, ...future])
+        restore(previous)
+    }
+
+    function redo() {
+        const next = future[0]
+        if (!next) return
+        setFuture(future.slice(1))
+        setPast([...past, detections])
+        restore(next)
+    }
+
+    function restore(snapshot: Detection[]) {
+        setDetections(snapshot)
+        if (!snapshot.some((detection) => detection.id === selectedDetectionId)) {
+            setSelectedDetectionId(null)
+        }
     }
 
     function isSameBox(box1: Detection["box"], box2: Detection["box"]): boolean {
@@ -144,14 +176,26 @@ export function EditDialog({
         if (confirmSaveOpen || confirmDiscardOpen) {
             return
         }
-        if (event.ctrlKey || event.metaKey || event.altKey) {
-            return
-        }
         if ((event.target as HTMLElement).closest("input, textarea")) {
             return
         }
 
         const key = event.key.toLowerCase()
+
+        if ((event.ctrlKey || event.metaKey) && key === "z") {
+            event.preventDefault()
+            if (event.shiftKey) {
+                redo()
+            } else {
+                undo()
+            }
+            return
+        }
+
+        if (event.ctrlKey || event.metaKey || event.altKey) {
+            return
+        }
+
         switch (key) {
             case "v":
                 handleModeChange("Select")
@@ -197,6 +241,10 @@ export function EditDialog({
                 mode={mode}
                 onModeChange={handleModeChange}
                 onClose={handleClose}
+                canUndo={past.length > 0}
+                canRedo={future.length > 0}
+                onUndo={undo}
+                onRedo={redo}
             />
             <Box
                 sx={{
