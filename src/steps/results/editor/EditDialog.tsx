@@ -1,5 +1,5 @@
 import { Box, Button, Dialog, DialogActions, Divider, Typography } from "@mui/material"
-import { useMemo, useState } from "react"
+import { useEffect, useEffectEvent, useMemo, useState } from "react"
 import type { BoundingBox, Detection, EditMode, ImageItem } from "../../../types"
 import { EditHeader } from "./EditHeader.tsx"
 import { BoxList } from "./BoxList.tsx"
@@ -140,8 +140,56 @@ export function EditDialog({
         }
     }
 
+    const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
+        if (confirmSaveOpen || confirmDiscardOpen) {
+            return
+        }
+        if (event.ctrlKey || event.metaKey || event.altKey) {
+            return
+        }
+        if ((event.target as HTMLElement).closest("input, textarea")) {
+            return
+        }
+
+        const key = event.key.toLowerCase()
+        switch (key) {
+            case "v":
+                handleModeChange("Select")
+                event.preventDefault()
+                break
+            case "b":
+                handleModeChange("Draw")
+                event.preventDefault()
+                break
+            case "h":
+                handleModeChange("Pan")
+                event.preventDefault()
+                break
+            case "delete":
+            case "backspace":
+                if (selectedDetectionId) {
+                    handleDelete(selectedDetectionId)
+                    event.preventDefault()
+                }
+                break
+            default:
+                break
+        }
+    })
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleKeyDown)
+        return () => window.removeEventListener("keydown", handleKeyDown)
+    }, [])
+
     return (
-        <Dialog open={true} fullScreen>
+        <Dialog
+            open={true}
+            fullScreen
+            onClose={(_, reason) => {
+                if (reason === "escapeKeyDown") setSelectedDetectionId(null)
+            }}
+        >
             <EditHeader
                 imageName={image.file.name}
                 imageIndex={imageIndex}
