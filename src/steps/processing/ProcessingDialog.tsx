@@ -18,7 +18,11 @@ export function ProcessingDialog({ images, onViewResults }: ProcessingDialogProp
                 <List sx={{ flex: 1, overflowY: "auto", pr: 1 }}>
                     {images.map((image, index) => (
                         <ListItem key={image.id} divider={index < images.length - 1}>
-                            <ListItemText primary={stripExtension(image.file.name)} />
+                            <ListItemText
+                                primary={stripExtension(image.file.name)}
+                                secondary={image.errorMessage}
+                                slotProps={{ secondary: { color: "error" } }}
+                            />
                             <StatusChip status={image.status} />
                         </ListItem>
                     ))}
