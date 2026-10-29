@@ -1,7 +1,7 @@
 import type { Detection } from "../../../types.ts"
 import { Box, Button, Typography } from "@mui/material"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
-import {LabelAutocomplete} from "./LabelAutocomplete.tsx";
+import { LabelAutocomplete } from "./LabelAutocomplete.tsx"
 
 interface SelectedBoxPanelProps {
     selectedBox: Detection
@@ -25,7 +25,7 @@ export function SelectedBoxPanel({ selectedBox, onLabelChange, onDelete, labels 
                 Selected box
             </Typography>
 
-            <LabelAutocomplete value={selectedBox.label} onSelect={onLabelChange} labels={labels}/>
+            <LabelAutocomplete value={selectedBox.label} onSelect={onLabelChange} labels={labels} />
 
             <Typography variant="body2" sx={{ mt: 2, mb: 1 }}>
                 Position in original image (px)

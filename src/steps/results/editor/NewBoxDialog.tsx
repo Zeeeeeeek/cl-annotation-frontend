@@ -1,13 +1,6 @@
-import {
-    Box,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from "@mui/material"
-import {useState} from "react"
-import {LabelAutocomplete} from "./LabelAutocomplete.tsx"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
+import { useState } from "react"
+import { LabelAutocomplete } from "./LabelAutocomplete.tsx"
 
 interface NewBoxDialogProps {
     onCancel: () => void
@@ -15,15 +8,15 @@ interface NewBoxDialogProps {
     labels: string[]
 }
 
-export function NewBoxDialog({onCancel, onAdd, labels}: NewBoxDialogProps) {
+export function NewBoxDialog({ onCancel, onAdd, labels }: NewBoxDialogProps) {
     const [label, setLabel] = useState<string | null>(null)
 
     return (
         <Dialog open onClose={onCancel} fullWidth maxWidth="xs">
             <DialogTitle>New Box</DialogTitle>
             <DialogContent>
-                <Box sx={{mt: 1}}>
-                    <LabelAutocomplete autoFocus onTextChange={(text) => setLabel(text || null)} labels={labels}/>
+                <Box sx={{ mt: 1 }}>
+                    <LabelAutocomplete autoFocus onTextChange={(text) => setLabel(text || null)} labels={labels} />
                 </Box>
             </DialogContent>
             <DialogActions>

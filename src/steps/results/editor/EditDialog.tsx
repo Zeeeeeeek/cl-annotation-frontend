@@ -18,7 +18,16 @@ interface EditDialogProps {
     onAddLabel: (label: string) => void
 }
 
-export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, colorForLabel, labels, onAddLabel }: EditDialogProps) {
+export function EditDialog({
+    image,
+    imageIndex,
+    totalImages,
+    onClose,
+    onSave,
+    colorForLabel,
+    labels,
+    onAddLabel,
+}: EditDialogProps) {
     const [mode, setMode] = useState<EditMode>("Select")
     const [selectedDetectionId, setSelectedDetectionId] = useState<string | null>(null)
 
