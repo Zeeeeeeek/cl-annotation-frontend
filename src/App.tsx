@@ -6,6 +6,7 @@ import { HealthChecker } from "./components/HealthChecker"
 import { runDetection } from "./api/runDetection"
 import { createImageItem } from "./utils/detections"
 import type { ImageItem } from "./types"
+import {COCO_LABELS} from "./constants/cocoLabels.ts";
 
 type Step = "upload" | "processing" | "results"
 
@@ -13,8 +14,14 @@ export function App() {
     const [step, setStep] = useState<Step>("upload")
     const [images, setImages] = useState<ImageItem[]>([])
 
+    const [labels, setLabels] = useState<string[]>([...COCO_LABELS])
+
     function updateImage(id: string, changes: Partial<ImageItem>) {
         setImages((prev) => prev.map((image) => (image.id === id ? { ...image, ...changes } : image)))
+    }
+
+    function addLabel(newLabel: string) {
+        setLabels((prev) => (prev.includes(newLabel) ? prev : [...prev, newLabel]))
     }
 
     function handleFilesSelected(files: File[]) {
@@ -38,7 +45,7 @@ export function App() {
 
             {step === "processing" && <ProcessingDialog images={images} onViewResults={() => setStep("results")} />}
 
-            {step === "results" && <ResultsStep images={images} onImageUpdate={updateImage} onReset={handleReset} />}
+            {step === "results" && <ResultsStep images={images} onImageUpdate={updateImage} onReset={handleReset} labels={labels} onAddLabel={addLabel}/>}
 
             <HealthChecker />
         </>

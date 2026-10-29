@@ -10,9 +10,11 @@ interface ResultsStepProps {
     images: ImageItem[]
     onImageUpdate: (id: string, changes: Partial<ImageItem>) => void
     onReset: () => void
+    labels: string[]
+    onAddLabel: (newLabel: string) => void
 }
 
-export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps) {
+export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel }: ResultsStepProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [confidenceThreshold, setConfidenceThreshold] = useState(0.9)
     const { colorForLabel, setColorForLabel } = useLabelColors()
@@ -85,6 +87,8 @@ export function ResultsStep({ images, onImageUpdate, onReset }: ResultsStepProps
                         setOpenEditDialog(false)
                     }}
                     colorForLabel={colorForLabel}
+                    labels={labels}
+                    onAddLabel={onAddLabel}
                 />
             )}
         </Box>

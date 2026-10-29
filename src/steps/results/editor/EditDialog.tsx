@@ -14,14 +14,17 @@ interface EditDialogProps {
     onClose: () => void
     onSave: (updatedDetections: Detection[]) => void
     colorForLabel: (label: string) => string
+    labels: string[]
+    onAddLabel: (label: string) => void
 }
 
-export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, colorForLabel }: EditDialogProps) {
+export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, colorForLabel, labels, onAddLabel }: EditDialogProps) {
     const [mode, setMode] = useState<EditMode>("Select")
     const [selectedDetectionId, setSelectedDetectionId] = useState<string | null>(null)
 
     const [detections, setDetections] = useState<Detection[]>(image.detections)
     const selectedDetection = detections.find((d) => d.id === selectedDetectionId) || null
+    const editorLabels = [...new Set([...labels, ...detections.map((detection) => detection.label)])]
     const [confirmSaveOpen, setConfirmSaveOpen] = useState(false)
 
     function handleToggleVisibility(id: string) {
@@ -114,6 +117,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
     }, [image.detections, detections])
 
     function handleConfirmSave() {
+        detections.forEach((detection) => onAddLabel(detection.label))
         onSave(detections)
         setConfirmSaveOpen(false)
     }
@@ -152,6 +156,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                         onBoxUpdate={handleBoxUpdate}
                         mode={mode}
                         onBoxCreate={handleBoxCreate}
+                        labels={editorLabels}
                     />
                 </Box>
                 <Box
@@ -181,6 +186,7 @@ export function EditDialog({ image, imageIndex, totalImages, onClose, onSave, co
                                     selectedBox={selectedDetection}
                                     onLabelChange={(newLabel) => handleLabelChange(selectedDetection.id, newLabel)}
                                     onDelete={() => handleDelete(selectedDetection.id)}
+                                    labels={editorLabels}
                                 />
                             </>
                         )}

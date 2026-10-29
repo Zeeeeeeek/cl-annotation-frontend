@@ -7,9 +7,10 @@ interface SelectedBoxPanelProps {
     selectedBox: Detection
     onLabelChange: (newLabel: string) => void
     onDelete: () => void
+    labels: string[]
 }
 
-export function SelectedBoxPanel({ selectedBox, onLabelChange, onDelete }: SelectedBoxPanelProps) {
+export function SelectedBoxPanel({ selectedBox, onLabelChange, onDelete, labels }: SelectedBoxPanelProps) {
     const { x, y, width, height } = selectedBox.box
     const coordinates = [
         { name: "X", value: x },
@@ -24,7 +25,7 @@ export function SelectedBoxPanel({ selectedBox, onLabelChange, onDelete }: Selec
                 Selected box
             </Typography>
 
-            <LabelAutocomplete value={selectedBox.label} onSelect={onLabelChange} />
+            <LabelAutocomplete value={selectedBox.label} onSelect={onLabelChange} labels={labels}/>
 
             <Typography variant="body2" sx={{ mt: 2, mb: 1 }}>
                 Position in original image (px)

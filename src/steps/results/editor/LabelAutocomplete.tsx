@@ -1,7 +1,5 @@
 import { Autocomplete, createFilterOptions, TextField, Typography } from "@mui/material"
-import { COCO_LABELS } from "../../../constants/cocoLabels.ts"
 
-const labelOptions: readonly string[] = COCO_LABELS
 const filter = createFilterOptions<string>()
 
 interface LabelAutocompleteProps {
@@ -9,13 +7,14 @@ interface LabelAutocompleteProps {
     onTextChange?: (text: string) => void
     onSelect?: (label: string) => void
     autoFocus?: boolean
+    labels: string[]
 }
 
-export function LabelAutocomplete({ value, onTextChange, onSelect, autoFocus }: LabelAutocompleteProps) {
+export function LabelAutocomplete({ value, onTextChange, onSelect, autoFocus, labels }: LabelAutocompleteProps) {
     return (
         <Autocomplete
             renderInput={(params) => <TextField {...params} label="Label" autoFocus={autoFocus} />}
-            options={labelOptions}
+            options={labels}
             value={value}
             onInputChange={(_, text) => onTextChange?.(text.trim().toLowerCase())}
             onChange={(_, newValue) => {
@@ -38,7 +37,7 @@ export function LabelAutocomplete({ value, onTextChange, onSelect, autoFocus }: 
                 const { key, ...optionProps } = props
                 return (
                     <li key={key} {...optionProps}>
-                        {labelOptions.includes(option) ? (
+                        {labels.includes(option) ? (
                             option
                         ) : (
                             <Typography color="primary">Add “{option}” as a new class</Typography>

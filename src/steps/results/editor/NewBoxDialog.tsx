@@ -12,9 +12,10 @@ import {LabelAutocomplete} from "./LabelAutocomplete.tsx"
 interface NewBoxDialogProps {
     onCancel: () => void
     onAdd: (label: string) => void
+    labels: string[]
 }
 
-export function NewBoxDialog({onCancel, onAdd}: NewBoxDialogProps) {
+export function NewBoxDialog({onCancel, onAdd, labels}: NewBoxDialogProps) {
     const [label, setLabel] = useState<string | null>(null)
 
     return (
@@ -22,7 +23,7 @@ export function NewBoxDialog({onCancel, onAdd}: NewBoxDialogProps) {
             <DialogTitle>New Box</DialogTitle>
             <DialogContent>
                 <Box sx={{mt: 1}}>
-                    <LabelAutocomplete autoFocus onTextChange={(text) => setLabel(text || null)}/>
+                    <LabelAutocomplete autoFocus onTextChange={(text) => setLabel(text || null)} labels={labels}/>
                 </Box>
             </DialogContent>
             <DialogActions>

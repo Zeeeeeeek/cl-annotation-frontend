@@ -19,6 +19,7 @@ interface EditCanvasProps {
     onBoxUpdate: (detectionId: string, updatedBox: Detection["box"]) => void
     mode: EditMode
     onBoxCreate: (box: BoundingBox, label: string) => void
+    labels: string[]
 }
 
 export function EditCanvas({
@@ -30,6 +31,7 @@ export function EditCanvas({
     onBoxUpdate,
     mode,
     onBoxCreate,
+    labels,
 }: EditCanvasProps) {
     const shownDetections = detections.filter((detection) => detection.visible)
 
@@ -119,6 +121,7 @@ export function EditCanvas({
                         onBoxCreate(pendingBox, label)
                         setPendingBox(null)
                     }}
+                    labels={labels}
                 />
             )}
         </>
