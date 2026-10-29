@@ -4,8 +4,6 @@ import { Kbd } from "../../../components/Kbd.tsx"
 const SHORTCUTS = [
     { key: "Del", label: "delete" },
     { key: "Esc", label: "deselect" },
-    { key: "V", label: "select" },
-    { key: "B", label: "draw" },
 ]
 
 export function ShortcutLegend() {
