@@ -247,8 +247,8 @@ export function EditDialog({
                     <Typography variant="h6">Save changes?</Typography>
 
                     <Typography sx={{ mt: 1 }}>
-                        Saving will set the confidence score of all remaining boxes to 100% and permanently delete any
-                        boxes you removed. This action cannot be undone.
+                        All boxes will be set to 100% confidence. Removed boxes and boxes below the threshold will be
+                        deleted. This can't be undone.
                     </Typography>
 
                     <DialogActions sx={{ mt: 2 }}>

@@ -7,6 +7,7 @@ import { DetectionList } from "./DetectionList"
 import { LabelColors } from "./LabelColors"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { PaginationLegend } from "./PaginationLegend.tsx"
+import { filterByThreshold } from "../../../utils/detections.ts"
 
 interface ControlPanelProps {
     confidenceThreshold: number
@@ -52,7 +53,9 @@ export function ControlPanel({
     editedImages,
     sentImages,
 }: ControlPanelProps) {
-    const uniqueLabels = [...new Set(detections.map((detection) => detection.label))]
+    const uniqueLabels = [
+        ...new Set(filterByThreshold(detections, confidenceThreshold).map((detection) => detection.label)),
+    ]
 
     return (
         <Paper elevation={12} sx={{ p: 2, height: "17vh", overflowY: "auto" }}>

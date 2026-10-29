@@ -1,4 +1,4 @@
-import type {ClassInfo, DetectedBox, Detection} from "../types"
+import type { ClassInfo, DetectedBox, Detection } from "../types"
 import { API_BASE_URL } from "../config"
 
 export async function detect(file: File, signal?: AbortSignal): Promise<DetectedBox[]> {

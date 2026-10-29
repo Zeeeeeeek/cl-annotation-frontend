@@ -6,7 +6,7 @@ import { HealthChecker } from "./components/HealthChecker"
 import { runDetection } from "./api/runDetection"
 import { createImageItem } from "./utils/detections"
 import type { ImageItem } from "./types"
-import {getClasses} from "./api/client.ts"
+import { getClasses } from "./api/client.ts"
 
 type Step = "upload" | "processing" | "results"
 

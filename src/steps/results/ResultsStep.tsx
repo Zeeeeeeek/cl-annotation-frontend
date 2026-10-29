@@ -9,6 +9,7 @@ import SendIcon from "@mui/icons-material/Send"
 import { ImageStatusChip } from "./ImageStatusChip.tsx"
 import { sendAnnotations } from "../../api/sendAnnotations.ts"
 import { SendDialog } from "./SendDialog.tsx"
+import { filterByThreshold } from "../../utils/detections.ts"
 
 interface ResultsStepProps {
     images: ImageItem[]
@@ -124,7 +125,10 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
             />
             {openEditDialog && selectedImage && (
                 <EditDialog
-                    image={selectedImage}
+                    image={{
+                        ...selectedImage,
+                        detections: filterByThreshold(selectedImage.detections, confidenceThreshold),
+                    }}
                     imageIndex={selectedIndex + 1}
                     totalImages={images.length}
                     onClose={() => setOpenEditDialog(false)}
