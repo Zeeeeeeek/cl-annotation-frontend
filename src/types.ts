@@ -40,3 +40,8 @@ export interface ImageItem {
     sent: boolean
     errorMessage?: string
 }
+
+export interface ClassInfo {
+    name: string
+    learned: boolean
+}

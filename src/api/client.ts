@@ -1,4 +1,4 @@
-import type { DetectedBox, Detection } from "../types"
+import type {ClassInfo, DetectedBox, Detection} from "../types"
 import { API_BASE_URL } from "../config"
 
 export async function detect(file: File, signal?: AbortSignal): Promise<DetectedBox[]> {
@@ -43,4 +43,12 @@ export async function checkHealth(): Promise<boolean> {
         console.error("Health check failed:", error)
         return false
     }
+}
+
+export async function getClasses(): Promise<ClassInfo[]> {
+    const response = await fetch(`${API_BASE_URL}/classes`)
+    if (!response.ok) {
+        throw new Error(`Loading classes failed with status ${response.status}`)
+    }
+    return response.json()
 }

@@ -6,7 +6,7 @@ import { HealthChecker } from "./components/HealthChecker"
 import { runDetection } from "./api/runDetection"
 import { createImageItem } from "./utils/detections"
 import type { ImageItem } from "./types"
-import { COCO_LABELS } from "./constants/cocoLabels.ts"
+import {getClasses} from "./api/client.ts"
 
 type Step = "upload" | "processing" | "results"
 
@@ -14,7 +14,7 @@ export function App() {
     const [step, setStep] = useState<Step>("upload")
     const [images, setImages] = useState<ImageItem[]>([])
 
-    const [labels, setLabels] = useState<string[]>([...COCO_LABELS])
+    const [labels, setLabels] = useState<string[]>([])
 
     function updateImage(id: string, changes: Partial<ImageItem>) {
         setImages((prev) => prev.map((image) => (image.id === id ? { ...image, ...changes } : image)))
@@ -24,6 +24,15 @@ export function App() {
         setLabels((prev) => (prev.includes(newLabel) ? prev : [...prev, newLabel]))
     }
 
+    async function loadClasses() {
+        try {
+            const classes = await getClasses()
+            setLabels(classes.map((classInfo) => classInfo.name))
+        } catch (error) {
+            console.error("Failed to load classes:", error)
+        }
+    }
+
     function handleFilesSelected(files: File[]) {
         if (files.length === 0) return
 
@@ -31,6 +40,7 @@ export function App() {
         setImages(newImages)
         setStep("processing")
         void runDetection(newImages, updateImage)
+        void loadClasses()
     }
 
     function handleReset() {
