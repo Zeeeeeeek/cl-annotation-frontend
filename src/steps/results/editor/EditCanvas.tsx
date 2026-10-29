@@ -80,7 +80,7 @@ export function EditCanvas({
                         setDraft(null)
                     }
                 }}
-                renderOverlay={(scale) =>
+                renderOverlay={(scale, imageSize) =>
                     orderedDetections.map((detection) => (
                         <EditableBox
                             key={detection.id}
@@ -92,6 +92,7 @@ export function EditCanvas({
                             onSelect={setSelectedId}
                             onBoxUpdate={onBoxUpdate}
                             interactive={mode === "Select"}
+                            imageSize={imageSize}
                         />
                     ))
                 }

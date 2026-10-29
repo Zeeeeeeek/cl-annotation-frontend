@@ -1,6 +1,6 @@
 import useImage from "use-image"
 import { useElementSize } from "../hooks/useElementSize.ts"
-import { clamp, MIN_ZOOM, type Point, useZoom } from "../hooks/useZoom.ts"
+import { clamp, MIN_ZOOM, type Point, type Size, useZoom } from "../hooks/useZoom.ts"
 import type { KonvaEventObject } from "konva/lib/Node"
 import { Box } from "@mui/material"
 import { Layer, Stage, Image as KonvaImage } from "react-konva"
@@ -11,7 +11,7 @@ const WHEEL_ZOOM_SENSITIVITY = 0.002
 
 interface ImageViewerProps {
     imageUrl: string
-    renderOverlay: (scale: number) => ReactNode
+    renderOverlay: (scale: number, imageSize: Size) => ReactNode
     onBackGroundClick?: () => void
     panEnabled?: boolean
     cursor?: string
@@ -119,10 +119,10 @@ export function ImageViewer({
                 }}
             >
                 <Layer>
-                    {htmlImage && (
+                    {imageSize && htmlImage && (
                         <>
                             <KonvaImage image={htmlImage} name={"background"} />
-                            {renderOverlay?.(scale)}
+                            {renderOverlay?.(scale, imageSize)}
                         </>
                     )}
                 </Layer>

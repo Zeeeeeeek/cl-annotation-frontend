@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { UploadStep } from "./steps/upload/UploadStep"
 import { ProcessingDialog } from "./steps/processing/ProcessingDialog"
 import { ResultsStep } from "./steps/results/ResultsStep"

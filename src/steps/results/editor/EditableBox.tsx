@@ -5,6 +5,7 @@ import { DetectionLabel } from "../../../components/DetectionLabel.tsx"
 import { memo, useEffect, useRef, useState } from "react"
 import Konva from "konva"
 import type { KonvaEventObject } from "konva/lib/Node"
+import { clamp, type Size } from "../../../hooks/useZoom.ts"
 
 interface EditableBoxProps {
     detection: Detection
@@ -15,6 +16,7 @@ interface EditableBoxProps {
     onSelect: (id: string) => void
     onBoxUpdate: (id: string, updatedBox: Detection["box"]) => void
     interactive: boolean
+    imageSize: Size
 }
 
 export const EditableBox = memo(function EditableBox({
@@ -26,6 +28,7 @@ export const EditableBox = memo(function EditableBox({
     onSelect,
     onBoxUpdate,
     interactive,
+    imageSize,
 }: EditableBoxProps) {
     const displayColor = isSelected ? brighten(color) : color
     const strokeWidth = isSelected ? 5 : 3
@@ -54,10 +57,27 @@ export const EditableBox = memo(function EditableBox({
         setLiveBox(readBox(event.target))
     }
 
+    function handleDragMove(event: KonvaEventObject<DragEvent>) {
+        const node = event.target
+        const box = readBox(node)
+        node.x(clamp(box.x, 0, imageSize.width - box.width))
+        node.y(clamp(box.y, 0, imageSize.height - box.height))
+        setLiveBox(readBox(node))
+    }
+
     function handleMoveEnd(event: KonvaEventObject<Event>) {
-        const updatedBox = readBox(event.target)
-        event.target.scaleX(1)
-        event.target.scaleY(1)
+        const node = event.target
+        const box = readBox(node)
+        const x = clamp(box.x, 0, imageSize.width)
+        const y = clamp(box.y, 0, imageSize.height)
+        const updatedBox = {
+            x,
+            y,
+            width: Math.min(box.x + box.width, imageSize.width) - x,
+            height: Math.min(box.y + box.height, imageSize.height) - y,
+        }
+
+        node.setAttrs({ ...updatedBox, scaleX: 1, scaleY: 1 })
         setLiveBox(null)
         onBoxUpdate(detection.id, updatedBox)
     }
@@ -76,7 +96,7 @@ export const EditableBox = memo(function EditableBox({
                 strokeScaleEnabled={false}
                 fill={"transparent"}
                 draggable={isSelected}
-                onDragMove={handleMove}
+                onDragMove={handleDragMove}
                 onTransform={handleMove}
                 onDragEnd={handleMoveEnd}
                 onTransformEnd={handleMoveEnd}
