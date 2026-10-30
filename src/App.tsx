@@ -65,11 +65,13 @@ export function App() {
         <>
             {step === "upload" && <UploadStep onFilesSelected={handleFilesSelected} />}
 
-            {step === "processing" && <ProcessingDialog images={images} onViewResults={() => setStep("results")} />}
+            {step === "processing" && (
+                <ProcessingDialog images={images} onViewResults={() => setStep("results")} onReset={handleReset} />
+            )}
 
             {step === "results" && (
                 <ResultsStep
-                    images={images}
+                    images={images.filter((image) => image.status === "completed")}
                     onImageUpdate={updateImage}
                     onReset={handleReset}
                     labels={labels}
