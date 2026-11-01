@@ -2,6 +2,7 @@ import { Box, Divider, Paper, Stack, Typography } from "@mui/material"
 import { blue } from "@mui/material/colors"
 import FileUploadIcon from "@mui/icons-material/FileUpload"
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react"
+import { isHeicFile } from "../../utils/files.ts"
 
 interface UploadStepProps {
     onFilesSelected: (files: File[]) => void
@@ -33,7 +34,9 @@ export function UploadStep({ onFilesSelected }: UploadStepProps) {
         event.preventDefault()
         dragCounter.current = 0
         setIsDragging(false)
-        const imageFiles = Array.from(event.dataTransfer.files).filter((file) => file.type.startsWith("image/"))
+        const imageFiles = Array.from(event.dataTransfer.files).filter(
+            (file) => file.type.startsWith("image/") || isHeicFile(file),
+        )
         onFilesSelected(imageFiles)
     }
 

@@ -13,11 +13,19 @@ export interface DetectedBox {
 
 export type ImageStatus = "queued" | "processing" | "completed" | "error"
 
+export type SendStatus = "queued" | "sending" | "sent" | "error"
+
 export type Emphasis = "highlighted" | "dimmed" | "normal"
+
+export type EditMode = "Select" | "Draw" | "Pan"
+
+export interface SendState {
+    status: SendStatus
+    errorMessage?: string
+}
 
 export interface Detection extends DetectedBox {
     id: string
-    index: number
     visible: boolean
     highlighted: boolean
 }
@@ -28,5 +36,12 @@ export interface ImageItem {
     previewUrl: string
     status: ImageStatus
     detections: Detection[]
+    edited: boolean
+    sent: boolean
     errorMessage?: string
+}
+
+export interface ClassInfo {
+    name: string
+    learned: boolean
 }
