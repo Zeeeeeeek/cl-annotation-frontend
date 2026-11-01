@@ -82,7 +82,14 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
     const modifiedCount = images.filter((image) => image.edited && !image.sent).length
 
     return (
-        <Box sx={{ display: "grid", gridTemplateRows: "minmax(0, 1fr) auto", height: "100vh" }}>
+        <Box
+            sx={{
+                display: "grid",
+                gridTemplateRows: "minmax(0, 1fr) auto",
+                gridTemplateColumns: "minmax(0, 1fr)",
+                height: "100vh",
+            }}
+        >
             <Box sx={{ position: "relative", minHeight: 0 }}>
                 <AnnotatedImage
                     key={selectedImage.id}

@@ -59,7 +59,7 @@ export function ControlPanel({
     ]
 
     return (
-        <Paper elevation={12} sx={{ p: 2, height: "17vh", overflowY: "auto" }}>
+        <Paper elevation={12} sx={{ p: 2 }}>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: "grow" }} sx={{ order: { xs: 5, sm: 1 } }}>
                     <Stack spacing={1}>
