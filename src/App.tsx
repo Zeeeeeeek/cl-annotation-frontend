@@ -7,6 +7,7 @@ import { runDetection } from "./api/runDetection"
 import { createImageItem, isWaitingToBeSent } from "./utils/detections"
 import type { ImageItem } from "./types"
 import { getClasses } from "./api/client.ts"
+import { updateById } from "./utils/arrays.ts"
 
 type Step = "upload" | "processing" | "results"
 
@@ -19,7 +20,7 @@ export function App() {
     const hasUnsentChanges = images.some((image) => isWaitingToBeSent(image))
 
     function updateImage(id: string, changes: Partial<ImageItem>) {
-        setImages((prev) => prev.map((image) => (image.id === id ? { ...image, ...changes } : image)))
+        setImages((prev) => updateById(prev, id, changes))
     }
 
     function addLabel(newLabel: string) {

@@ -10,6 +10,7 @@ import { ImageStatusChip } from "./ImageStatusChip.tsx"
 import { SendDialog } from "./SendDialog.tsx"
 import { filterByThreshold, isWaitingToBeSent } from "../../utils/detections.ts"
 import { useSendAnnotations } from "../../hooks/useSendAnnotations.ts"
+import { updateById } from "../../utils/arrays.ts"
 
 interface ResultsStepProps {
     images: ImageItem[]
@@ -32,9 +33,7 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
 
     function updateDetection(detectionId: string, changes: Partial<Detection>) {
         onImageUpdate(selectedImage.id, {
-            detections: selectedImage.detections.map((detection) =>
-                detection.id === detectionId ? { ...detection, ...changes } : detection,
-            ),
+            detections: updateById(selectedImage.detections, detectionId, changes),
         })
     }
 

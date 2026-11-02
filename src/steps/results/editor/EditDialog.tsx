@@ -10,6 +10,7 @@ import { haveDetectionsChanged } from "../../../utils/detections.ts"
 import { useDetectionHistory } from "../../../hooks/useDetectionHistory.ts"
 import { ConfirmDialog } from "../../../components/ConfirmDialog.tsx"
 import { EditFooter } from "./EditFooter.tsx"
+import { updateById } from "../../../utils/arrays.ts"
 
 interface EditDialogProps {
     image: ImageItem
@@ -63,9 +64,7 @@ export function EditDialog({
     }
 
     function handleLabelChange(id: string, newLabel: string) {
-        changeDetections((prevDetections) =>
-            prevDetections.map((detection) => (detection.id === id ? { ...detection, label: newLabel } : detection)),
-        )
+        changeDetections((prevDetections) => updateById(prevDetections, id, { label: newLabel }))
     }
 
     function handleDelete(id: string) {
@@ -76,16 +75,7 @@ export function EditDialog({
     }
 
     function handleBoxUpdate(detectionId: string, updatedBox: BoundingBox) {
-        changeDetections((prevDetections) =>
-            prevDetections.map((detection) =>
-                detection.id === detectionId
-                    ? {
-                          ...detection,
-                          box: updatedBox,
-                      }
-                    : detection,
-            ),
-        )
+        changeDetections((prevDetections) => updateById(prevDetections, detectionId, { box: updatedBox }))
     }
 
     function handleBoxCreate(box: BoundingBox, label: string) {
