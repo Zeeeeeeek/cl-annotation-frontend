@@ -20,14 +20,15 @@ interface ResultsStepProps {
 }
 
 export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel }: ResultsStepProps) {
-    const [selectedIndex, setSelectedIndex] = useState(0)
-    const [confidenceThreshold, setConfidenceThreshold] = useState(0.9)
     const { colorForLabel, setColorForLabel } = useLabelColors()
     const { sendStates, sendingImages, send, retry, clearSendStates } = useSendAnnotations(images, onImageUpdate)
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [confidenceThreshold, setConfidenceThreshold] = useState(0.9)
+    const [hoveredDetectionId, setHoveredDetectionId] = useState<string | null>(null)
+    const [isEditorOpen, setIsEditorOpen] = useState(false)
 
     const selectedImage = images[selectedIndex]
-
-    const [hoveredDetectionId, setHoveredDetectionId] = useState<string | null>(null)
+    const modifiedCount = images.filter((image) => image.edited && !image.sent).length
 
     function updateDetection(detectionId: string, changes: Partial<Detection>) {
         onImageUpdate(selectedImage.id, {
@@ -45,13 +46,9 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
         updateDetection(detection.id, { highlighted: !detection.highlighted })
     }
 
-    const [openEditDialog, setOpenEditDialog] = useState(false)
-
-    function onImageEdit() {
-        setOpenEditDialog((prevState) => !prevState)
+    function handleImageEdit() {
+        setIsEditorOpen(true)
     }
-
-    const modifiedCount = images.filter((image) => image.edited && !image.sent).length
 
     return (
         <Box
@@ -98,11 +95,11 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
                 onReset={onReset}
                 onToggleHighlight={handleToggleHighlight}
                 onDetectionHover={setHoveredDetectionId}
-                onImageEdit={onImageEdit}
+                onImageEdit={handleImageEdit}
                 editedImages={images.map((image) => image.edited)}
                 sentImages={images.map((image) => image.sent)}
             />
-            {openEditDialog && selectedImage && (
+            {isEditorOpen && selectedImage && (
                 <EditDialog
                     image={{
                         ...selectedImage,
@@ -110,7 +107,7 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
                     }}
                     imageIndex={selectedIndex + 1}
                     totalImages={images.length}
-                    onClose={() => setOpenEditDialog(false)}
+                    onClose={() => setIsEditorOpen(false)}
                     onSave={(updatedDetections) => {
                         onImageUpdate(selectedImage.id, {
                             detections: updatedDetections.map((detection) => ({
@@ -121,7 +118,7 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
                             edited: true,
                             sent: false,
                         })
-                        setOpenEditDialog(false)
+                        setIsEditorOpen(false)
                     }}
                     colorForLabel={colorForLabel}
                     labels={labels}
