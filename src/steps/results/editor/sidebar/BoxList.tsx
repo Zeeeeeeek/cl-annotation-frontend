@@ -12,9 +12,9 @@ import {
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined"
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined"
-import type { Detection } from "../../../types"
-import { formatConfidence, formatDetectionName } from "../../../utils/format.ts"
-import { getDetectionIndexes } from "../../../utils/detections.ts"
+import type { Detection } from "../../../../types.ts"
+import { formatConfidence, formatDetectionName } from "../../../../utils/format.ts"
+import { getDetectionIndexes } from "../../../../utils/detections.ts"
 
 interface BoxListProps {
     detections: Detection[]

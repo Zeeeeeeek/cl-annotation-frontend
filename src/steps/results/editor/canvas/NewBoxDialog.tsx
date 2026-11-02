@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
 import { useState } from "react"
-import { LabelAutocomplete } from "./LabelAutocomplete.tsx"
+import { LabelAutocomplete } from "../LabelAutocomplete.tsx"
 
 interface NewBoxDialogProps {
     onCancel: () => void

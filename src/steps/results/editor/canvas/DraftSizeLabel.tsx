@@ -1,5 +1,5 @@
 import { Group, Label, Text, Tag } from "react-konva"
-import type { BoundingBox } from "../../../types.ts"
+import type { BoundingBox } from "../../../../types.ts"
 
 interface DraftSizeLabelProps {
     draftBox: BoundingBox

@@ -1,11 +1,11 @@
-import type { BoundingBox, Detection, EditMode } from "../../../types.ts"
-import { getDetectionIndexes, sortByDrawingOrder } from "../../../utils/detections.ts"
-import { ImageViewer } from "../../../components/ImageViewer.tsx"
+import type { BoundingBox, Detection, EditMode } from "../../../../types.ts"
+import { getDetectionIndexes, sortByDrawingOrder } from "../../../../utils/detections.ts"
+import { ImageViewer } from "../../../../components/ImageViewer.tsx"
 import { EditableBox } from "./EditableBox.tsx"
 import { Rect } from "react-konva"
 import { DraftSizeLabel } from "./DraftSizeLabel.tsx"
 import { NewBoxDialog } from "./NewBoxDialog.tsx"
-import { useBoxDrawing } from "../../../hooks/useBoxDrawing.ts"
+import { useBoxDrawing } from "../../../../hooks/useBoxDrawing.ts"
 
 interface EditCanvasProps {
     imageUrl: string

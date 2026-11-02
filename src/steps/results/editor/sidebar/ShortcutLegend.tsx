@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material"
-import { Kbd } from "../../../components/Kbd.tsx"
+import { Kbd } from "../../../../components/Kbd.tsx"
 
 const SHORTCUTS = [
     { key: "Del", label: "delete" },

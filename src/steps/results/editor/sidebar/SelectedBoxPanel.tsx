@@ -1,7 +1,7 @@
-import type { Detection } from "../../../types.ts"
+import type { Detection } from "../../../../types.ts"
 import { Box, Button, Typography } from "@mui/material"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
-import { LabelAutocomplete } from "./LabelAutocomplete.tsx"
+import { LabelAutocomplete } from "../LabelAutocomplete.tsx"
 
 interface SelectedBoxPanelProps {
     selectedBox: Detection
