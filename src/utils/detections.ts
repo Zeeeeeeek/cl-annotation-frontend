@@ -1,4 +1,5 @@
-import type { BoundingBox, DetectedBox, Detection, ImageItem, Point } from "../types"
+import type {BoundingBox, DetectedBox, Detection, ImageItem, Point, Size} from "../types"
+import {clamp} from "./math.ts";
 
 export function createImageItem(file: File): ImageItem {
     return {
@@ -88,4 +89,16 @@ export function sortByDrawingOrder(detections: Detection[], selectedId: string |
 
 export function toSavedDetections(detections: Detection[]): Detection[] {
     return detections.map((detection) => ({ ...detection, visible: true, confidence: 1 }))
+}
+
+// Cuts off the parts of the box that fall outside the image
+export function clampBoxToImage(box: BoundingBox, imageSize: Size): BoundingBox {
+    const x = clamp(box.x, 0, imageSize.width)
+    const y = clamp(box.y, 0, imageSize.height)
+    return {
+        x,
+        y,
+        width: Math.min(box.x + box.width, imageSize.width) - x,
+        height: Math.min(box.y + box.height, imageSize.height) - y,
+    }
 }
