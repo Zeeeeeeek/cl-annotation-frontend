@@ -20,11 +20,9 @@ export function useLabelColors() {
     }
 
     function setColorForLabel(label: string, color: string) {
-        setOverrides((prev) => {
-            const next = { ...prev, [label]: color }
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-            return next
-        })
+        const next = { ...overrides, [label]: color }
+        setOverrides(next)
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
     }
 
     return { colorForLabel, setColorForLabel }
