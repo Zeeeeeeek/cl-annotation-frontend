@@ -1,14 +1,12 @@
-import { Badge, Button, Divider, Grid, Pagination, PaginationItem, Paper, Stack } from "@mui/material"
+import { Button, Divider, Grid, Paper, Stack } from "@mui/material"
 import EditIcon from "@mui/icons-material/Edit"
 import ReplayIcon from "@mui/icons-material/Replay"
 import type { Detection } from "../../../types"
 import { ThresholdControl } from "./ThresholdControl"
 import { DetectionList } from "./DetectionList"
 import { LabelColors } from "./LabelColors"
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"
-import { PaginationLegend } from "./PaginationLegend.tsx"
 import { filterByThreshold } from "../../../utils/detections.ts"
-import CircleIcon from "@mui/icons-material/Circle"
+import { ImagePagination } from "./ImagePagination.tsx"
 
 interface ControlPanelProps {
     confidenceThreshold: number
@@ -68,41 +66,13 @@ export function ControlPanel({
                             onChange={onConfidenceThresholdChange}
                             scores={detections.map((detection) => detection.confidence)}
                         />
-                        <Stack direction="row" sx={{ alignItems: "center" }} spacing={2}>
-                            <Pagination
-                                count={totalResults}
-                                page={currentIndex + 1}
-                                onChange={(_, page) => onIndexChange(page - 1)}
-                                sx={{ display: "flex", justifyContent: "center", flex: 1 }}
-                                renderItem={(item) => {
-                                    if (item.type !== "page" || item.page === null) return <PaginationItem {...item} />
-
-                                    const index = item.page - 1
-                                    if (sentImages[index]) {
-                                        return (
-                                            <Badge
-                                                overlap="circular"
-                                                badgeContent={
-                                                    <CheckCircleIcon color="success" sx={{ fontSize: "0.875rem" }} />
-                                                }
-                                            >
-                                                <PaginationItem {...item} />
-                                            </Badge>
-                                        )
-                                    }
-                                    return (
-                                        <Badge
-                                            overlap="circular"
-                                            invisible={!editedImages[index]}
-                                            badgeContent={<CircleIcon color="warning" sx={{ fontSize: "0.875rem" }} />}
-                                        >
-                                            <PaginationItem {...item} />
-                                        </Badge>
-                                    )
-                                }}
-                            />
-                            <PaginationLegend />
-                        </Stack>
+                        <ImagePagination
+                            currentIndex={currentIndex}
+                            totalResults={totalResults}
+                            onIndexChange={onIndexChange}
+                            editedImages={editedImages}
+                            sentImages={sentImages}
+                        />
                         <Stack direction="row" spacing={1}>
                             <Button
                                 variant="contained"
