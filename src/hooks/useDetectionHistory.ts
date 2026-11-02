@@ -1,5 +1,5 @@
-import type {Detection} from "../types.ts";
-import {useState} from "react";
+import type { Detection } from "../types.ts"
+import { useState } from "react"
 
 export function useDetectionHistory(initialDetections: Detection[]) {
     const [detections, setDetections] = useState<Detection[]>(initialDetections)
