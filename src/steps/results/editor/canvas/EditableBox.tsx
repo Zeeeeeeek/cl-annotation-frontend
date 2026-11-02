@@ -48,12 +48,6 @@ export function EditableBox({
     const strokeWidth = isSelected ? 5 : 3
     const labelBox = liveBox ?? detection.box
 
-    useEffect(() => {
-        if (isSelected && rectRef.current && transformerRef.current) {
-            transformerRef.current.nodes([rectRef.current])
-        }
-    }, [isSelected])
-
     function handleMove(event: KonvaEventObject<Event>) {
         setLiveBox(readBox(event.target))
     }
@@ -73,6 +67,11 @@ export function EditableBox({
         onBoxUpdate(detection.id, updatedBox)
     }
 
+    useEffect(() => {
+        if (isSelected && rectRef.current && transformerRef.current) {
+            transformerRef.current.nodes([rectRef.current])
+        }
+    }, [isSelected])
 
     return (
         <Group onClick={() => onSelect(detection.id)} onTap={() => onSelect(detection.id)} listening={isInteractive}>
