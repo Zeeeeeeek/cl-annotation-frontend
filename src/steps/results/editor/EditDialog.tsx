@@ -7,7 +7,8 @@ import { SelectedBoxPanel } from "./SelectedBoxPanel.tsx"
 import { ShortcutLegend } from "./ShortcutLegend.tsx"
 import { EditCanvas } from "./EditCanvas.tsx"
 import { haveDetectionsChanged } from "../../../utils/detections.ts"
-import {useDetectionHistory} from "../../../hooks/useDetectionHistory.ts";
+import { useDetectionHistory } from "../../../hooks/useDetectionHistory.ts"
+import { ConfirmDialog } from "../../../components/ConfirmDialog.tsx"
 
 interface EditDialogProps {
     image: ImageItem
@@ -287,35 +288,28 @@ export function EditDialog({
                     </Button>
                 </Box>
             </DialogActions>
-            <Dialog open={confirmSaveOpen} onClose={() => setConfirmSaveOpen(false)}>
-                <Box sx={{ p: 3 }}>
-                    <Typography variant="h6">Save changes?</Typography>
-
-                    <Typography sx={{ mt: 1 }}>
-                        All boxes will be set to 100% confidence. Removed boxes and boxes below the threshold will be
-                        deleted. This can't be undone.
-                    </Typography>
-
-                    <DialogActions sx={{ mt: 2 }}>
-                        <Button onClick={() => setConfirmSaveOpen(false)}>Go back</Button>
-                        <Button variant="contained" onClick={handleConfirmSave}>
-                            Confirm
-                        </Button>
-                    </DialogActions>
-                </Box>
-            </Dialog>
-            <Dialog open={confirmDiscardOpen} onClose={() => setConfirmDiscardOpen(false)}>
-                <Box sx={{ p: 3 }}>
-                    <Typography variant="h6">Discard changes?</Typography>
-                    <Typography sx={{ mt: 1 }}>Your changes to this image will be lost.</Typography>
-                    <DialogActions sx={{ mt: 2 }}>
-                        <Button onClick={() => setConfirmDiscardOpen(false)}>Keep editing</Button>
-                        <Button variant="contained" color="error" onClick={onClose}>
-                            Discard
-                        </Button>
-                    </DialogActions>
-                </Box>
-            </Dialog>
+            <ConfirmDialog
+                isOpen={confirmSaveOpen}
+                title="Save changes?"
+                message={
+                    "All boxes will be set to 100% confidence. Removed boxes and boxes below the threshold " +
+                    "will be deleted. This can't be undone."
+                }
+                cancelLabel="Go back"
+                confirmLabel="Confirm"
+                onCancel={() => setConfirmSaveOpen(false)}
+                onConfirm={handleConfirmSave}
+            />
+            <ConfirmDialog
+                isOpen={confirmDiscardOpen}
+                title="Discard changes?"
+                message="Your changes to this image will be lost."
+                cancelLabel="Keep editing"
+                confirmLabel="Discard"
+                confirmColor="error"
+                onCancel={() => setConfirmDiscardOpen(false)}
+                onConfirm={onClose}
+            />
         </Dialog>
     )
 }
