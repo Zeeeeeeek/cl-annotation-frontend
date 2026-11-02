@@ -2,7 +2,7 @@ import type { Detection } from "../../../types.ts"
 import { Group, Rect, Transformer } from "react-konva"
 import { brighten } from "../../../utils/labelColors.ts"
 import { DetectionLabel } from "../../../components/DetectionLabel.tsx"
-import { memo, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Konva from "konva"
 import type { KonvaEventObject } from "konva/lib/Node"
 import { clamp, type Size } from "../../../hooks/useZoom.ts"
@@ -19,7 +19,7 @@ interface EditableBoxProps {
     imageSize: Size
 }
 
-export const EditableBox = memo(function EditableBox({
+export function EditableBox({
     detection,
     detectionIndex,
     color,
@@ -122,4 +122,4 @@ export const EditableBox = memo(function EditableBox({
             )}
         </Group>
     )
-})
+}
