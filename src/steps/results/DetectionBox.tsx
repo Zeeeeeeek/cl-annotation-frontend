@@ -21,13 +21,7 @@ export function DetectionBox({ detection, color, emphasis, viewScale, detectionI
 
     return (
         <Group opacity={opacity}>
-            <Rect
-                {...box}
-                stroke={displayColor}
-                strokeWidth={strokeWidth}
-                strokeScaleEnabled={false}
-                shadowBlur={10}
-            />
+            <Rect {...box} stroke={displayColor} strokeWidth={strokeWidth} strokeScaleEnabled={false} shadowBlur={10} />
             <DetectionLabel
                 detection={detection}
                 detectionIndex={detectionIndex}

@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react"
 import Konva from "konva"
 import type { KonvaEventObject } from "konva/lib/Node"
 import { clamp } from "../../../../utils/math.ts"
-import {clampBoxToImage} from "../../../../utils/detections.ts";
+import { clampBoxToImage } from "../../../../utils/detections.ts"
 
 interface EditableBoxProps {
     detection: Detection

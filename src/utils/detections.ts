@@ -1,5 +1,5 @@
-import type {BoundingBox, DetectedBox, Detection, ImageItem, Point, Size} from "../types"
-import {clamp} from "./math.ts";
+import type { BoundingBox, DetectedBox, Detection, ImageItem, Point, Size } from "../types"
+import { clamp } from "./math.ts"
 
 export function createImageItem(file: File): ImageItem {
     return {

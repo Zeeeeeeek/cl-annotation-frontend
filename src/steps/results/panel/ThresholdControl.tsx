@@ -1,7 +1,7 @@
 import { Box, Grid, Input, Slider } from "@mui/material"
 import type { ChangeEvent } from "react"
 import { SectionTitle } from "../../../components/SectionTitle"
-import {clamp} from "../../../utils/math.ts";
+import { clamp } from "../../../utils/math.ts"
 
 const MIN_THRESHOLD = 0.5
 const MAX_THRESHOLD = 1
