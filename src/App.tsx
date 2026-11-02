@@ -16,6 +16,8 @@ export function App() {
 
     const [labels, setLabels] = useState<string[]>([])
 
+    const hasUnsentChanges = images.some((image) => image.edited && !image.sent)
+
     function updateImage(id: string, changes: Partial<ImageItem>) {
         setImages((prev) => prev.map((image) => (image.id === id ? { ...image, ...changes } : image)))
     }
@@ -50,7 +52,6 @@ export function App() {
     }
 
     useEffect(() => {
-        const hasUnsentChanges = images.some((image) => image.edited && !image.sent)
         if (!hasUnsentChanges) return
 
         function handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -59,7 +60,7 @@ export function App() {
 
         window.addEventListener("beforeunload", handleBeforeUnload)
         return () => window.removeEventListener("beforeunload", handleBeforeUnload)
-    }, [images])
+    }, [hasUnsentChanges])
 
     return (
         <>
