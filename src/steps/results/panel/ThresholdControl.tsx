@@ -1,6 +1,7 @@
 import { Box, Grid, Input, Slider } from "@mui/material"
 import type { ChangeEvent } from "react"
 import { SectionTitle } from "../../../components/SectionTitle"
+import {clamp} from "../../../utils/math.ts";
 
 const MIN_THRESHOLD = 0.5
 const MAX_THRESHOLD = 1
@@ -22,7 +23,7 @@ export function ThresholdControl({ value, onChange, scores }: ThresholdControlPr
 
     // The input allows out-of-range values while typing: clamp them when it loses focus
     function handleBlur() {
-        onChange(Math.min(MAX_THRESHOLD, Math.max(MIN_THRESHOLD, value)))
+        onChange(clamp(value, MIN_THRESHOLD, MAX_THRESHOLD))
     }
 
     return (

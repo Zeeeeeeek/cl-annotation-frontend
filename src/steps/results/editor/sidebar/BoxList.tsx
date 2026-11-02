@@ -85,7 +85,7 @@ export function BoxList({
                                     <ListItemIcon sx={{ minWidth: "2rem" }}>
                                         <Box
                                             sx={{
-                                                backgroundColor: colorForLabel(detection.label) ?? "red",
+                                                backgroundColor: colorForLabel(detection.label),
                                                 width: "1rem",
                                                 height: "1rem",
                                                 borderRadius: "30%",

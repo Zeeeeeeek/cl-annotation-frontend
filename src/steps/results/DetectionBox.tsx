@@ -22,10 +22,7 @@ export function DetectionBox({ detection, color, emphasis, viewScale, detectionI
     return (
         <Group opacity={opacity}>
             <Rect
-                x={box.x}
-                y={box.y}
-                width={box.width}
-                height={box.height}
+                {...box}
                 stroke={displayColor}
                 strokeWidth={strokeWidth}
                 strokeScaleEnabled={false}

@@ -87,10 +87,7 @@ export function EditableBox({
     return (
         <Group onClick={() => onSelect(detection.id)} onTap={() => onSelect(detection.id)} listening={isInteractive}>
             <Rect
-                x={detection.box.x}
-                y={detection.box.y}
-                width={detection.box.width}
-                height={detection.box.height}
+                {...detection.box}
                 stroke={displayColor}
                 strokeWidth={strokeWidth}
                 strokeScaleEnabled={false}
