@@ -64,3 +64,7 @@ export function haveDetectionsChanged(original: Detection[], current: Detection[
         )
     })
 }
+
+export function isWaitingToBeSent(image: ImageItem): boolean {
+    return image.edited && !image.sent
+}

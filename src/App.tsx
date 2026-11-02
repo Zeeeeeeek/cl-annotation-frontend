@@ -4,7 +4,7 @@ import { ProcessingDialog } from "./steps/processing/ProcessingDialog"
 import { ResultsStep } from "./steps/results/ResultsStep"
 import { HealthChecker } from "./components/HealthChecker"
 import { runDetection } from "./api/runDetection"
-import { createImageItem } from "./utils/detections"
+import { createImageItem, isWaitingToBeSent } from "./utils/detections"
 import type { ImageItem } from "./types"
 import { getClasses } from "./api/client.ts"
 
@@ -16,7 +16,7 @@ export function App() {
 
     const [labels, setLabels] = useState<string[]>([])
 
-    const hasUnsentChanges = images.some((image) => image.edited && !image.sent)
+    const hasUnsentChanges = images.some((image) => isWaitingToBeSent(image))
 
     function updateImage(id: string, changes: Partial<ImageItem>) {
         setImages((prev) => prev.map((image) => (image.id === id ? { ...image, ...changes } : image)))

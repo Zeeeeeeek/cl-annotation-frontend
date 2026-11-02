@@ -8,7 +8,7 @@ import { EditDialog } from "./editor/EditDialog.tsx"
 import SendIcon from "@mui/icons-material/Send"
 import { ImageStatusChip } from "./ImageStatusChip.tsx"
 import { SendDialog } from "./SendDialog.tsx"
-import { filterByThreshold } from "../../utils/detections.ts"
+import { filterByThreshold, isWaitingToBeSent } from "../../utils/detections.ts"
 import { useSendAnnotations } from "../../hooks/useSendAnnotations.ts"
 
 interface ResultsStepProps {
@@ -28,7 +28,7 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
     const [isEditorOpen, setIsEditorOpen] = useState(false)
 
     const selectedImage = images[selectedIndex]
-    const modifiedCount = images.filter((image) => image.edited && !image.sent).length
+    const modifiedCount = images.filter((image) => isWaitingToBeSent(image)).length
 
     function updateDetection(detectionId: string, changes: Partial<Detection>) {
         onImageUpdate(selectedImage.id, {

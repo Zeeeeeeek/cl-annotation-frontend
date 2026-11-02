@@ -1,6 +1,7 @@
 import { useState } from "react"
 import type { ImageItem, SendState, SendStatus } from "../types.ts"
 import { sendAnnotations } from "../api/sendAnnotations.ts"
+import { isWaitingToBeSent } from "../utils/detections.ts"
 
 function queuedStates(toSend: ImageItem[]): Record<string, SendState> {
     const states: Record<string, SendState> = {}
@@ -26,7 +27,7 @@ export function useSendAnnotations(
     }
 
     function send() {
-        const toSend = images.filter((image) => image.edited && !image.sent)
+        const toSend = images.filter((image) => isWaitingToBeSent(image))
         setSendStates(queuedStates(toSend))
         void sendAnnotations(toSend, updateSendState)
     }
