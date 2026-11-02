@@ -10,6 +10,8 @@ interface EditorShortcutsOptions {
     onRedo: () => void
 }
 
+const MODE_SHORTCUTS: Partial<Record<string, EditMode>> = { v: "Select", b: "Draw", h: "Pan" }
+
 export function useEditorShortcuts({
     isEnabled,
     selectedId,
@@ -37,28 +39,16 @@ export function useEditorShortcuts({
             return
         }
 
-        switch (key) {
-            case "v":
-                onModeChange("Select")
-                event.preventDefault()
-                break
-            case "b":
-                onModeChange("Draw")
-                event.preventDefault()
-                break
-            case "h":
-                onModeChange("Pan")
-                event.preventDefault()
-                break
-            case "delete":
-            case "backspace":
-                if (selectedId) {
-                    onDelete(selectedId)
-                    event.preventDefault()
-                }
-                break
-            default:
-                break
+        const mode = MODE_SHORTCUTS[key]
+        if (mode) {
+            event.preventDefault()
+            onModeChange(mode)
+            return
+        }
+
+        if ((key === "delete" || key === "backspace") && selectedId) {
+            event.preventDefault()
+            onDelete(selectedId)
         }
     })
 
