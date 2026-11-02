@@ -1,4 +1,4 @@
-import type { BoundingBox, DetectedBox, Detection, ImageItem } from "../types"
+import type { BoundingBox, DetectedBox, Detection, ImageItem, Point } from "../types"
 
 export function createImageItem(file: File): ImageItem {
     return {
@@ -67,4 +67,21 @@ export function haveDetectionsChanged(original: Detection[], current: Detection[
 
 export function isWaitingToBeSent(image: ImageItem): boolean {
     return image.edited && !image.sent
+}
+
+export function boxFromPoints(start: Point, end: Point): BoundingBox {
+    return {
+        x: Math.min(start.x, end.x),
+        y: Math.min(start.y, end.y),
+        width: Math.abs(end.x - start.x),
+        height: Math.abs(end.y - start.y),
+    }
+}
+
+// Larger boxes first, so smaller ones are drawn on top and stay clickable
+export function sortByDrawingOrder(detections: Detection[], selectedId: string | null): Detection[] {
+    const areaDiff = (a: Detection, b: Detection) => getBoxArea(b.box) - getBoxArea(a.box)
+    const selectionDiff = (a: Detection, b: Detection) => Number(a.id === selectedId) - Number(b.id === selectedId)
+
+    return [...detections].sort((a, b) => areaDiff(a, b) || selectionDiff(a, b))
 }

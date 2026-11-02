@@ -1,5 +1,5 @@
 import type { BoundingBox, Detection, EditMode, Point } from "../../../types.ts"
-import { getBoxArea, getDetectionIndexes } from "../../../utils/detections.ts"
+import { boxFromPoints, getDetectionIndexes, sortByDrawingOrder } from "../../../utils/detections.ts"
 import { ImageViewer } from "../../../components/ImageViewer.tsx"
 import { EditableBox } from "./EditableBox.tsx"
 import { useState } from "react"
@@ -32,27 +32,14 @@ export function EditCanvas({
     onBoxCreate,
     labels,
 }: EditCanvasProps) {
-    const shownDetections = detections.filter((detection) => detection.visible)
-
-    const selectionDiff = (a: Detection, b: Detection): number =>
-        Number(a.id === selectedId) - Number(b.id === selectedId)
-
-    const areaDiff = (a: Detection, b: Detection): number => getBoxArea(b.box) - getBoxArea(a.box)
-
-    const orderedDetections = [...shownDetections].sort((a, b) => areaDiff(a, b) || selectionDiff(a, b))
-    const detectionIndexes = getDetectionIndexes(detections)
-
     const [draft, setDraft] = useState<{ start: Point; end: Point } | null>(null)
-
-    const draftBox = draft && {
-        x: Math.min(draft.start.x, draft.end.x),
-        y: Math.min(draft.start.y, draft.end.y),
-        width: Math.abs(draft.end.x - draft.start.x),
-        height: Math.abs(draft.end.y - draft.start.y),
-    }
-
     const [pendingBox, setPendingBox] = useState<BoundingBox | null>(null)
-    const showBox = draftBox ?? pendingBox
+
+    const shownDetections = detections.filter((detection) => detection.visible)
+    const orderedDetections = sortByDrawingOrder(shownDetections, selectedId)
+    const detectionIndexes = getDetectionIndexes(detections)
+    const draftBox = draft ? boxFromPoints(draft.start, draft.end) : null
+    const previewBox = draftBox ?? pendingBox
     return (
         <>
             <ImageViewer
@@ -96,10 +83,10 @@ export function EditCanvas({
                     ))
                 }
                 renderTopOverlay={(scale) =>
-                    showBox && (
+                    previewBox && (
                         <>
                             <Rect
-                                {...showBox}
+                                {...previewBox}
                                 stroke="white"
                                 strokeWidth={2}
                                 strokeScaleEnabled={false}
@@ -107,7 +94,7 @@ export function EditCanvas({
                                 fill="rgba(255, 255, 255, 0.2)"
                                 listening={false}
                             />
-                            <DraftSizeLabel draftBox={showBox} scale={scale} />
+                            <DraftSizeLabel draftBox={previewBox} scale={scale} />
                         </>
                     )
                 }
