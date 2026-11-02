@@ -1,18 +1,7 @@
 import type { ImageItem, SendState } from "../../types.ts"
-import {
-    Box,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    List,
-    ListItem,
-    ListItemText,
-} from "@mui/material"
-import { stripExtension } from "../../utils/format.ts"
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, List } from "@mui/material"
 import RefreshIcon from "@mui/icons-material/Refresh"
-import { StatusChip } from "../../components/StatusChip.tsx"
+import { ImageStatusItem } from "../../components/ImageStatusItem.tsx"
 
 interface SendDialogProps {
     images: ImageItem[]
@@ -34,14 +23,13 @@ export function SendDialog({ images, sendStates, onClose, onRetry }: SendDialogP
                     {images.map((image, index) => {
                         const { status, errorMessage } = sendStates[image.id]
                         return (
-                            <ListItem key={image.id} divider={index < images.length - 1}>
-                                <ListItemText
-                                    primary={stripExtension(image.file.name)}
-                                    secondary={errorMessage}
-                                    slotProps={{ secondary: { color: "error" } }}
-                                />
-                                <StatusChip status={status} />
-                            </ListItem>
+                            <ImageStatusItem
+                                key={image.id}
+                                fileName={image.file.name}
+                                status={status}
+                                errorMessage={errorMessage}
+                                hasDivider={index < images.length - 1}
+                            />
                         )
                     })}
                 </List>

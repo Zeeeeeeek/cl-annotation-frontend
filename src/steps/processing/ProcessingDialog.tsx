@@ -1,8 +1,7 @@
-import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText } from "@mui/material"
+import { Button, Dialog, DialogContent, DialogTitle, List } from "@mui/material"
 import type { ImageItem } from "../../types"
-import { StatusChip } from "../../components/StatusChip"
-import { stripExtension } from "../../utils/format"
 import ReplayIcon from "@mui/icons-material/Replay"
+import { ImageStatusItem } from "../../components/ImageStatusItem.tsx"
 
 interface ProcessingDialogProps {
     images: ImageItem[]
@@ -19,14 +18,13 @@ export function ProcessingDialog({ images, onViewResults, onReset }: ProcessingD
             <DialogContent sx={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
                 <List sx={{ flex: 1, overflowY: "auto", pr: 1 }}>
                     {images.map((image, index) => (
-                        <ListItem key={image.id} divider={index < images.length - 1}>
-                            <ListItemText
-                                primary={stripExtension(image.file.name)}
-                                secondary={image.errorMessage}
-                                slotProps={{ secondary: { color: "error" } }}
-                            />
-                            <StatusChip status={image.status} />
-                        </ListItem>
+                        <ImageStatusItem
+                            key={image.id}
+                            fileName={image.file.name}
+                            status={image.status}
+                            errorMessage={image.errorMessage}
+                            hasDivider={index < images.length - 1}
+                        />
                     ))}
                 </List>
                 {isProcessingDone && !hasResults ? (
