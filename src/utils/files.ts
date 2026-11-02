@@ -8,3 +8,7 @@ export function isHeicFile(file: File): boolean {
         HEIC_EXTENSIONS.some((extension) => fileName.endsWith(extension))
     )
 }
+
+export function isAcceptedImageFile(file: File): boolean {
+    return file.type.startsWith("image/") || isHeicFile(file)
+}

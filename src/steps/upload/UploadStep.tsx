@@ -1,47 +1,23 @@
 import { Box, Divider, Paper, Stack, Typography } from "@mui/material"
 import { blue } from "@mui/material/colors"
 import FileUploadIcon from "@mui/icons-material/FileUpload"
-import { useRef, useState, type ChangeEvent, type DragEvent } from "react"
-import { isHeicFile } from "../../utils/files.ts"
+import type { ChangeEvent } from "react"
+import { isAcceptedImageFile } from "../../utils/files.ts"
+import { useFileDrop } from "../../hooks/useFileDrop.ts"
 
 interface UploadStepProps {
     onFilesSelected: (files: File[]) => void
 }
 
 export function UploadStep({ onFilesSelected }: UploadStepProps) {
-    const [isDragging, setIsDragging] = useState(false)
-    const dragCounter = useRef(0)
-
-    function handleDragEnter(event: DragEvent<HTMLDivElement>) {
-        event.preventDefault()
-        dragCounter.current++
-        setIsDragging(true)
-    }
-
-    function handleDragLeave(event: DragEvent<HTMLDivElement>) {
-        event.preventDefault()
-        dragCounter.current--
-        if (dragCounter.current === 0) {
-            setIsDragging(false)
-        }
-    }
-
-    function handleDragOver(event: DragEvent<HTMLDivElement>) {
-        event.preventDefault()
-    }
-
-    function handleDrop(event: DragEvent<HTMLDivElement>) {
-        event.preventDefault()
-        dragCounter.current = 0
-        setIsDragging(false)
-        const imageFiles = Array.from(event.dataTransfer.files).filter(
-            (file) => file.type.startsWith("image/") || isHeicFile(file),
-        )
-        onFilesSelected(imageFiles)
-    }
+    const { isDragging, dropHandlers } = useFileDrop(handleFilesDrop)
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
         onFilesSelected(Array.from(event.target.files ?? []))
+    }
+
+    function handleFilesDrop(files: File[]) {
+        onFilesSelected(files.filter(isAcceptedImageFile))
     }
 
     return (
@@ -57,10 +33,7 @@ export function UploadStep({ onFilesSelected }: UploadStepProps) {
 
                 <Box sx={{ p: 3, height: "100%", my: 1 }}>
                     <Paper
-                        onDragEnter={handleDragEnter}
-                        onDragLeave={handleDragLeave}
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
+                        {...dropHandlers}
                         sx={{
                             backgroundColor: isDragging ? blue[50] : "background.paper",
                             color: "text.primary",
