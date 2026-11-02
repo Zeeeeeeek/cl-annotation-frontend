@@ -1,6 +1,7 @@
 import useImage from "use-image"
 import { useElementSize } from "../hooks/useElementSize.ts"
-import { clamp, MIN_ZOOM, useZoom } from "../hooks/useZoom.ts"
+import { MIN_ZOOM, useZoom } from "../hooks/useZoom.ts"
+import { clamp } from "../utils/math.ts"
 import type { KonvaEventObject } from "konva/lib/Node"
 import { Box } from "@mui/material"
 import { Layer, Stage, Image as KonvaImage } from "react-konva"

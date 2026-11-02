@@ -1,12 +1,9 @@
 import { useState } from "react"
 import type { Size, Point } from "../types.ts"
+import { clamp } from "../utils/math.ts"
 
 export const MIN_ZOOM = 1
 export const MAX_ZOOM = 5
-
-export function clamp(value: number, min: number, max: number): number {
-    return Math.min(max, Math.max(min, value))
-}
 
 // Position on one axis: centered if the image is smaller than the area,
 // otherwise limited so the image always covers the area (no empty gaps at the edges).

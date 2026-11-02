@@ -5,7 +5,7 @@ import { DetectionLabel } from "../../../components/DetectionLabel.tsx"
 import { useEffect, useRef, useState } from "react"
 import Konva from "konva"
 import type { KonvaEventObject } from "konva/lib/Node"
-import { clamp } from "../../../hooks/useZoom.ts"
+import { clamp } from "../../../utils/math.ts"
 
 interface EditableBoxProps {
     detection: Detection
