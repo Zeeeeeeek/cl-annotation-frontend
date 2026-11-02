@@ -1,4 +1,4 @@
-import { AppBar, Box, IconButton, Stack, ToggleButtonGroup, Toolbar, Tooltip, Typography } from "@mui/material"
+import { AppBar, Box, IconButton, Stack, ToggleButtonGroup, Toolbar, Typography } from "@mui/material"
 import NearMeOutlinedIcon from "@mui/icons-material/NearMeOutlined"
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined"
 import PanToolOutlinedIcon from "@mui/icons-material/PanToolOutlined"
@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import type { EditMode } from "../../../types"
 import type { MouseEvent, ReactNode } from "react"
 import { ModeToggleButton } from "./ModeToggleButton.tsx"
+import { IconButtonWithTooltip } from "../../../components/IconButtonWithTooltip.tsx"
 
 export interface EditHeaderProps {
     imageName: string
@@ -66,20 +67,12 @@ export function EditHeader({
                     ))}
                 </ToggleButtonGroup>
                 <Stack direction="row">
-                    <Tooltip title="Undo (Ctrl+Z)">
-                        <span>
-                            <IconButton onClick={onUndo} disabled={!canUndo} aria-label="Undo">
-                                <UndoIcon />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
-                    <Tooltip title="Redo (Ctrl+Shift+Z)">
-                        <span>
-                            <IconButton onClick={onRedo} disabled={!canRedo} aria-label="Redo">
-                                <RedoIcon />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
+                    <IconButtonWithTooltip title="Undo (Ctrl+Z)" onClick={onUndo} isDisabled={!canUndo}>
+                        <UndoIcon />
+                    </IconButtonWithTooltip>
+                    <IconButtonWithTooltip title="Redo (Ctrl+Shift+Z)" onClick={onRedo} isDisabled={!canRedo}>
+                        <RedoIcon />
+                    </IconButtonWithTooltip>
                 </Stack>
                 <Box sx={{ flexGrow: 1 }} />
                 <IconButton edge="end" aria-label="Close editor" onClick={onClose}>

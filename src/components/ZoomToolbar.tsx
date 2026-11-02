@@ -1,8 +1,9 @@
-import { IconButton, Paper, Slider, Tooltip, Typography } from "@mui/material"
+import { IconButton, Paper, Slider, Typography } from "@mui/material"
 import ZoomInIcon from "@mui/icons-material/ZoomIn"
 import ZoomOutIcon from "@mui/icons-material/ZoomOut"
 import FitScreenIcon from "@mui/icons-material/FitScreen"
 import { MAX_ZOOM, MIN_ZOOM } from "../hooks/useZoom.ts"
+import { IconButtonWithTooltip } from "./IconButtonWithTooltip.tsx"
 
 // Each click on + / − multiplies or divides the zoom by this factor
 const ZOOM_BUTTON_FACTOR = 1.25
@@ -70,13 +71,9 @@ export function ZoomToolbar({ zoom, onZoomChange, onReset }: ZoomToolbarProps) {
                 {Math.round(zoom * 100)}%
             </Typography>
 
-            <Tooltip title="Fit image">
-                <span>
-                    <IconButton size="small" onClick={onReset} disabled={isMinZoom} aria-label="Fit image">
-                        <FitScreenIcon fontSize="small" />
-                    </IconButton>
-                </span>
-            </Tooltip>
+            <IconButtonWithTooltip title="Fit image" size="small" onClick={onReset} isDisabled={isMinZoom}>
+                <FitScreenIcon fontSize="small" />
+            </IconButtonWithTooltip>
         </Paper>
     )
 }
