@@ -1,4 +1,4 @@
-import { Box, Button, DialogActions, Typography } from "@mui/material"
+import { Box, Button, DialogActions, Stack, Typography } from "@mui/material"
 
 interface EditFooterProps {
     isModified: boolean
@@ -17,7 +17,7 @@ export function EditFooter({ isModified, onCancel, onSave }: EditFooterProps) {
                 justifyContent: "space-between",
             }}
         >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                 <Box
                     sx={{
                         width: "0.5rem",
@@ -28,9 +28,9 @@ export function EditFooter({ isModified, onCancel, onSave }: EditFooterProps) {
                 />
 
                 <Typography variant="body2">{isModified ? "Unsaved changes" : ""}</Typography>
-            </Box>
+            </Stack>
 
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Stack direction="row" spacing={1}>
                 <Button color="inherit" onClick={onCancel}>
                     Cancel
                 </Button>
@@ -38,7 +38,7 @@ export function EditFooter({ isModified, onCancel, onSave }: EditFooterProps) {
                 <Button color="primary" variant="contained" disabled={!isModified} onClick={onSave}>
                     Save changes
                 </Button>
-            </Box>
+            </Stack>
         </DialogActions>
     )
 }

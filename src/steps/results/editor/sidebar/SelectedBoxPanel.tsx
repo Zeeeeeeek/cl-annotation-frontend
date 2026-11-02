@@ -1,5 +1,5 @@
 import type { Detection } from "../../../../types.ts"
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Button, Stack, Typography } from "@mui/material"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 import { LabelAutocomplete } from "../LabelAutocomplete.tsx"
 
@@ -30,7 +30,7 @@ export function SelectedBoxPanel({ selectedBox, onLabelChange, onDelete, labels 
             <Typography variant="body2" sx={{ mt: 2, mb: 1 }}>
                 Position in original image (px)
             </Typography>
-            <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
                 {coordinates.map(({ name, value }) => (
                     <Box
                         key={name}
@@ -46,7 +46,7 @@ export function SelectedBoxPanel({ selectedBox, onLabelChange, onDelete, labels 
                         {name} {Math.round(value)}
                     </Box>
                 ))}
-            </Box>
+            </Stack>
 
             <Button variant="outlined" color="error" fullWidth startIcon={<DeleteOutlinedIcon />} onClick={onDelete}>
                 Delete box

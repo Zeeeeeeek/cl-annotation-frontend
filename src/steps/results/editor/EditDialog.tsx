@@ -1,4 +1,4 @@
-import { Box, Dialog, Divider } from "@mui/material"
+import { Box, Dialog, Divider, Stack } from "@mui/material"
 import { useState } from "react"
 import type { BoundingBox, Detection, EditMode, ImageItem } from "../../../types"
 import { EditHeader } from "./EditHeader.tsx"
@@ -125,13 +125,7 @@ export function EditDialog({
                 onUndo={undo}
                 onRedo={redo}
             />
-            <Box
-                sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    minHeight: 0,
-                }}
-            >
+            <Stack direction="row" sx={{ flexGrow: 1, minHeight: 0 }}>
                 <Box
                     sx={{
                         flexGrow: 1,
@@ -152,17 +146,10 @@ export function EditDialog({
                         labels={editorLabels}
                     />
                 </Box>
-                <Box
-                    sx={{
-                        width: "clamp(18rem, 25vw, 25rem)",
-                        flexShrink: 0,
-                        borderLeft: 1,
-                        borderColor: "divider",
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
+                <Stack
+                    sx={{ width: "clamp(18rem, 25vw, 25rem)", flexShrink: 0, borderLeft: 1, borderColor: "divider" }}
                 >
-                    <Box sx={{ p: 2, display: "flex", flexDirection: "column", minHeight: 0, flex: 1 }}>
+                    <Stack sx={{ p: 2, minHeight: 0, flex: 1 }}>
                         <BoxList
                             detections={detections}
                             selectedId={selectedDetection?.id ?? null}
@@ -183,12 +170,12 @@ export function EditDialog({
                                 />
                             </>
                         )}
-                    </Box>
+                    </Stack>
                     <Box sx={{ borderTop: 1, borderColor: "divider", px: 2, py: 1.5 }}>
                         <ShortcutLegend />
                     </Box>
-                </Box>
-            </Box>
+                </Stack>
+            </Stack>
             <EditFooter isModified={isModified} onCancel={handleClose} onSave={() => setIsSaveConfirmOpen(true)} />
             <ConfirmDialog
                 isOpen={isSaveConfirmOpen}

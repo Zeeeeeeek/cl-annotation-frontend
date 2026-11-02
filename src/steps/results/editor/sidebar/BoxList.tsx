@@ -24,7 +24,7 @@ export function BoxList({
     const detectionsIndexes = getDetectionIndexes(detections)
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
+        <Stack sx={{ minHeight: 0 }}>
             <Stack direction="row" spacing={1} sx={{ alignItems: "baseline" }}>
                 <Typography variant="subtitle1">Boxes</Typography>
                 <Typography variant="body2" color="text.secondary">
@@ -47,6 +47,6 @@ export function BoxList({
                     ))}
                 </List>
             </Box>
-        </Box>
+        </Stack>
     )
 }

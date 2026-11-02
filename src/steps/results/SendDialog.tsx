@@ -1,5 +1,5 @@
 import type { ImageItem, SendState } from "../../types.ts"
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, List } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, List } from "@mui/material"
 import RefreshIcon from "@mui/icons-material/Refresh"
 import { ImageStatusItem } from "../../components/ImageStatusItem.tsx"
 
@@ -35,16 +35,14 @@ export function SendDialog({ images, sendStates, onClose, onRetry }: SendDialogP
                 </List>
             </DialogContent>
             <DialogActions sx={{ px: 3, pb: 2 }}>
-                <Box sx={{ display: "flex", gap: 1 }}>
-                    <Button onClick={onClose} disabled={isSending}>
-                        Close
+                <Button onClick={onClose} disabled={isSending}>
+                    Close
+                </Button>
+                {failedCount > 0 && (
+                    <Button variant="contained" startIcon={<RefreshIcon />} onClick={onRetry} disabled={isSending}>
+                        Retry failed ({failedCount})
                     </Button>
-                    {failedCount > 0 && (
-                        <Button variant="contained" startIcon={<RefreshIcon />} onClick={onRetry} disabled={isSending}>
-                            Retry failed ({failedCount})
-                        </Button>
-                    )}
-                </Box>
+                )}
             </DialogActions>
         </Dialog>
     )

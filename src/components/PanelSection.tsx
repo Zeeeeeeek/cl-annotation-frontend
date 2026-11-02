@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box, Stack } from "@mui/material"
 import type { ReactNode } from "react"
 import { SectionTitle } from "./SectionTitle"
 
@@ -10,9 +10,9 @@ interface PanelSectionProps {
 
 export function PanelSection({ title, tooltip, children }: PanelSectionProps) {
     return (
-        <Box sx={{ maxHeight: "9.375rem", display: "flex", flexDirection: "column" }}>
+        <Stack sx={{ maxHeight: "9.375rem" }}>
             <SectionTitle title={title} tooltip={tooltip} />
             <Box sx={{ overflowY: "auto", flexGrow: 1, pb: 1 }}>{children}</Box>
-        </Box>
+        </Stack>
     )
 }
