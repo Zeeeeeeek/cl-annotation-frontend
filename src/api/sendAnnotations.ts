@@ -1,5 +1,6 @@
 import { saveAnnotations } from "./client"
 import type { ImageItem, SendStatus } from "../types"
+import { getErrorMessage } from "../utils/errors.ts"
 
 type SendUpdater = (id: string, status: SendStatus, errorMessage?: string) => void
 
@@ -10,8 +11,7 @@ export async function sendAnnotations(images: ImageItem[], onUpdate: SendUpdater
             await saveAnnotations(image.file, image.detections)
             onUpdate(image.id, "sent")
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : "Unknown error"
-            onUpdate(image.id, "error", errorMessage)
+            onUpdate(image.id, "error", getErrorMessage(error))
         }
     }
 }
