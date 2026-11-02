@@ -1,5 +1,5 @@
 import { Box, Dialog, Divider } from "@mui/material"
-import { useEffect, useEffectEvent, useState } from "react"
+import { useState } from "react"
 import type { BoundingBox, Detection, EditMode, ImageItem } from "../../../types"
 import { EditHeader } from "./EditHeader.tsx"
 import { BoxList } from "./BoxList.tsx"
@@ -11,6 +11,7 @@ import { useDetectionHistory } from "../../../hooks/useDetectionHistory.ts"
 import { ConfirmDialog } from "../../../components/ConfirmDialog.tsx"
 import { EditFooter } from "./EditFooter.tsx"
 import { updateById } from "../../../utils/arrays.ts"
+import { useEditorShortcuts } from "../../../hooks/useEditorShortcuts.ts"
 
 interface EditDialogProps {
     image: ImageItem
@@ -104,59 +105,14 @@ export function EditDialog({
         }
     }
 
-    const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
-        if (isSaveConfirmOpen || isDiscardConfirmOpen) {
-            return
-        }
-        if ((event.target as HTMLElement).closest("input, textarea")) {
-            return
-        }
-
-        const key = event.key.toLowerCase()
-
-        if ((event.ctrlKey || event.metaKey) && key === "z") {
-            event.preventDefault()
-            if (event.shiftKey) {
-                redo()
-            } else {
-                undo()
-            }
-            return
-        }
-
-        if (event.ctrlKey || event.metaKey || event.altKey) {
-            return
-        }
-
-        switch (key) {
-            case "v":
-                handleModeChange("Select")
-                event.preventDefault()
-                break
-            case "b":
-                handleModeChange("Draw")
-                event.preventDefault()
-                break
-            case "h":
-                handleModeChange("Pan")
-                event.preventDefault()
-                break
-            case "delete":
-            case "backspace":
-                if (selectedDetection) {
-                    handleDelete(selectedDetection.id)
-                    event.preventDefault()
-                }
-                break
-            default:
-                break
-        }
+    useEditorShortcuts({
+        isEnabled: !isSaveConfirmOpen && !isDiscardConfirmOpen,
+        selectedId: selectedDetection?.id ?? null,
+        onModeChange: handleModeChange,
+        onDelete: handleDelete,
+        onUndo: undo,
+        onRedo: redo,
     })
-
-    useEffect(() => {
-        window.addEventListener("keydown", handleKeyDown)
-        return () => window.removeEventListener("keydown", handleKeyDown)
-    }, [])
 
     return (
         <Dialog
