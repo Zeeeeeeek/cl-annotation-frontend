@@ -7,6 +7,7 @@ import { SelectedBoxPanel } from "./SelectedBoxPanel.tsx"
 import { ShortcutLegend } from "./ShortcutLegend.tsx"
 import { EditCanvas } from "./EditCanvas.tsx"
 import { haveDetectionsChanged } from "../../../utils/detections.ts"
+import {useDetectionHistory} from "../../../hooks/useDetectionHistory.ts";
 
 interface EditDialogProps {
     image: ImageItem
@@ -29,24 +30,15 @@ export function EditDialog({
     labels,
     onAddLabel,
 }: EditDialogProps) {
+    const { detections, changeDetections, undo, redo, canUndo, canRedo } = useDetectionHistory(image.detections)
     const [mode, setMode] = useState<EditMode>("Select")
     const [selectedDetectionId, setSelectedDetectionId] = useState<string | null>(null)
-
-    const [detections, setDetections] = useState<Detection[]>(image.detections)
-    const selectedDetection = detections.find((d) => d.id === selectedDetectionId) || null
-    const editorLabels = [...new Set([...labels, ...detections.map((detection) => detection.label)])]
-    const isModified = haveDetectionsChanged(image.detections, detections)
     const [confirmSaveOpen, setConfirmSaveOpen] = useState(false)
     const [confirmDiscardOpen, setConfirmDiscardOpen] = useState(false)
 
-    const [past, setPast] = useState<Detection[][]>([])
-    const [future, setFuture] = useState<Detection[][]>([])
-
-    function changeDetections(update: (prev: Detection[]) => Detection[]) {
-        setPast((prev) => [...prev, detections])
-        setFuture([])
-        setDetections(update)
-    }
+    const selectedDetection = detections.find((d) => d.id === selectedDetectionId) || null
+    const editorLabels = [...new Set([...labels, ...detections.map((detection) => detection.label)])]
+    const isModified = haveDetectionsChanged(image.detections, detections)
 
     function handleToggleVisibility(id: string) {
         changeDetections((prevDetections) =>
@@ -104,22 +96,6 @@ export function EditDialog({
             highlighted: false,
         }
         changeDetections((prevDetections) => [...prevDetections, newDetection])
-    }
-
-    function undo() {
-        const previous = past.at(-1)
-        if (!previous) return
-        setPast(past.slice(0, -1))
-        setFuture([detections, ...future])
-        setDetections(previous)
-    }
-
-    function redo() {
-        const next = future[0]
-        if (!next) return
-        setFuture(future.slice(1))
-        setPast([...past, detections])
-        setDetections(next)
     }
 
     function handleConfirmSave() {
@@ -205,8 +181,8 @@ export function EditDialog({
                 mode={mode}
                 onModeChange={handleModeChange}
                 onClose={handleClose}
-                canUndo={past.length > 0}
-                canRedo={future.length > 0}
+                canUndo={canUndo}
+                canRedo={canRedo}
                 onUndo={undo}
                 onRedo={redo}
             />
