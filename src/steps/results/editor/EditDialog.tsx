@@ -1,11 +1,12 @@
 import { Box, Button, Dialog, DialogActions, Divider, Typography } from "@mui/material"
-import { useEffect, useEffectEvent, useMemo, useState } from "react"
+import { useEffect, useEffectEvent, useState } from "react"
 import type { BoundingBox, Detection, EditMode, ImageItem } from "../../../types"
 import { EditHeader } from "./EditHeader.tsx"
 import { BoxList } from "./BoxList.tsx"
 import { SelectedBoxPanel } from "./SelectedBoxPanel.tsx"
 import { ShortcutLegend } from "./ShortcutLegend.tsx"
 import { EditCanvas } from "./EditCanvas.tsx"
+import { haveDetectionsChanged } from "../../../utils/detections.ts"
 
 interface EditDialogProps {
     image: ImageItem
@@ -34,6 +35,7 @@ export function EditDialog({
     const [detections, setDetections] = useState<Detection[]>(image.detections)
     const selectedDetection = detections.find((d) => d.id === selectedDetectionId) || null
     const editorLabels = [...new Set([...labels, ...detections.map((detection) => detection.label)])]
+    const isModified = haveDetectionsChanged(image.detections, detections)
     const [confirmSaveOpen, setConfirmSaveOpen] = useState(false)
     const [confirmDiscardOpen, setConfirmDiscardOpen] = useState(false)
 
@@ -126,37 +128,6 @@ export function EditDialog({
             setSelectedDetectionId(null)
         }
     }
-
-    function isSameBox(box1: BoundingBox, box2: BoundingBox): boolean {
-        const epsilon = 0.01
-
-        return (
-            Math.abs(box1.x - box2.x) < epsilon &&
-            Math.abs(box1.y - box2.y) < epsilon &&
-            Math.abs(box1.width - box2.width) < epsilon &&
-            Math.abs(box1.height - box2.height) < epsilon
-        )
-    }
-
-    const isModified = useMemo(() => {
-        const original = image.detections
-
-        if (original.length !== detections.length) {
-            return true
-        }
-
-        return original.some((oldDetection) => {
-            const current = detections.find((detection) => detection.id === oldDetection.id)
-
-            if (!current) return true
-
-            if (current.label !== oldDetection.label) {
-                return true
-            }
-
-            return !isSameBox(oldDetection.box, current.box)
-        })
-    }, [image.detections, detections])
 
     function handleConfirmSave() {
         detections.forEach((detection) => onAddLabel(detection.label))
