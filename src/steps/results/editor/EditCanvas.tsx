@@ -15,7 +15,7 @@ interface EditCanvasProps {
     selectedId: string | null
     setSelectedId: (id: string | null) => void
     colorForLabel: (label: string) => string
-    onBoxUpdate: (detectionId: string, updatedBox: Detection["box"]) => void
+    onBoxUpdate: (detectionId: string, updatedBox: BoundingBox) => void
     mode: EditMode
     onBoxCreate: (box: BoundingBox, label: string) => void
     labels: string[]

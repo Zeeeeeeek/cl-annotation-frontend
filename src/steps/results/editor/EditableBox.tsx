@@ -1,4 +1,4 @@
-import type { Detection, Size } from "../../../types.ts"
+import type { BoundingBox, Detection, Size } from "../../../types.ts"
 import { Group, Rect, Transformer } from "react-konva"
 import { brighten } from "../../../utils/labelColors.ts"
 import { DetectionLabel } from "../../../components/DetectionLabel.tsx"
@@ -14,7 +14,7 @@ interface EditableBoxProps {
     isSelected: boolean
     viewScale: number
     onSelect: (id: string) => void
-    onBoxUpdate: (id: string, updatedBox: Detection["box"]) => void
+    onBoxUpdate: (id: string, updatedBox: BoundingBox) => void
     interactive: boolean
     imageSize: Size
 }
@@ -42,9 +42,9 @@ export function EditableBox({
         }
     }, [isSelected])
 
-    const [liveBox, setLiveBox] = useState<Detection["box"] | null>(null)
+    const [liveBox, setLiveBox] = useState<BoundingBox | null>(null)
 
-    function readBox(node: Konva.Node): Detection["box"] {
+    function readBox(node: Konva.Node): BoundingBox {
         return {
             x: node.x(),
             y: node.y(),

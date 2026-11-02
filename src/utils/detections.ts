@@ -1,4 +1,4 @@
-import type { DetectedBox, Detection, ImageItem } from "../types"
+import type {BoundingBox, DetectedBox, Detection, ImageItem} from "../types"
 
 export function createImageItem(file: File): ImageItem {
     return {
@@ -36,6 +36,6 @@ export function getDetectionIndexes(detections: Detection[]): Map<string, number
     return detectionIndexMap
 }
 
-export function getBoxArea(box: Detection["box"]): number {
+export function getBoxArea(box: BoundingBox): number {
     return box.width * box.height
 }

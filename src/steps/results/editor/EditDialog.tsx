@@ -79,7 +79,7 @@ export function EditDialog({
         }
     }
 
-    function handleBoxUpdate(detectionId: string, updatedBox: Detection["box"]) {
+    function handleBoxUpdate(detectionId: string, updatedBox: BoundingBox) {
         changeDetections((prevDetections) =>
             prevDetections.map((detection) =>
                 detection.id === detectionId
@@ -127,7 +127,7 @@ export function EditDialog({
         }
     }
 
-    function isSameBox(box1: Detection["box"], box2: Detection["box"]): boolean {
+    function isSameBox(box1: BoundingBox, box2: BoundingBox): boolean {
         const epsilon = 0.01
 
         return (
