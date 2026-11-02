@@ -85,3 +85,7 @@ export function sortByDrawingOrder(detections: Detection[], selectedId: string |
 
     return [...detections].sort((a, b) => areaDiff(a, b) || selectionDiff(a, b))
 }
+
+export function toSavedDetections(detections: Detection[]): Detection[] {
+    return detections.map((detection) => ({ ...detection, visible: true, confidence: 1 }))
+}

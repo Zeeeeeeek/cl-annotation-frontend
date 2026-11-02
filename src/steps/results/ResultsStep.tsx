@@ -8,7 +8,7 @@ import { EditDialog } from "./editor/EditDialog.tsx"
 import SendIcon from "@mui/icons-material/Send"
 import { ImageStatusChip } from "./ImageStatusChip.tsx"
 import { SendDialog } from "./SendDialog.tsx"
-import { filterByThreshold, isWaitingToBeSent } from "../../utils/detections.ts"
+import { filterByThreshold, isWaitingToBeSent, toSavedDetections } from "../../utils/detections.ts"
 import { useSendAnnotations } from "../../hooks/useSendAnnotations.ts"
 import { updateById } from "../../utils/arrays.ts"
 
@@ -30,6 +30,10 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
 
     const selectedImage = images[selectedIndex]
     const modifiedCount = images.filter((image) => isWaitingToBeSent(image)).length
+    const editorImage = {
+        ...selectedImage,
+        detections: filterByThreshold(selectedImage.detections, confidenceThreshold),
+    }
 
     function updateDetection(detectionId: string, changes: Partial<Detection>) {
         onImageUpdate(selectedImage.id, {
@@ -47,6 +51,15 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
 
     function handleImageEdit() {
         setIsEditorOpen(true)
+    }
+
+    function handleEditorSave(updatedDetections: Detection[]) {
+        onImageUpdate(selectedImage.id, {
+            detections: toSavedDetections(updatedDetections),
+            edited: true,
+            sent: false,
+        })
+        setIsEditorOpen(false)
     }
 
     return (
@@ -100,25 +113,11 @@ export function ResultsStep({ images, onImageUpdate, onReset, labels, onAddLabel
             />
             {isEditorOpen && selectedImage && (
                 <EditDialog
-                    image={{
-                        ...selectedImage,
-                        detections: filterByThreshold(selectedImage.detections, confidenceThreshold),
-                    }}
+                    image={editorImage}
                     imageIndex={selectedIndex + 1}
                     totalImages={images.length}
                     onClose={() => setIsEditorOpen(false)}
-                    onSave={(updatedDetections) => {
-                        onImageUpdate(selectedImage.id, {
-                            detections: updatedDetections.map((detection) => ({
-                                ...detection,
-                                visible: true,
-                                confidence: 1,
-                            })),
-                            edited: true,
-                            sent: false,
-                        })
-                        setIsEditorOpen(false)
-                    }}
+                    onSave={handleEditorSave}
                     colorForLabel={colorForLabel}
                     labels={labels}
                     onAddLabel={onAddLabel}
