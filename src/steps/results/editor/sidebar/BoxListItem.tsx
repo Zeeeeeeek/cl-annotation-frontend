@@ -26,7 +26,6 @@ export function BoxListItem({
 }: BoxListItemProps) {
     return (
         <ListItem
-            key={detection.id}
             disablePadding
             secondaryAction={
                 <Stack direction="row">
