@@ -13,7 +13,7 @@ export function UploadStep({ onFilesSelected }: UploadStepProps) {
     const { isDragging, dropHandlers } = useFileDrop(handleFilesDrop)
 
     function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-        onFilesSelected(Array.from(event.target.files ?? []))
+        onFilesSelected(Array.from(event.target.files ?? []).filter(isAcceptedImageFile))
     }
 
     function handleFilesDrop(files: File[]) {
