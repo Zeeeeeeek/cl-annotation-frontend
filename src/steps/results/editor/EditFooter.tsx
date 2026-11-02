@@ -20,8 +20,8 @@ export function EditFooter({ isModified, onCancel, onSave }: EditFooterProps) {
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Box
                     sx={{
-                        width: 8,
-                        height: 8,
+                        width: "0.5rem",
+                        height: "0.5rem",
                         borderRadius: "50%",
                         bgcolor: isModified ? "warning.main" : "transparent",
                     }}

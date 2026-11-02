@@ -10,7 +10,7 @@ interface PanelSectionProps {
 
 export function PanelSection({ title, tooltip, children }: PanelSectionProps) {
     return (
-        <Box sx={{ maxHeight: 150, display: "flex", flexDirection: "column" }}>
+        <Box sx={{ maxHeight: "9.375rem", display: "flex", flexDirection: "column" }}>
             <SectionTitle title={title} tooltip={tooltip} />
             <Box sx={{ overflowY: "auto", flexGrow: 1, pb: 1 }}>{children}</Box>
         </Box>

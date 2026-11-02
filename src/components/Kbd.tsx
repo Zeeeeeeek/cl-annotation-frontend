@@ -18,7 +18,7 @@ export function Kbd({ children }: KbdProps) {
                 borderColor: "divider",
                 color: "text.primary",
                 fontFamily: "monospace",
-                fontSize: 11,
+                fontSize: "0.6875rem",
                 fontWeight: 500,
                 lineHeight: 1.4,
             }}

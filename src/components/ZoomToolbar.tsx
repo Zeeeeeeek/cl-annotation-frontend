@@ -22,8 +22,8 @@ export function ZoomToolbar({ zoom, onZoomChange, onReset }: ZoomToolbarProps) {
             elevation={3}
             sx={{
                 position: "absolute",
-                bottom: 16,
-                left: 16,
+                bottom: "1rem",
+                left: "1rem",
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
@@ -53,7 +53,7 @@ export function ZoomToolbar({ zoom, onZoomChange, onReset }: ZoomToolbarProps) {
                 step={0.01}
                 onChange={(_, value) => onZoomChange(value as number)}
                 aria-label="Zoom"
-                sx={{ width: 120 }}
+                sx={{ width: "7.5rem" }}
             />
 
             <IconButton

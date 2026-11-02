@@ -14,11 +14,11 @@ export function EmptyState({ message, withIcon = true }: EmptyStateProps) {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                height: 100,
+                height: "6.25rem",
                 color: "text.secondary",
             }}
         >
-            {withIcon && <SentimentVeryDissatisfiedIcon sx={{ fontSize: 32, mb: 0.5 }} />}
+            {withIcon && <SentimentVeryDissatisfiedIcon sx={{ fontSize: "2rem", mb: 0.5 }} />}
             <Typography variant="body2">{message}</Typography>
         </Box>
     )

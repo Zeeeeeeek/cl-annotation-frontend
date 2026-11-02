@@ -48,7 +48,7 @@ export function UploadStep({ onFilesSelected }: UploadStepProps) {
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "90vh" }}>
             <Paper
                 elevation={4}
-                sx={{ width: "100%", maxWidth: "clamp(320px, 40vw, 600px)", maxHeight: "75%", borderRadius: 2 }}
+                sx={{ width: "100%", maxWidth: "clamp(20rem, 40vw, 37.5rem)", maxHeight: "75%", borderRadius: 2 }}
             >
                 <Box sx={{ px: 3, py: 2.5 }}>
                     <Typography variant="h6">Upload Images</Typography>
@@ -74,7 +74,7 @@ export function UploadStep({ onFilesSelected }: UploadStepProps) {
                         }}
                     >
                         <Stack spacing={1} sx={{ height: "100%", justifyContent: "center", alignItems: "center" }}>
-                            <FileUploadIcon sx={{ fontSize: 60 }} color="primary" />
+                            <FileUploadIcon sx={{ fontSize: "3.75rem" }} color="primary" />
                             <Typography variant="h6">Drag and Drop here</Typography>
                             <Typography variant="body1">or</Typography>
                             <Typography
