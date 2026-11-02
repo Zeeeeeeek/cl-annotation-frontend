@@ -12,12 +12,12 @@ export function createImageItem(file: File): ImageItem {
     }
 }
 
+export function createDetection(detectedBox: DetectedBox): Detection {
+    return { ...detectedBox, id: crypto.randomUUID(), visible: true, highlighted: false }
+}
+
 export function toDetections(detectedBoxes: DetectedBox[]): Detection[] {
-    return [...detectedBoxes]
-        .sort((a, b) => b.confidence - a.confidence)
-        .map((detectedBox): Detection => {
-            return { ...detectedBox, id: crypto.randomUUID(), visible: true, highlighted: false }
-        })
+    return [...detectedBoxes].sort((a, b) => b.confidence - a.confidence).map(createDetection)
 }
 
 export function filterByThreshold(detections: Detection[], threshold: number): Detection[] {

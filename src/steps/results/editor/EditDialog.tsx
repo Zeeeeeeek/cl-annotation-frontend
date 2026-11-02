@@ -6,7 +6,7 @@ import { BoxList } from "./BoxList.tsx"
 import { SelectedBoxPanel } from "./SelectedBoxPanel.tsx"
 import { ShortcutLegend } from "./ShortcutLegend.tsx"
 import { EditCanvas } from "./EditCanvas.tsx"
-import { haveDetectionsChanged } from "../../../utils/detections.ts"
+import { createDetection, haveDetectionsChanged } from "../../../utils/detections.ts"
 import { useDetectionHistory } from "../../../hooks/useDetectionHistory.ts"
 import { ConfirmDialog } from "../../../components/ConfirmDialog.tsx"
 import { EditFooter } from "./EditFooter.tsx"
@@ -80,14 +80,7 @@ export function EditDialog({
     }
 
     function handleBoxCreate(box: BoundingBox, label: string) {
-        const newDetection: Detection = {
-            id: crypto.randomUUID(),
-            box,
-            label,
-            confidence: 1.0,
-            visible: true,
-            highlighted: false,
-        }
+        const newDetection = createDetection({ box, label, confidence: 1 })
         changeDetections((prevDetections) => [...prevDetections, newDetection])
     }
 
@@ -105,6 +98,10 @@ export function EditDialog({
         }
     }
 
+    function handleDialogClose(_event: object, reason: "backdropClick" | "escapeKeyDown") {
+        if (reason === "escapeKeyDown") setSelectedDetectionId(null)
+    }
+
     useEditorShortcuts({
         isEnabled: !isSaveConfirmOpen && !isDiscardConfirmOpen,
         selectedId: selectedDetection?.id ?? null,
@@ -115,13 +112,7 @@ export function EditDialog({
     })
 
     return (
-        <Dialog
-            open={true}
-            fullScreen
-            onClose={(_, reason) => {
-                if (reason === "escapeKeyDown") setSelectedDetectionId(null)
-            }}
-        >
+        <Dialog open={true} fullScreen onClose={handleDialogClose}>
             <EditHeader
                 imageName={image.file.name}
                 imageIndex={imageIndex}
