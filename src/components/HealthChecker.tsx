@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { checkHealth } from "../api/client"
 
 export function HealthChecker() {
-    const [showSnackbar, setShowSnackbar] = useState<boolean>(false)
+    const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false)
     const [alertInfo, setAlertInfo] = useState<{ severity: "success" | "error"; message: string }>({
         severity: "success",
         message: "",
@@ -25,7 +25,7 @@ export function HealthChecker() {
                     ? { severity: "success", message: "The server is now working correctly" }
                     : { severity: "error", message: "The server is not responding" },
             )
-            setShowSnackbar(true)
+            setIsSnackbarOpen(true)
         }
 
         void refreshHealth()
@@ -35,7 +35,7 @@ export function HealthChecker() {
     }, [])
 
     return (
-        <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={() => setShowSnackbar(false)}>
+        <Snackbar open={isSnackbarOpen} autoHideDuration={6000} onClose={() => setIsSnackbarOpen(false)}>
             <Alert severity={alertInfo.severity} variant="filled" sx={{ width: "100%" }}>
                 {alertInfo.message}
             </Alert>

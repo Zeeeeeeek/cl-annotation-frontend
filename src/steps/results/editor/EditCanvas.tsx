@@ -13,7 +13,7 @@ interface EditCanvasProps {
     imageUrl: string
     detections: Detection[]
     selectedId: string | null
-    setSelectedId: (id: string | null) => void
+    onSelect: (id: string | null) => void
     colorForLabel: (label: string) => string
     onBoxUpdate: (detectionId: string, updatedBox: BoundingBox) => void
     mode: EditMode
@@ -26,7 +26,7 @@ export function EditCanvas({
     detections,
     selectedId,
     colorForLabel,
-    setSelectedId,
+    onSelect,
     onBoxUpdate,
     mode,
     onBoxCreate,
@@ -57,7 +57,7 @@ export function EditCanvas({
         <>
             <ImageViewer
                 imageUrl={imageUrl}
-                onBackGroundClick={() => setSelectedId(null)}
+                onBackgroundClick={() => onSelect(null)}
                 panEnabled={mode === "Pan"}
                 cursor={mode === "Draw" ? "crosshair" : undefined}
                 onImageMouseDown={(point) => {
@@ -88,9 +88,9 @@ export function EditCanvas({
                             color={colorForLabel(detection.label)}
                             isSelected={detection.id === selectedId}
                             viewScale={scale}
-                            onSelect={setSelectedId}
+                            onSelect={onSelect}
                             onBoxUpdate={onBoxUpdate}
-                            interactive={mode === "Select"}
+                            isInteractive={mode === "Select"}
                             imageSize={imageSize}
                         />
                     ))

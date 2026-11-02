@@ -36,8 +36,8 @@ export function EditDialog({
     const { detections, changeDetections, undo, redo, canUndo, canRedo } = useDetectionHistory(image.detections)
     const [mode, setMode] = useState<EditMode>("Select")
     const [selectedDetectionId, setSelectedDetectionId] = useState<string | null>(null)
-    const [confirmSaveOpen, setConfirmSaveOpen] = useState(false)
-    const [confirmDiscardOpen, setConfirmDiscardOpen] = useState(false)
+    const [isSaveConfirmOpen, setIsSaveConfirmOpen] = useState(false)
+    const [isDiscardConfirmOpen, setIsDiscardConfirmOpen] = useState(false)
 
     const selectedDetection = detections.find((d) => d.id === selectedDetectionId) || null
     const editorLabels = [...new Set([...labels, ...detections.map((detection) => detection.label)])]
@@ -93,19 +93,19 @@ export function EditDialog({
     function handleConfirmSave() {
         detections.forEach((detection) => onAddLabel(detection.label))
         onSave(detections)
-        setConfirmSaveOpen(false)
+        setIsSaveConfirmOpen(false)
     }
 
     function handleClose() {
         if (isModified) {
-            setConfirmDiscardOpen(true)
+            setIsDiscardConfirmOpen(true)
         } else {
             onClose()
         }
     }
 
     const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
-        if (confirmSaveOpen || confirmDiscardOpen) {
+        if (isSaveConfirmOpen || isDiscardConfirmOpen) {
             return
         }
         if ((event.target as HTMLElement).closest("input, textarea")) {
@@ -197,7 +197,7 @@ export function EditDialog({
                         imageUrl={image.previewUrl}
                         detections={detections}
                         selectedId={selectedDetection?.id ?? null}
-                        setSelectedId={setSelectedDetectionId}
+                        onSelect={setSelectedDetectionId}
                         colorForLabel={colorForLabel}
                         onBoxUpdate={handleBoxUpdate}
                         mode={mode}
@@ -242,9 +242,9 @@ export function EditDialog({
                     </Box>
                 </Box>
             </Box>
-            <EditFooter isModified={isModified} onCancel={handleClose} onSave={() => setConfirmSaveOpen(true)} />
+            <EditFooter isModified={isModified} onCancel={handleClose} onSave={() => setIsSaveConfirmOpen(true)} />
             <ConfirmDialog
-                isOpen={confirmSaveOpen}
+                isOpen={isSaveConfirmOpen}
                 title="Save changes?"
                 message={
                     "All boxes will be set to 100% confidence. Removed boxes and boxes below the threshold " +
@@ -252,17 +252,17 @@ export function EditDialog({
                 }
                 cancelLabel="Go back"
                 confirmLabel="Confirm"
-                onCancel={() => setConfirmSaveOpen(false)}
+                onCancel={() => setIsSaveConfirmOpen(false)}
                 onConfirm={handleConfirmSave}
             />
             <ConfirmDialog
-                isOpen={confirmDiscardOpen}
+                isOpen={isDiscardConfirmOpen}
                 title="Discard changes?"
                 message="Your changes to this image will be lost."
                 cancelLabel="Keep editing"
                 confirmLabel="Discard"
                 confirmColor="error"
-                onCancel={() => setConfirmDiscardOpen(false)}
+                onCancel={() => setIsDiscardConfirmOpen(false)}
                 onConfirm={onClose}
             />
         </Dialog>

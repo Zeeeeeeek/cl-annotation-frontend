@@ -14,7 +14,7 @@ const WHEEL_ZOOM_SENSITIVITY = 0.002
 interface ImageViewerProps {
     imageUrl: string
     renderOverlay: (scale: number, imageSize: Size) => ReactNode
-    onBackGroundClick?: () => void
+    onBackgroundClick?: () => void
     panEnabled?: boolean
     cursor?: string
     onImageMouseDown?: (point: Point) => void
@@ -26,7 +26,7 @@ interface ImageViewerProps {
 export function ImageViewer({
     imageUrl,
     renderOverlay,
-    onBackGroundClick,
+    onBackgroundClick,
     panEnabled = true,
     cursor,
     onImageMouseUp,
@@ -96,8 +96,8 @@ export function ImageViewer({
                     const clickedOnBackground = e.target === e.target.getStage() || e.target.name() === "background"
                     if (clickedOnBackground) {
                         e.cancelBubble = true
-                        if (onBackGroundClick) {
-                            onBackGroundClick()
+                        if (onBackgroundClick) {
+                            onBackgroundClick()
                         }
                     }
                 }}

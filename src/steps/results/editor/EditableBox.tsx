@@ -15,7 +15,7 @@ interface EditableBoxProps {
     viewScale: number
     onSelect: (id: string) => void
     onBoxUpdate: (id: string, updatedBox: BoundingBox) => void
-    interactive: boolean
+    isInteractive: boolean
     imageSize: Size
 }
 
@@ -27,7 +27,7 @@ export function EditableBox({
     viewScale,
     onSelect,
     onBoxUpdate,
-    interactive,
+    isInteractive,
     imageSize,
 }: EditableBoxProps) {
     const displayColor = isSelected ? brighten(color) : color
@@ -85,7 +85,7 @@ export function EditableBox({
     const labelBox = liveBox ?? detection.box
 
     return (
-        <Group onClick={() => onSelect(detection.id)} onTap={() => onSelect(detection.id)} listening={interactive}>
+        <Group onClick={() => onSelect(detection.id)} onTap={() => onSelect(detection.id)} listening={isInteractive}>
             <Rect
                 x={detection.box.x}
                 y={detection.box.y}
