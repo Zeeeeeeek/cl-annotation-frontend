@@ -6,7 +6,7 @@ import RedoIcon from "@mui/icons-material/Redo"
 import UndoIcon from "@mui/icons-material/Undo"
 import CloseIcon from "@mui/icons-material/Close"
 import type { EditMode } from "../../../types"
-import type { MouseEvent } from "react"
+import type { MouseEvent, ReactNode } from "react"
 import { ModeToggleButton } from "./ModeToggleButton.tsx"
 
 export interface EditHeaderProps {
@@ -21,6 +21,12 @@ export interface EditHeaderProps {
     onUndo: () => void
     onRedo: () => void
 }
+
+const EDIT_MODES: { value: EditMode; shortcut: string; icon: ReactNode }[] = [
+    { value: "Select", shortcut: "V", icon: <NearMeOutlinedIcon fontSize="small" /> },
+    { value: "Draw", shortcut: "B", icon: <AddBoxOutlinedIcon fontSize="small" /> },
+    { value: "Pan", shortcut: "H", icon: <PanToolOutlinedIcon fontSize="small" /> },
+]
 
 export function EditHeader({
     imageName,
@@ -49,24 +55,15 @@ export function EditHeader({
                     </Typography>
                 </Stack>
                 <ToggleButtonGroup exclusive value={mode} onChange={handleModeChange} color={"primary"} size={"small"}>
-                    <ModeToggleButton
-                        text={"Select"}
-                        keyboardShortcut={"V"}
-                        icon={<NearMeOutlinedIcon fontSize={"small"} />}
-                        value={"Select"}
-                    />
-                    <ModeToggleButton
-                        text={"Draw"}
-                        keyboardShortcut={"B"}
-                        icon={<AddBoxOutlinedIcon fontSize={"small"} />}
-                        value={"Draw"}
-                    />
-                    <ModeToggleButton
-                        text={"Pan"}
-                        keyboardShortcut={"H"}
-                        icon={<PanToolOutlinedIcon fontSize={"small"} />}
-                        value={"Pan"}
-                    />
+                    {EDIT_MODES.map(({ value, shortcut, icon }) => (
+                        <ModeToggleButton
+                            key={value}
+                            value={value}
+                            text={value}
+                            keyboardShortcut={shortcut}
+                            icon={icon}
+                        />
+                    ))}
                 </ToggleButtonGroup>
                 <Stack direction="row">
                     <Tooltip title="Undo (Ctrl+Z)">
