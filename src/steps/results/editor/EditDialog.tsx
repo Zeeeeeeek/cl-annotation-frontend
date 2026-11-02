@@ -111,7 +111,7 @@ export function EditDialog({
         if (!previous) return
         setPast(past.slice(0, -1))
         setFuture([detections, ...future])
-        restore(previous)
+        setDetections(previous)
     }
 
     function redo() {
@@ -119,14 +119,7 @@ export function EditDialog({
         if (!next) return
         setFuture(future.slice(1))
         setPast([...past, detections])
-        restore(next)
-    }
-
-    function restore(snapshot: Detection[]) {
-        setDetections(snapshot)
-        if (!snapshot.some((detection) => detection.id === selectedDetectionId)) {
-            setSelectedDetectionId(null)
-        }
+        setDetections(next)
     }
 
     function handleConfirmSave() {
@@ -182,8 +175,8 @@ export function EditDialog({
                 break
             case "delete":
             case "backspace":
-                if (selectedDetectionId) {
-                    handleDelete(selectedDetectionId)
+                if (selectedDetection) {
+                    handleDelete(selectedDetection.id)
                     event.preventDefault()
                 }
                 break
@@ -235,7 +228,7 @@ export function EditDialog({
                     <EditCanvas
                         imageUrl={image.previewUrl}
                         detections={detections}
-                        selectedId={selectedDetectionId}
+                        selectedId={selectedDetection?.id ?? null}
                         setSelectedId={setSelectedDetectionId}
                         colorForLabel={colorForLabel}
                         onBoxUpdate={handleBoxUpdate}
@@ -257,7 +250,7 @@ export function EditDialog({
                     <Box sx={{ p: 2, display: "flex", flexDirection: "column", minHeight: 0, flex: 1 }}>
                         <BoxList
                             detections={detections}
-                            selectedId={selectedDetectionId}
+                            selectedId={selectedDetection?.id ?? null}
                             onSelect={setSelectedDetectionId}
                             onToggleVisibility={handleToggleVisibility}
                             onDelete={handleDelete}
