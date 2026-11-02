@@ -1,17 +1,8 @@
 import { useState } from "react"
+import type { Size, Point } from "../types.ts"
 
 export const MIN_ZOOM = 1
 export const MAX_ZOOM = 5
-
-export interface Point {
-    x: number
-    y: number
-}
-
-export interface Size {
-    width: number
-    height: number
-}
 
 export function clamp(value: number, min: number, max: number): number {
     return Math.min(max, Math.max(min, value))

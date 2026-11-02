@@ -1,11 +1,12 @@
 import useImage from "use-image"
 import { useElementSize } from "../hooks/useElementSize.ts"
-import { clamp, MIN_ZOOM, type Point, type Size, useZoom } from "../hooks/useZoom.ts"
+import { clamp, MIN_ZOOM, useZoom } from "../hooks/useZoom.ts"
 import type { KonvaEventObject } from "konva/lib/Node"
 import { Box } from "@mui/material"
 import { Layer, Stage, Image as KonvaImage } from "react-konva"
 import { ZoomToolbar } from "./ZoomToolbar.tsx"
 import type { ReactNode } from "react"
+import type { Size, Point } from "../types.ts"
 
 const WHEEL_ZOOM_SENSITIVITY = 0.002
 
