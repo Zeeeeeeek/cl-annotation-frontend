@@ -1,7 +1,6 @@
 import { Badge, Pagination, PaginationItem, type PaginationRenderItemParams, Stack } from "@mui/material"
 import { PaginationLegend } from "./PaginationLegend.tsx"
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"
-import CircleIcon from "@mui/icons-material/Circle"
+import { ModifiedIcon, SentIcon } from "./StatusIcons.tsx"
 
 interface ImagePaginationProps {
     currentIndex: number
@@ -22,21 +21,12 @@ export function ImagePagination({
         if (item.type !== "page" || item.page === null) return <PaginationItem {...item} />
 
         const index = item.page - 1
-        if (sentImages[index]) {
-            return (
-                <Badge
-                    overlap="circular"
-                    badgeContent={<CheckCircleIcon color="success" sx={{ fontSize: "0.875rem" }} />}
-                >
-                    <PaginationItem {...item} />
-                </Badge>
-            )
-        }
+        const isSent = sentImages[index]
         return (
             <Badge
                 overlap="circular"
-                invisible={!editedImages[index]}
-                badgeContent={<CircleIcon color="warning" sx={{ fontSize: "0.875rem" }} />}
+                invisible={!isSent && !editedImages[index]}
+                badgeContent={isSent ? <SentIcon /> : <ModifiedIcon />}
             >
                 <PaginationItem {...item} />
             </Badge>
