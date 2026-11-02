@@ -1,4 +1,5 @@
 import { Autocomplete, createFilterOptions, TextField, Typography } from "@mui/material"
+import { normalizeLabel } from "../../../utils/labels.ts"
 
 const filter = createFilterOptions<string>()
 
@@ -16,9 +17,9 @@ export function LabelAutocomplete({ value, onTextChange, onSelect, autoFocus, la
             renderInput={(params) => <TextField {...params} label="Label" autoFocus={autoFocus} />}
             options={labels}
             value={value}
-            onInputChange={(_, text) => onTextChange?.(text.trim().toLowerCase())}
+            onInputChange={(_, text) => onTextChange?.(normalizeLabel(text))}
             onChange={(_, newValue) => {
-                const label = newValue?.trim().toLowerCase()
+                const label = normalizeLabel(newValue)
                 if (label) onSelect?.(label)
             }}
             freeSolo
@@ -27,7 +28,7 @@ export function LabelAutocomplete({ value, onTextChange, onSelect, autoFocus, la
             clearOnBlur
             filterOptions={(options, params) => {
                 const filtered = filter(options, params)
-                const typedValue = params.inputValue.trim().toLowerCase()
+                const typedValue = normalizeLabel(params.inputValue)
                 if (typedValue !== "" && !options.includes(typedValue)) {
                     filtered.push(typedValue)
                 }
