@@ -68,6 +68,20 @@ export function ImageViewer({
         }
     }
 
+    function handleStageClick(event: KonvaEventObject<MouseEvent>) {
+        const isBackgroundClick = event.target === event.target.getStage() || event.target.name() === "background"
+        if (!isBackgroundClick) return
+        event.cancelBubble = true
+        onBackgroundClick?.()
+    }
+
+    function forwardImagePoint(callback?: (point: Point) => void) {
+        return (event: KonvaEventObject<MouseEvent>) => {
+            const imagePoint = getImagePointFromEvent(event)
+            if (imagePoint) callback?.(imagePoint)
+        }
+    }
+
     return (
         <Box
             ref={ref}
@@ -92,39 +106,16 @@ export function ImageViewer({
                 dragBoundFunc={canPan ? (point) => clampPosition(point) : undefined}
                 onDragMove={handleDragMove}
                 onWheel={handleWheel}
-                onClick={(e) => {
-                    const clickedOnBackground = e.target === e.target.getStage() || e.target.name() === "background"
-                    if (clickedOnBackground) {
-                        e.cancelBubble = true
-                        if (onBackgroundClick) {
-                            onBackgroundClick()
-                        }
-                    }
-                }}
-                onMouseDown={(event) => {
-                    const imagePoint = getImagePointFromEvent(event)
-                    if (imagePoint) {
-                        onImageMouseDown?.(imagePoint)
-                    }
-                }}
-                onMouseUp={(event) => {
-                    const imagePoint = getImagePointFromEvent(event)
-                    if (imagePoint) {
-                        onImageMouseUp?.(imagePoint)
-                    }
-                }}
-                onMouseMove={(event) => {
-                    const imagePoint = getImagePointFromEvent(event)
-                    if (imagePoint) {
-                        onImageMouseMove?.(imagePoint)
-                    }
-                }}
+                onClick={handleStageClick}
+                onMouseDown={forwardImagePoint(onImageMouseDown)}
+                onMouseUp={forwardImagePoint(onImageMouseUp)}
+                onMouseMove={forwardImagePoint(onImageMouseMove)}
             >
                 <Layer>
                     {imageSize && htmlImage && (
                         <>
                             <KonvaImage image={htmlImage} name={"background"} />
-                            {renderOverlay?.(scale, imageSize)}
+                            {renderOverlay(scale, imageSize)}
                         </>
                     )}
                 </Layer>
