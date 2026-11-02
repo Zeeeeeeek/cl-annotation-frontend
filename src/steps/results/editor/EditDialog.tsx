@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, Divider, Typography } from "@mui/material"
+import { Box, Dialog, Divider } from "@mui/material"
 import { useEffect, useEffectEvent, useState } from "react"
 import type { BoundingBox, Detection, EditMode, ImageItem } from "../../../types"
 import { EditHeader } from "./EditHeader.tsx"
@@ -9,6 +9,7 @@ import { EditCanvas } from "./EditCanvas.tsx"
 import { haveDetectionsChanged } from "../../../utils/detections.ts"
 import { useDetectionHistory } from "../../../hooks/useDetectionHistory.ts"
 import { ConfirmDialog } from "../../../components/ConfirmDialog.tsx"
+import { EditFooter } from "./EditFooter.tsx"
 
 interface EditDialogProps {
     image: ImageItem
@@ -251,43 +252,7 @@ export function EditDialog({
                     </Box>
                 </Box>
             </Box>
-            <DialogActions
-                sx={{
-                    borderTop: 1,
-                    borderColor: "divider",
-                    px: 3,
-                    py: 2,
-                    justifyContent: "space-between",
-                }}
-            >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Box
-                        sx={{
-                            width: 8,
-                            height: 8,
-                            borderRadius: "50%",
-                            bgcolor: isModified ? "warning.main" : "transparent",
-                        }}
-                    />
-
-                    <Typography variant="body2">{isModified ? "Unsaved changes" : ""}</Typography>
-                </Box>
-
-                <Box sx={{ display: "flex", gap: 1 }}>
-                    <Button color="inherit" onClick={handleClose}>
-                        Cancel
-                    </Button>
-
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        disabled={!isModified}
-                        onClick={() => setConfirmSaveOpen(true)}
-                    >
-                        Save changes
-                    </Button>
-                </Box>
-            </DialogActions>
+            <EditFooter isModified={isModified} onCancel={handleClose} onSave={() => setConfirmSaveOpen(true)} />
             <ConfirmDialog
                 isOpen={confirmSaveOpen}
                 title="Save changes?"
